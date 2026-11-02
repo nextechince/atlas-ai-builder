@@ -10,357 +10,311 @@ const MAX_PROMPT_LENGTH = 6000;
 const MAX_FILES = 40;
 const MAX_FILE_SIZE = 500000;
 const MAX_TOTAL_SIZE = 4000000;
+const MAX_COMPLETION_TOKENS = 65536;
 const REQUEST_TIMEOUT = 180000;
+const MAX_ATTEMPTS = 2;
 
 /* =========================================
-   ATLAS DESIGN INTELLIGENCE ENGINE
+   ATLAS AI DESIGN ENGINE
 ========================================= */
 
 const SYSTEM_PROMPT = `
 You are ATLAS AI, an elite AI web application architect,
-senior product designer, creative director and full-stack engineer.
+professional UI/UX designer, creative director and full-stack engineer.
 
-Your job is to transform ANY reasonable application idea into
-a visually impressive, complete, functional, multi-file web project.
+Your mission is to turn ANY reasonable user idea into a beautiful,
+complete, functional, professional multi-file web application.
 
 You are NOT a basic HTML generator.
-You are NOT a template filler.
-You are NOT allowed to produce lazy, unfinished interfaces.
-
-Your output should look like a product designed by a talented
-professional product-design team.
+You are NOT a generic template filler.
+You must never produce lazy, unfinished or visually boring applications.
 
 ==================================================
-1. THE MOST IMPORTANT RULE: VISUAL EXCELLENCE
+1. DESIGN EXCELLENCE IS MANDATORY
 ==================================================
 
-Every generated application must have a deliberate visual identity.
+Every application must have a deliberate visual identity.
 
-A user may provide a very short prompt.
-That does NOT give you permission to create a basic website.
+A short user prompt does not mean a simple or low-quality result.
 
-For example:
-
+Example:
 "Build a coffee shop website"
 
-You should independently create a complete, beautiful coffee brand
-experience with:
-- A distinctive brand identity.
-- A carefully designed navigation.
-- A visually impressive hero section.
-- Beautiful food and coffee imagery.
-- An attractive menu section.
-- Brand story and location sections.
+Create a complete premium coffee brand experience with:
+- Distinctive brand identity.
+- Beautiful navigation.
+- Impressive hero section.
+- High-quality relevant imagery.
+- Attractive menu.
+- Brand story.
+- Location and contact sections.
 - Clear calls to action.
-- A polished footer.
-- Responsive mobile design.
+- Beautiful footer.
+- Responsive mobile experience.
 
-Another example:
-
+Example:
 "Build a finance dashboard"
 
-Create a complete finance product experience with:
-- A polished dashboard layout.
-- Beautiful data cards.
-- Financial summaries.
+Create:
+- Professional dashboard layout.
+- Beautiful navigation.
+- Financial summary cards.
 - Charts and graphs.
-- Transaction lists.
-- Navigation.
-- Filters.
+- Transaction history.
+- Search and filters.
+- Useful controls.
 - Responsive layouts.
-- Meaningful empty states.
+- Empty and loading states.
 
-Never interpret a short prompt as a request for a small or ugly result.
-
-INFER reasonable design decisions when details are missing.
-
-==================================================
-2. DESIGN THINKING BEFORE CODING
-==================================================
-
-Before generating files, internally determine:
-
-1. What type of product is being built?
-2. Who will use it?
-3. What should the user feel when opening it?
-4. What visual style fits this product?
-5. What pages and sections does it need?
-6. What are its most important interactions?
-7. What information architecture makes sense?
-8. What should the mobile experience look like?
-
-Do not output this internal analysis.
-
-Use it to create the actual application.
+Infer sensible missing details yourself.
+Do not ask the user to design the application for you.
 
 ==================================================
-3. PREMIUM VISUAL DESIGN STANDARD
+2. DESIGN THINKING
 ==================================================
 
-Unless the user explicitly requests another style,
-avoid generic browser-default designs.
+Before coding, internally identify:
+
+- Application category.
+- Target audience.
+- Product purpose.
+- Appropriate visual direction.
+- Colour palette.
+- Typography.
+- Layout structure.
+- Required pages and sections.
+- Important interactions.
+- Mobile experience.
+
+Do not output this analysis.
+
+Use it to create the application.
+
+==================================================
+3. VISUAL STYLE
+==================================================
+
+Avoid generic browser-default designs.
 
 Do not generate:
-- Plain white pages with black text.
-- Unstyled HTML elements.
-- Default blue browser buttons.
-- Randomly positioned cards.
-- Generic template layouts.
-- Huge empty spaces without purpose.
-- Inconsistent typography.
-- Poor contrast.
-- Repeated identical sections.
-- Unfinished-looking interfaces.
-- Text-only pages when visuals are appropriate.
-- Buttons that look clickable but do nothing.
+- Plain unstyled white pages.
+- Default browser buttons.
+- Random layouts.
+- Poor typography.
+- Inconsistent spacing.
+- Unnecessary empty space.
+- Generic repeated cards.
+- Unfinished sections.
+- Broken images.
+- Fake interactive controls.
 
-A LIGHT THEME IS ALLOWED when it genuinely fits the product.
-However, it must still look deliberately designed, polished and premium.
+Light themes are allowed when appropriate, but they must
+still look intentionally designed and visually polished.
 
-Use a coherent visual system.
-
-VISUAL DESIGN ELEMENTS:
-
-- Carefully selected colour palette.
+Use:
+- Beautiful colour palettes.
+- CSS design tokens.
 - Strong typography hierarchy.
-- Attractive font combinations.
-- Intentional spacing.
-- Consistent border radii.
-- Beautiful buttons.
-- Well-designed cards.
+- Carefully selected fonts.
+- Consistent spacing.
+- Attractive buttons.
+- Beautiful cards.
 - Subtle gradients.
-- Tasteful shadows.
-- Depth and layering.
+- Refined shadows.
 - Elegant borders.
-- Carefully controlled animations.
-- Strong visual hierarchy.
+- Appropriate border radii.
+- Smooth transitions.
+- Clear visual hierarchy.
 - High-quality responsive layouts.
 
-Use CSS variables for design tokens.
+Do not use the same design for every application.
 
-Example design-token structure:
-
-:root {
-  --background: ...;
-  --surface: ...;
-  --surface-elevated: ...;
-  --primary: ...;
-  --secondary: ...;
-  --accent: ...;
-  --text: ...;
-  --muted: ...;
-  --border: ...;
-  --radius: ...;
-  --shadow: ...;
-}
-
-Do not copy the same colours and layout into every application.
-
-A luxury fashion store, a gaming platform, a finance dashboard
-and a medical booking website should NOT look identical.
+A fashion store, gaming platform, finance dashboard,
+restaurant and portfolio must have distinct identities.
 
 ==================================================
-4. PRODUCT-SPECIFIC DESIGN INTELLIGENCE
+4. PRODUCT-SPECIFIC DESIGN
 ==================================================
 
-Choose the visual direction based on the application.
+Choose the visual direction based on the product.
 
-Examples:
+SAAS:
+Premium business interface, refined typography, elegant
+dashboards and professional layouts.
 
-SAAS / BUSINESS:
-Clean premium interface, strong typography, refined dashboards,
-professional navigation, carefully designed pricing and feature sections.
+FINANCE:
+Trustworthy colours, clear figures, organized transactions
+and excellent data visualization.
 
-FINANCE / BANKING:
-Trustworthy design, elegant data visualization, readable figures,
-organized transactions and clear financial hierarchy.
+ECOMMERCE:
+Beautiful product imagery, product cards, filters,
+search, shopping cart and purchase interactions.
 
-E-COMMERCE:
-Strong product imagery, attractive product cards, filters,
-search, shopping cart and clear purchase interactions.
-
-FOOD / RESTAURANT:
-Appetizing imagery, expressive typography, attractive menus,
-location information and prominent ordering actions.
+RESTAURANT:
+Appetizing imagery, attractive menu, brand storytelling
+and prominent ordering actions.
 
 PORTFOLIO:
-Distinctive personal identity, strong typography, project showcases,
-creative layouts and elegant transitions.
+Distinctive personal identity, creative layouts,
+project showcases and expressive typography.
 
 GAMING:
-Immersive dark visuals, energetic colours, rich graphics,
-bold typography and engaging interactions.
+Immersive visuals, bold typography, rich graphics
+and energetic interactions.
 
 EDUCATION:
-Clear learning hierarchy, course cards, progress indicators,
-organized lessons and accessible layouts.
+Clear learning hierarchy, course cards, progress
+indicators and organized lessons.
 
-SOCIAL / COMMUNITY:
-User-focused interface, profiles, feeds, interaction controls,
-messages and responsive navigation.
+SOCIAL:
+Profiles, feeds, messaging, interaction controls
+and responsive navigation.
 
 TRAVEL:
-Beautiful destination imagery, booking experiences,
-location cards, search and itinerary sections.
+Beautiful destinations, booking interfaces,
+search and itinerary sections.
 
 HEALTH:
-Calm colours, accessible controls, clear information,
-appointment interfaces and trustworthy visual design.
+Calm colours, accessible controls, clear information
+and trustworthy appointment interfaces.
 
-These are design directions, not rigid templates.
-Create an original design appropriate to the specific request.
+These are directions, not fixed templates.
+Create original designs that fit the user's actual request.
 
 ==================================================
-5. COMPLETE APPLICATION EXPERIENCE
+5. COMPLETE USER EXPERIENCE
 ==================================================
 
-Build complete experiences, not just hero sections.
+Do not build only a hero section.
 
-For a marketing website, consider:
+For marketing websites, consider:
 - Navigation.
 - Hero.
 - Features.
-- Product or service showcase.
 - Benefits.
-- Testimonials where appropriate.
-- Pricing where appropriate.
-- FAQ where appropriate.
+- Product or service showcase.
+- Testimonials when appropriate.
+- Pricing when appropriate.
+- FAQ when appropriate.
 - Contact or conversion section.
 - Footer.
 
-For a dashboard, consider:
+For dashboards, consider:
 - Sidebar or navigation.
-- Top navigation.
-- Main overview.
-- Useful metrics.
-- Data tables or lists.
+- Header.
+- Overview.
+- Metrics.
+- Charts.
+- Tables and lists.
 - Filters.
 - Search.
-- Charts when appropriate.
-- Settings or account controls.
-- Loading, empty and error states.
+- Account controls.
+- Empty and loading states.
 
-For an application, consider:
-- Main navigation.
-- Core user workflow.
+For applications, implement the actual user workflow:
+- Navigation.
 - Forms.
-- Input validation.
+- Validation.
 - Interactive components.
+- Relevant screens.
 - Feedback states.
 - Responsive layouts.
-- Relevant secondary screens.
 
-Do not blindly add every section.
-Only add sections that make sense for the product.
-
-Make the application feel complete.
+Only include sections that make sense.
 
 ==================================================
-6. IMAGES AND VISUAL ASSETS
+6. IMAGES AND ASSETS
 ==================================================
 
-Visuals are important.
+Use relevant attractive imagery whenever it improves the design.
 
-Use relevant, attractive imagery when it improves the result.
+You may use appropriate remote images from reliable sources
+such as images.unsplash.com.
 
-You may use reliable remote image URLs, including appropriate
-images from images.unsplash.com.
-
-Choose images that match the actual content.
-
-Do not use unrelated images just to fill space.
+Images must match the content.
 
 Use:
-- Proper image aspect ratios.
-- object-fit: cover where appropriate.
+- Proper aspect ratios.
+- object-fit: cover.
+- Meaningful alt text.
 - Attractive image containers.
 - Appropriate overlays.
-- Meaningful alt text.
-- Sensible fallback backgrounds.
+- Sensible fallbacks.
 
-If a suitable image is unavailable, create a visually attractive
-CSS-based visual instead of showing a broken image.
+Never use unrelated imagery to fill space.
 
-Do not invent local image files that are not included in the project.
+If an image cannot be supplied, use an attractive CSS visual
+instead of showing a broken image.
 
-Do not output binary image data.
+Do not invent local image files that are not included.
+
+Do not output binary data.
 
 ==================================================
 7. TYPOGRAPHY AND LAYOUT
 ==================================================
 
-Typography must look intentional.
+Typography must be intentional.
 
-Use suitable web fonts where appropriate.
-A font from Google Fonts may be loaded using a valid external URL.
+Use appropriate web fonts when useful.
+Google Fonts may be loaded through valid external URLs.
 
 Use:
-- Clear heading hierarchy.
+- Strong heading hierarchy.
 - Readable body text.
-- Appropriate line heights.
-- Proper text widths.
 - Consistent font weights.
+- Good line heights.
+- Proper text widths.
 - Responsive font sizes.
 
-Use modern CSS layout techniques:
-- CSS Grid.
+Use modern CSS:
+- Grid.
 - Flexbox.
-- Responsive containers.
 - clamp().
 - minmax().
+- Responsive containers.
 - Media queries.
-
-Avoid layouts that break on smaller screens.
 
 ==================================================
 8. RESPONSIVE DESIGN
 ==================================================
 
-Every generated application must support:
+Every application must support:
+- Mobile.
+- Tablet.
+- Desktop.
+- Large screens.
 
-- Mobile phones.
-- Tablets.
-- Desktop screens.
-- Large desktop screens.
+Do not merely shrink desktop layouts.
 
-Do not simply shrink the desktop interface.
+Create a proper mobile experience.
 
-Design a proper mobile experience.
+Test the layout mentally at:
+360px, 390px, 768px, 1024px and 1440px.
 
-Examples:
-- Desktop sidebars may become mobile navigation.
-- Multi-column cards should adapt.
-- Tables should become readable or horizontally scrollable.
-- Navigation should have a functional mobile menu.
-- Buttons should be comfortable to tap.
-- Modals should fit small screens.
-
-Test your layout mentally at approximately:
-360px, 390px, 768px, 1024px and 1440px widths.
+Mobile navigation, buttons, forms, cards, tables and
+modals must remain usable.
 
 ==================================================
-9. ANIMATION AND INTERACTION
+9. ANIMATIONS AND INTERACTIONS
 ==================================================
 
 Use subtle, purposeful animations.
 
 Examples:
-- Smooth hover states.
+- Hover effects.
 - Button feedback.
 - Card transitions.
-- Navigation transitions.
 - Modal animations.
+- Navigation transitions.
 - Loading indicators.
-- Scroll-based effects when appropriate.
-- Smooth mobile menu transitions.
-
-Do not overuse animation.
+- Smooth mobile menus.
 
 Respect prefers-reduced-motion.
 
 Every visible interactive element must perform its intended action.
 
-Implement:
+Implement requested:
 - Navigation.
 - Search.
 - Filters.
@@ -371,22 +325,19 @@ Implement:
 - Tabs.
 - Dropdowns.
 - Buttons.
-- Relevant application workflows.
+- Application workflows.
 
 Do not create fake buttons.
-
-Do not use alert() as a substitute for a proper interface.
-
+Do not use alert() as a replacement for a proper interface.
 Do not simulate successful backend operations.
 
 ==================================================
-10. REAL BACKEND IMPLEMENTATION
+10. REAL BACKEND
 ==================================================
 
-If the requested application requires a backend, generate the
-necessary backend files and actual integration code.
+If the application requires a backend, generate the necessary files.
 
-Use appropriate architecture such as:
+Possible structure:
 
 server.js
 api/
@@ -394,32 +345,28 @@ routes/
 controllers/
 middleware/
 config/
-src/
 
-Never expose private API keys in frontend JavaScript.
+Never expose private API keys in browser JavaScript.
 
 Use environment variables for secrets.
 
-If credentials are unavailable:
-- Implement the integration safely.
-- Document the required environment variables.
-- Explain how to configure the service.
-- Do not claim the service is already connected.
+If credentials are missing:
+- Implement integrations safely.
+- Document required environment variables.
+- Explain configuration in README.
+- Do not claim services are already connected.
 
 Never invent database records or fake API responses.
 
-Do not claim that payments, authentication, email, storage or
-database operations work unless they are actually implemented.
-
 ==================================================
-11. MULTI-FILE PROJECT STRUCTURE
+11. MULTI-FILE PROJECT
 ==================================================
 
 You are generating a REAL MULTI-FILE PROJECT.
 
-You must keep source files separate.
+Never put the entire application in index.html.
 
-Every standard project must include:
+Every standard project must contain:
 
 index.html
 styles.css
@@ -448,17 +395,15 @@ api/
 
 server.js
 
-The structure must fit the actual application.
+Keep source files separate and use consistent file references.
 
-Do not put the entire application into index.html.
-
-Do not create empty or unnecessary files.
+Do not create empty files or unnecessary files.
 
 ==================================================
-12. PWA REQUIREMENTS
+12. PWA
 ==================================================
 
-Include a valid manifest.webmanifest containing:
+Include a valid manifest.webmanifest with:
 
 - name
 - short_name
@@ -469,23 +414,20 @@ Include a valid manifest.webmanifest containing:
 - background_color
 - icons
 
-Include service-worker.js with appropriate caching and
-offline fallback behavior.
+Include service-worker.js with sensible caching and
+offline fallback behaviour.
 
-Use a safe, sensible cache strategy.
+Do not cache private API responses or sensitive data.
 
-Do not cache private API responses or sensitive user data.
-
-Include the service-worker registration in the application
-when appropriate.
+Include service worker registration where appropriate.
 
 Do not claim installability if required assets are missing.
 
 If icon image files cannot be generated, document the required
-icon assets and use appropriate icon paths.
+assets and use appropriate icon paths.
 
 ==================================================
-13. ACCESSIBILITY AND QUALITY
+13. ACCESSIBILITY
 ==================================================
 
 Use:
@@ -493,8 +435,8 @@ Use:
 - Accessible labels.
 - Keyboard-friendly controls.
 - Visible focus states.
-- Good colour contrast.
 - Appropriate ARIA attributes.
+- Good colour contrast.
 - Form validation.
 - Useful error messages.
 - Loading states.
@@ -502,48 +444,38 @@ Use:
 
 Avoid unnecessary dependencies.
 
-Do not use a framework unless it makes sense for the requested app.
-
-If using a framework, generate all required configuration files.
-
 ==================================================
-14. COMPLETENESS AND SELF-REVIEW
+14. FINAL QUALITY REVIEW
 ==================================================
 
-Before returning the JSON, internally review the project.
-
-Check:
+Before returning the project, internally check:
 
 - Does the design fit the product?
-- Does it look professionally designed?
-- Is the first screen visually impressive?
-- Is the colour palette coherent?
-- Is the typography attractive?
-- Does the layout have proper hierarchy?
-- Does the mobile layout work?
-- Are all requested sections present?
-- Are buttons and interactions implemented?
-- Are file references consistent?
-- Are all required files included?
+- Is the first screen impressive?
+- Is the visual identity coherent?
+- Are the colours attractive?
+- Is typography professional?
+- Is spacing consistent?
+- Is the mobile layout usable?
+- Are requested features implemented?
+- Do buttons work?
+- Are file references correct?
 - Is package.json valid?
 - Is the manifest valid JSON?
-- Does the service worker make sense?
-- Are there obvious syntax errors?
-- Are there placeholder implementations?
+- Is the service worker sensible?
+- Are there syntax errors?
 - Are there fake backend claims?
+- Are there unfinished placeholders?
 
-Improve the project before returning it if any answer is no.
-
-Do not return an unfinished application simply because the
-user supplied a short prompt.
+Improve the project before returning it.
 
 ==================================================
-15. OUTPUT FORMAT
+15. JSON OUTPUT
 ==================================================
 
-Return ONE valid JSON object.
+Return exactly ONE valid JSON object.
 
-Use this structure:
+Required structure:
 
 {
   "projectName": "Application Name",
@@ -565,32 +497,31 @@ Additional files may use nested paths:
 
 JSON RULES:
 
-- Return valid JSON only.
-- No Markdown fences.
+- Valid JSON only.
+- No Markdown code fences.
 - No explanations outside JSON.
-- Escape newlines and quotation marks correctly.
+- Escape newlines and quotation marks.
 - Every file must contain complete source code.
 - Never write "rest of code here".
 - Never write "implement this later".
-- Never use placeholder file contents.
+- Never return placeholder file contents.
 - Never include binary data.
 - Never include private secrets.
 
-Your priority order is:
-
+Priorities:
 1. Correct functionality.
 2. Exceptional visual design.
-3. Complete user experience.
+3. Complete experience.
 4. Responsive behaviour.
-5. Clean project architecture.
+5. Clean architecture.
 6. Maintainable code.
 
 Build something that makes the user excited to explore it.
 `;
 
- /* =========================================
-    HELPERS
- ========================================= */
+/* =========================================
+   HELPERS
+========================================= */
 
 function sendJSON(res, status, data) {
   return res.status(status).json(data);
@@ -642,11 +573,15 @@ function parseAIJSON(content) {
   const last = text.lastIndexOf("}");
 
   if (first === -1 || last === -1 || last <= first) {
-    throw new Error("The AI did not return a valid project JSON object.");
+    throw new Error("The AI did not return a valid JSON project.");
   }
 
   return JSON.parse(text.slice(first, last + 1));
 }
+
+/* =========================================
+   FILE VALIDATION
+========================================= */
 
 function validateProjectFiles(project) {
   if (
@@ -708,23 +643,40 @@ function validateProjectFiles(project) {
     }
   }
 
+  // Validate manifest JSON.
+  try {
+    JSON.parse(files["manifest.webmanifest"]);
+  } catch {
+    throw new Error("The generated PWA manifest contains invalid JSON.");
+  }
+
+  // Validate package.json.
+  try {
+    const pkg = JSON.parse(files["package.json"]);
+
+    if (!pkg || typeof pkg !== "object" || Array.isArray(pkg)) {
+      throw new Error();
+    }
+  } catch {
+    throw new Error("The generated package.json contains invalid JSON.");
+  }
+
   return files;
 }
 
 /* =========================================
    PREVIEW BUILDER
-   Keeps original project files separate.
 ========================================= */
 
 function createPreviewHTML(files) {
   let html = files["index.html"];
 
-  const rootCSS = files["styles.css"] || "";
-  const rootJS = files["script.js"] || "";
+  const css = files["styles.css"] || "";
+  const js = files["script.js"] || "";
 
-  // Inline the main stylesheet.
-  if (rootCSS) {
-    const styleTag = `<style>\n${rootCSS}\n</style>`;
+  // Inline main stylesheet.
+  if (css) {
+    const styleTag = `<style>\n${css}\n</style>`;
 
     if (/<\/head>/i.test(html)) {
       html = html.replace(
@@ -736,25 +688,23 @@ function createPreviewHTML(files) {
     }
   }
 
-  // Remove only the local root stylesheet reference.
+  // Remove only the local root stylesheet.
   html = html.replace(
     /<link\b(?=[^>]*href=["'](?:\.\/)?styles\.css(?:\?[^"']*)?["'])[^>]*>/gi,
     ""
   );
 
-  // Inline the main classic JavaScript file.
-  // Module projects retain their original module structure;
-  // they should be previewed through a proper project runtime.
+  // Inline classic root script.
   const hasModuleScript =
     /<script\b[^>]*type=["']module["'][^>]*>/i.test(html);
 
-  if (!hasModuleScript && rootJS) {
+  if (!hasModuleScript && js) {
     html = html.replace(
       /<script\b(?=[^>]*src=["'](?:\.\/)?script\.js(?:\?[^"']*)?["'])[^>]*>\s*<\/script>/gi,
       ""
     );
 
-    const scriptTag = `<script>\n${rootJS}\n</script>`;
+    const scriptTag = `<script>\n${js}\n</script>`;
 
     if (/<\/body>/i.test(html)) {
       html = html.replace(
@@ -766,13 +716,121 @@ function createPreviewHTML(files) {
     }
   }
 
-  // Blob previews cannot register service workers.
+  // Service workers cannot be registered from Blob previews.
   html = html.replace(
     /navigator\.serviceWorker\.register\s*\(\s*(['"`])[^'"`]*\1\s*(?:,\s*\{[^}]*\})?\s*\)\s*;?/g,
     "/* Service worker registration is enabled on deployed HTTPS builds. */"
   );
 
   return html;
+}
+
+/* =========================================
+   GROQ REQUEST
+========================================= */
+
+async function requestGroq({
+  groqKey,
+  model,
+  projectName,
+  projectId,
+  prompt,
+  attempt,
+  signal
+}) {
+  const retryInstruction = attempt > 1
+    ? `
+IMPORTANT RETRY:
+Your previous response failed JSON generation or validation.
+
+Generate the complete project again.
+Use concise but complete source code.
+Do not omit required files.
+Ensure every JSON string is correctly escaped.
+Return one complete valid JSON object.
+Do not include Markdown.
+`
+    : "";
+
+  const response = await fetch(GROQ_ENDPOINT, {
+    method: "POST",
+
+    headers: {
+      Authorization: `Bearer ${groqKey}`,
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+      model,
+
+      messages: [
+        {
+          role: "system",
+          content: SYSTEM_PROMPT
+        },
+        {
+          role: "user",
+          content: `
+APPLICATION NAME:
+${projectName}
+
+PROJECT ID:
+${projectId || "New project"}
+
+USER REQUIREMENTS:
+${prompt}
+
+GENERATION INSTRUCTIONS:
+
+Treat the user requirements as the product specification.
+
+If the prompt is short, intelligently infer missing details.
+Do not ask the user to design the interface.
+
+Choose a unique visual identity appropriate to the product.
+Make the first screen visually impressive.
+Build a complete and useful application experience.
+Use relevant imagery and polished visual components.
+Implement real interactions.
+Generate separate source files.
+Include all seven required standard files.
+
+Do not return a generic starter template.
+Do not return a plain unstyled page.
+Do not reduce quality because the prompt is short.
+
+${retryInstruction}
+
+Return valid JSON only.
+`
+        }
+      ],
+
+      temperature: 0.55,
+
+      // GPT-OSS uses max_completion_tokens.
+      max_completion_tokens: MAX_COMPLETION_TOKENS,
+
+      reasoning_effort: "low",
+
+      include_reasoning: false,
+
+      response_format: {
+        type: "json_object"
+      },
+
+      stream: false
+    }),
+
+    signal
+  });
+
+  const result = await response.json().catch(() => ({}));
+
+  return {
+    response,
+    result
+  };
 }
 
 /* =========================================
@@ -854,7 +912,8 @@ export default async function handler(req, res) {
 
   /* AI CONFIGURATION */
 
-  const model = process.env.GROQ_MODEL || DEFAULT_MODEL;
+  const model =
+    process.env.GROQ_MODEL || DEFAULT_MODEL;
 
   const controller = new AbortController();
 
@@ -864,131 +923,152 @@ export default async function handler(req, res) {
   );
 
   try {
-    const response = await fetch(GROQ_ENDPOINT, {
-      method: "POST",
+    let project = null;
+    let files = null;
+    let lastError = null;
+    let lastProviderError = null;
+    let usage = null;
 
-      headers: {
-        Authorization: `Bearer ${groqKey}`,
-        "Content-Type": "application/json"
-      },
+    /* GENERATION WITH RETRY */
 
-      body: JSON.stringify({
-        model,
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      let response;
+      let result;
 
-        messages: [
-          {
-            role: "system",
-            content: SYSTEM_PROMPT
-          },
-          {
-            role: "user",
-            content: `
-APPLICATION NAME:
-${projectName}
+      try {
+        const request = await requestGroq({
+          groqKey,
+          model,
+          projectName,
+          projectId,
+          prompt,
+          attempt,
+          signal: controller.signal
+        });
 
-PROJECT ID:
-${projectId || "New project"}
+        response = request.response;
+        result = request.result;
 
-USER REQUIREMENTS:
-${prompt}
+      } catch (error) {
+        if (error.name === "AbortError") {
+          throw error;
+        }
 
-IMPORTANT GENERATION INSTRUCTIONS:
+        console.error("Groq network error:", error);
 
-Treat the user requirements as the product specification.
+        lastError = error;
 
-If the prompt is short, intelligently infer missing details.
-Do not ask the user to design the interface for you.
+        if (attempt < MAX_ATTEMPTS) {
+          continue;
+        }
 
-Choose a unique visual identity appropriate to the product.
-Make the first screen visually impressive.
-Build a complete, useful application experience.
-Use appropriate imagery and polished visual components.
-Implement actual interactions.
-Generate all required separate source files.
+        break;
+      }
 
-Do not return a generic starter template.
-Do not return a plain unstyled page.
-Do not reduce the quality because the prompt is short.
+      if (!response.ok) {
+        const providerError = result?.error || {};
 
-Return the complete multi-file project as valid JSON only.
-`
-          }
-        ],
+        lastProviderError = {
+          status: response.status,
+          code: providerError.code || null,
+          message: providerError.message || null
+        };
 
-        temperature: 0.65,
-        max_tokens: 12000,
+        console.error("ATLAS GROQ ERROR:", {
+          ...lastProviderError,
+          failed_generation:
+            providerError.failed_generation || null
+        });
 
-        response_format: {
-          type: "json_object"
-        },
+        lastError = new Error(
+          providerError.message ||
+          `Groq request failed (${response.status}).`
+        );
 
-        stream: false
-      }),
+        // Retry only JSON generation errors and temporary server errors.
+        const retryable =
+          providerError.code === "json_validate_failed" ||
+          response.status >= 500;
 
-      signal: controller.signal
-    });
+        if (retryable && attempt < MAX_ATTEMPTS) {
+          continue;
+        }
 
-    const result = await response.json();
+        break;
+      }
 
-    if (!response.ok) {
-      console.error(
-        "Groq error:",
-        result?.error || result
-      );
+      const choice = result?.choices?.[0];
+      const content = choice?.message?.content;
 
+      usage = result?.usage || usage;
+
+      if (!content) {
+        lastError = new Error(
+          "The AI provider returned no project content."
+        );
+
+        if (attempt < MAX_ATTEMPTS) {
+          continue;
+        }
+
+        break;
+      }
+
+      if (choice.finish_reason === "length") {
+        lastError = new Error(
+          "The AI reached its completion-token limit before finishing the project."
+        );
+
+        if (attempt < MAX_ATTEMPTS) {
+          continue;
+        }
+
+        break;
+      }
+
+      /* PARSE JSON */
+
+      try {
+        project = parseAIJSON(content);
+
+        /* VALIDATE FILES */
+
+        files = validateProjectFiles(project);
+
+        lastError = null;
+
+        break;
+
+      } catch (error) {
+        console.error(
+          `ATLAS generation attempt ${attempt} failed:`,
+          error.message
+        );
+
+        lastError = error;
+        project = null;
+        files = null;
+
+        if (attempt >= MAX_ATTEMPTS) {
+          break;
+        }
+      }
+    }
+
+    /* GENERATION FAILED */
+
+    if (!files || !project) {
       return sendJSON(res, 502, {
         success: false,
+
         error:
-          result?.error?.message ||
-          `AI provider request failed (${response.status}).`
-      });
-    }
+          lastError?.message ||
+          "The AI could not generate a valid project. Please try again.",
 
-    const choice = result?.choices?.[0];
-    const content = choice?.message?.content;
+        providerCode:
+          lastProviderError?.code || null,
 
-    if (!content) {
-      return sendJSON(res, 502, {
-        success: false,
-        error: "The AI provider returned no project content."
-      });
-    }
-
-    if (choice.finish_reason === "length") {
-      return sendJSON(res, 502, {
-        success: false,
-        error:
-          "The generated project exceeded the AI output limit. Try a more focused request."
-      });
-    }
-
-    /* PARSE PROJECT */
-
-    let project;
-
-    try {
-      project = parseAIJSON(content);
-    } catch (error) {
-      console.error("AI JSON parsing failed:", error.message);
-
-      return sendJSON(res, 502, {
-        success: false,
-        error: "The AI returned invalid project data. Please try again."
-      });
-    }
-
-    /* VALIDATE FILES */
-
-    let files;
-
-    try {
-      files = validateProjectFiles(project);
-    } catch (error) {
-      console.error("Project validation failed:", error.message);
-
-      return sendJSON(res, 502, {
-        success: false,
-        error: error.message
+        attempts: MAX_ATTEMPTS
       });
     }
 
@@ -1032,7 +1112,7 @@ Return the complete multi-file project as valid JSON only.
 
       previewHtml,
 
-      // Backward compatibility with the current builder.js.
+      // Backward compatibility with current builder.js.
       code: previewHtml,
 
       fileCount: Object.keys(files).length,
@@ -1044,7 +1124,9 @@ Return the complete multi-file project as valid JSON only.
 
       model,
 
-      usage: result.usage || null,
+      usage,
+
+      attemptsUsed: MAX_ATTEMPTS,
 
       generatedAt: new Date().toISOString(),
 
@@ -1060,7 +1142,7 @@ Return the complete multi-file project as valid JSON only.
     if (error.name === "AbortError") {
       return sendJSON(res, 504, {
         success: false,
-        error: "AI generation timed out. Try a smaller request."
+        error: "AI generation timed out. Try a more focused request."
       });
     }
 
