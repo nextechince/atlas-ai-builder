@@ -1,0 +1,1768 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070916">
+<meta name="description" content="Explore premium website and application templates on ATLAS AI BUILDER.">
+<title>Templates — ATLAS AI BUILDER</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:#070916;
+  --panel:#0d1429;
+  --card:#111a32;
+  --purple:#9855ff;
+  --blue:#426aff;
+  --cyan:#00d4ff;
+  --text:#f8faff;
+  --muted:#91a0c0;
+  --border:rgba(255,255,255,.10);
+}
+
+* {box-sizing:border-box;margin:0;padding:0}
+html {scroll-behavior:smooth}
+body {
+  min-height:100vh;
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  background:
+    radial-gradient(ellipse at 20% 0%,#35207825,transparent 35%),
+    radial-gradient(ellipse at 95% 20%,#123b7d20,transparent 35%),
+    var(--bg);
+}
+button,input {font:inherit}
+button,a {-webkit-tap-highlight-color:transparent}
+a {color:inherit;text-decoration:none}
+button {cursor:pointer}
+.gradient {
+  background:linear-gradient(100deg,#d36aff,#8b79ff,#00d4ff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.muted {color:var(--muted)}
+
+/* NAVIGATION */
+
+.topbar {
+  position:sticky;
+  top:0;
+  z-index:50;
+  height:74px;
+  display:flex;
+  align-items:center;
+  gap:30px;
+  padding:0 5%;
+  border-bottom:1px solid #ffffff10;
+  background:#080b19eF;
+  backdrop-filter:blur(20px);
+}
+.brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:16px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  white-space:nowrap;
+}
+.brand-mark {
+  width:39px;
+  height:39px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  font-size:24px;
+  background:linear-gradient(140deg,#a855f7,#2563eb);
+  box-shadow:0 0 24px #7147ff70;
+}
+.brand small {
+  display:block;
+  font-size:8px;
+  letter-spacing:2.5px;
+  color:#9aa8c9;
+  margin-top:3px;
+}
+.nav-links {
+  display:flex;
+  align-items:center;
+  gap:25px;
+  margin-left:20px;
+}
+.nav-links a {
+  color:#aab6d0;
+  font-size:11px;
+  font-weight:600;
+  transition:.2s;
+}
+.nav-links a:hover,.nav-links a.active {color:white}
+.nav-spacer {flex:1}
+.nav-actions {display:flex;align-items:center;gap:10px}
+.nav-button {
+  padding:10px 15px;
+  border-radius:9px;
+  font-size:10px;
+  font-weight:800;
+}
+.nav-login {
+  color:#dce4fa;
+  border:1px solid #ffffff20;
+  background:#ffffff08;
+}
+.nav-create {
+  color:white;
+  background:linear-gradient(110deg,#9b36ff,#426aff);
+  box-shadow:0 4px 18px #6843ff50;
+}
+.mobile-menu {
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:white;
+  background:#121a31;
+  font-size:20px;
+}
+
+/* PAGE */
+
+.page {
+  width:min(1500px,92%);
+  margin:auto;
+  padding:45px 0 80px;
+}
+.breadcrumb {
+  display:flex;
+  gap:9px;
+  align-items:center;
+  font-size:10px;
+  color:#8492b2;
+  margin-bottom:25px;
+}
+.breadcrumb a:hover {color:white}
+.hero {
+  position:relative;
+  overflow:hidden;
+  padding:38px 40px;
+  border:1px solid #8852ff66;
+  border-radius:23px;
+  background:
+    radial-gradient(ellipse at 90% 20%,#174fbd55,transparent 38%),
+    radial-gradient(ellipse at 20% 100%,#8c35d955,transparent 45%),
+    linear-gradient(115deg,#171032,#101a3b 70%,#091b34);
+  box-shadow:0 0 45px #653aff1d;
+}
+.hero::after {
+  content:"✦";
+  position:absolute;
+  right:9%;
+  top:12px;
+  font-size:190px;
+  color:#a77aff;
+  opacity:.08;
+  pointer-events:none;
+}
+.hero-content {position:relative;z-index:2;max-width:720px}
+.eyebrow {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:#d2b5ff;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.hero h1 {
+  margin:17px 0 13px;
+  font-size:clamp(34px,5vw,58px);
+  letter-spacing:-2.8px;
+  line-height:1.06;
+}
+.hero p {
+  max-width:620px;
+  color:#b4c0df;
+  font-size:13px;
+  line-height:1.9;
+}
+.hero-bottom {
+  display:flex;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-top:25px;
+}
+.hero-stat {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#cbd5ee;
+  font-size:10px;
+}
+.hero-stat b {color:white;font-size:13px}
+.hero-stat-icon {font-size:17px;color:#c38bff}
+
+/* SEARCH */
+
+.search-row {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:30px 0 20px;
+}
+.search-wrap {
+  flex:1;
+  min-width:0;
+  height:49px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 16px;
+  border:1px solid #ffffff18;
+  border-radius:12px;
+  background:#0d1429;
+  transition:.2s;
+}
+.search-wrap:focus-within {
+  border-color:#9855ff;
+  box-shadow:0 0 20px #884bff25;
+}
+.search-icon {font-size:19px;color:#9ba9cb}
+.search-wrap input {
+  flex:1;
+  width:100%;
+  outline:0;
+  border:0;
+  color:white;
+  background:transparent;
+  font-size:11px;
+}
+.search-wrap input::placeholder {color:#7180a2}
+.search-shortcut {
+  color:#8290af;
+  border:1px solid #ffffff18;
+  border-radius:5px;
+  padding:4px 7px;
+  font-size:9px;
+}
+.sort-select {
+  height:49px;
+  min-width:150px;
+  padding:0 13px;
+  border:1px solid #ffffff18;
+  border-radius:12px;
+  color:#dce5fa;
+  background:#0d1429;
+  outline:none;
+  font-size:10px;
+}
+.sort-select option {background:#0d1429}
+
+/* CATEGORY FILTERS */
+
+.filter-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:12px;
+}
+.filter-heading h2 {font-size:13px}
+.filter-heading span {font-size:9px;color:#8492b1}
+.filters {
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  padding:2px 1px 13px;
+}
+.filters::-webkit-scrollbar {display:none}
+.filter-btn {
+  flex-shrink:0;
+  padding:10px 15px;
+  border:1px solid #ffffff17;
+  border-radius:30px;
+  color:#a8b5d1;
+  background:#10172c;
+  font-size:10px;
+  font-weight:700;
+  transition:.2s;
+}
+.filter-btn:hover {border-color:#8651ff;color:white}
+.filter-btn.active {
+  color:white;
+  border-color:#a26aff;
+  background:linear-gradient(100deg,#7936d9,#3a4fd1);
+  box-shadow:0 4px 16px #7540ff40;
+}
+
+/* FEATURED TEMPLATE */
+
+.featured-section {margin-top:28px}
+.section-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:15px;
+  margin-bottom:16px;
+}
+.section-heading h2 {font-size:19px;letter-spacing:-.5px}
+.section-heading p {font-size:10px;color:#8998b8;margin-top:6px}
+.featured-card {
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  overflow:hidden;
+  min-height:280px;
+  border:1px solid #8755ff66;
+  border-radius:18px;
+  background:linear-gradient(120deg,#151b3c,#11112b);
+}
+.featured-info {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  padding:30px;
+}
+.featured-label {
+  padding:6px 9px;
+  color:#e0c4ff;
+  background:#8c4bff2b;
+  border:1px solid #a76cff55;
+  border-radius:20px;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+.featured-info h3 {
+  font-size:27px;
+  letter-spacing:-1px;
+  margin:16px 0 9px;
+}
+.featured-info p {
+  max-width:440px;
+  color:#aab8d7;
+  font-size:11px;
+  line-height:1.8;
+}
+.featured-meta {
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin:17px 0;
+  color:#aebcdb;
+  font-size:9px;
+}
+.featured-actions {display:flex;gap:9px;flex-wrap:wrap}
+.btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:1px solid transparent;
+  border-radius:9px;
+  padding:11px 15px;
+  font-size:10px;
+  font-weight:800;
+  transition:.2s;
+}
+.btn:hover {transform:translateY(-2px);filter:brightness(1.12)}
+.btn-primary {
+  color:white;
+  background:linear-gradient(110deg,#a332ff,#476aff);
+  box-shadow:0 5px 18px #7545ff50;
+}
+.btn-secondary {
+  color:#e1e8fa;
+  background:#ffffff09;
+  border-color:#ffffff25;
+}
+.featured-visual {
+  position:relative;
+  min-height:280px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 50%,#8c40ff55,transparent 65%),
+    linear-gradient(135deg,#19255a,#102c54);
+}
+.featured-visual .browser {
+  width:80%;
+  transform:rotate(-3deg);
+  box-shadow:0 25px 60px #0008;
+}
+
+/* BROWSER MOCKUP */
+
+.browser {
+  overflow:hidden;
+  border:1px solid #ffffff50;
+  border-radius:10px;
+  background:#f5f6ff;
+  color:#15192b;
+}
+.browser-bar {
+  height:23px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:0 9px;
+  background:#e6e8f1;
+}
+.browser-bar i {
+  width:5px;height:5px;border-radius:50%;background:#a0a6ba;
+}
+.browser-body {padding:13px}
+.mock-nav {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:13px;
+}
+.mock-logo {width:45px;height:6px;border-radius:5px;background:#27345b}
+.mock-links {display:flex;gap:5px}
+.mock-links i {width:17px;height:4px;border-radius:5px;background:#aab2c9}
+.mock-hero {
+  min-height:65px;
+  padding:12px;
+  border-radius:5px;
+  background:linear-gradient(110deg,#252b61,#7254e8);
+  color:white;
+}
+.mock-hero b {display:block;font-size:12px;margin-bottom:5px}
+.mock-hero span {display:block;width:55%;height:4px;background:#ffffff9c;border-radius:5px}
+.mock-hero em {
+  display:inline-block;
+  width:40px;
+  height:11px;
+  border-radius:4px;
+  margin-top:9px;
+  background:#fff;
+}
+.mock-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-top:9px;
+}
+.mock-grid i {
+  display:block;
+  height:35px;
+  border-radius:4px;
+  background:linear-gradient(135deg,#dce2f8,#b8c4ee);
+}
+.mock-grid i:nth-child(2) {background:linear-gradient(135deg,#e9d7ff,#c4a3ff)}
+.mock-grid i:nth-child(3) {background:linear-gradient(135deg,#d0f3f1,#91d8d6)}
+
+/* TEMPLATE GRID */
+
+.templates-section {margin-top:38px}
+.template-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+.template-card {
+  min-width:0;
+  overflow:hidden;
+  border:1px solid #ffffff15;
+  border-radius:15px;
+  background:linear-gradient(145deg,#111a32,#0b1123);
+  transition:transform .25s,border-color .25s,box-shadow .25s;
+}
+.template-card:hover {
+  transform:translateY(-5px);
+  border-color:#8651ff;
+  box-shadow:0 15px 35px #5834b52a;
+}
+.template-preview {
+  height:190px;
+  position:relative;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:var(--preview-bg,#18234a);
+}
+.template-preview .browser {
+  width:100%;
+  max-width:390px;
+  transition:transform .3s;
+  box-shadow:0 12px 35px #0006;
+}
+.template-card:hover .template-preview .browser {transform:scale(1.035)}
+.preview-tag {
+  position:absolute;
+  left:12px;
+  top:12px;
+  z-index:2;
+  padding:6px 9px;
+  border:1px solid #ffffff35;
+  border-radius:20px;
+  color:white;
+  background:#080d20b8;
+  backdrop-filter:blur(8px);
+  font-size:8px;
+  font-weight:800;
+}
+.favorite-btn {
+  position:absolute;
+  right:12px;
+  top:12px;
+  z-index:3;
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  border:1px solid #ffffff40;
+  border-radius:50%;
+  color:white;
+  background:#080d20b8;
+  font-size:15px;
+}
+.favorite-btn.saved {color:#ff79bd;border-color:#ff79bd}
+.template-info {padding:15px}
+.template-topline {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.template-topline h3 {
+  font-size:13px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+.template-category {
+  color:#bda0ff;
+  font-size:8px;
+  white-space:nowrap;
+}
+.template-description {
+  min-height:34px;
+  color:#96a4c2;
+  font-size:9px;
+  line-height:1.7;
+  margin-top:8px;
+}
+.template-tags {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin:12px 0;
+}
+.template-tags span {
+  padding:5px 7px;
+  border-radius:5px;
+  color:#9daed1;
+  background:#ffffff09;
+  font-size:8px;
+}
+.template-footer {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding-top:12px;
+  border-top:1px solid #ffffff10;
+}
+.template-footer small {font-size:8px;color:#8493b4}
+.template-actions {display:flex;gap:7px}
+.small-btn {
+  padding:8px 10px;
+  border:1px solid #ffffff20;
+  border-radius:7px;
+  color:#cbd5ed;
+  background:#ffffff08;
+  font-size:8px;
+  font-weight:800;
+}
+.small-btn.use {
+  color:white;
+  border-color:#8755ff;
+  background:linear-gradient(110deg,#8538e5,#3e5de4);
+}
+
+/* EMPTY STATE / PAGINATION */
+
+.empty-state {
+  display:none;
+  grid-column:1/-1;
+  padding:55px 20px;
+  text-align:center;
+  border:1px dashed #ffffff25;
+  border-radius:15px;
+  color:#98a6c4;
+}
+.empty-state .empty-icon {font-size:35px;margin-bottom:12px}
+.empty-state h3 {color:white;font-size:16px;margin-bottom:8px}
+.empty-state p {font-size:10px;line-height:1.8}
+.empty-state button {
+  margin-top:15px;
+  padding:9px 15px;
+  color:white;
+  background:#6e45d8;
+  border:0;
+  border-radius:8px;
+  font-size:10px;
+}
+.results-line {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+  color:#8493b4;
+  font-size:9px;
+}
+.results-line b {color:#e7ecfb}
+.load-more-wrap {text-align:center;margin-top:25px}
+.load-more {
+  padding:12px 22px;
+  color:white;
+  background:#141b35;
+  border:1px solid #8050ee;
+  border-radius:10px;
+  font-size:10px;
+  font-weight:800;
+}
+
+/* MODAL */
+
+.modal {
+  position:fixed;
+  z-index:200;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:#030510d9;
+  backdrop-filter:blur(10px);
+}
+.modal.open {display:flex}
+.modal-box {
+  width:min(850px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid #8554ff75;
+  border-radius:18px;
+  background:#0c1328;
+  box-shadow:0 20px 80px #0009,0 0 35px #7441ff22;
+}
+.modal-header {
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:17px 20px;
+  background:#0c1328ed;
+  border-bottom:1px solid #ffffff13;
+  backdrop-filter:blur(12px);
+}
+.modal-header b {font-size:13px}
+.modal-close {
+  width:32px;height:32px;
+  border:1px solid #ffffff20;
+  border-radius:8px;
+  color:white;
+  background:#ffffff09;
+  font-size:18px;
+}
+.modal-content {padding:20px}
+.modal-preview {
+  min-height:280px;
+  display:grid;
+  place-items:center;
+  padding:25px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#1d2859,#40236e);
+}
+.modal-preview .browser {width:100%;max-width:620px}
+.modal-details {
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:20px;
+  align-items:center;
+  margin-top:20px;
+}
+.modal-details h2 {font-size:20px;margin-bottom:8px}
+.modal-details p {color:#a4b2cf;font-size:10px;line-height:1.8}
+.modal-details .btn {white-space:nowrap}
+.modal-prompt {
+  margin-top:18px;
+  padding:15px;
+  border:1px solid #ffffff13;
+  border-radius:10px;
+  background:#080e20;
+}
+.modal-prompt b {display:block;font-size:10px;margin-bottom:8px;color:#c4a4ff}
+.modal-prompt p {font-size:9px;color:#9ba9c8;line-height:1.8}
+
+/* TOAST */
+
+.toast {
+  position:fixed;
+  z-index:300;
+  left:50%;
+  bottom:25px;
+  transform:translate(-50%,20px);
+  opacity:0;
+  pointer-events:none;
+  padding:12px 18px;
+  border:1px solid #925cff;
+  border-radius:10px;
+  background:#151d3a;
+  color:white;
+  font-size:10px;
+  box-shadow:0 0 25px #7545ff40;
+  transition:.25s;
+}
+.toast.show {opacity:1;transform:translate(-50%,0)}
+
+/* FOOTER */
+
+.footer {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+  padding:25px 5%;
+  border-top:1px solid #ffffff10;
+  color:#8492b1;
+  font-size:9px;
+}
+.footer-brand {font-weight:900;color:white;letter-spacing:1px}
+
+/* RESPONSIVE */
+
+@media(min-width:1500px) {
+  .page {width:90%}
+  .template-grid {grid-template-columns:repeat(4,minmax(0,1fr))}
+  .template-preview {height:210px}
+}
+@media(max-width:1050px) {
+  .template-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .featured-card {grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px) {
+  .topbar {height:65px;padding:0 4%;gap:12px}
+  .mobile-menu {display:block;flex-shrink:0}
+  .nav-links {
+    display:none;
+    position:absolute;
+    left:4%;right:4%;top:58px;
+    padding:15px;
+    border:1px solid #ffffff20;
+    border-radius:12px;
+    background:#10172c;
+    box-shadow:0 15px 35px #0008;
+  }
+  .nav-links.open {display:flex;flex-direction:column;align-items:stretch;gap:0}
+  .nav-links a {padding:12px}
+  .nav-actions {gap:6px}
+  .nav-button {padding:9px 10px;font-size:9px}
+  .brand {font-size:13px;gap:7px}
+  .brand-mark {width:34px;height:34px;font-size:20px}
+  .brand small {font-size:7px}
+  .page {width:92%;padding:25px 0 55px}
+  .hero {padding:27px 22px;border-radius:17px}
+  .hero h1 {font-size:37px;letter-spacing:-1.8px}
+  .hero p {font-size:11px}
+  .hero-bottom {gap:13px}
+  .search-row {margin:20px 0 16px}
+  .search-shortcut {display:none}
+  .sort-select {min-width:105px;width:105px;font-size:9px;padding:0 7px}
+  .featured-card {grid-template-columns:1fr}
+  .featured-info {padding:22px}
+  .featured-info h3 {font-size:23px}
+  .featured-visual {min-height:210px}
+  .featured-visual .browser {width:78%}
+  .template-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .template-preview {height:135px;padding:10px}
+  .template-info {padding:11px}
+  .template-topline {display:block}
+  .template-topline h3 {font-size:11px}
+  .template-category {display:block;margin-top:5px}
+  .template-description {font-size:8px;min-height:48px}
+  .template-tags {gap:4px}
+  .template-tags span {font-size:7px;padding:4px 5px}
+  .template-footer {align-items:flex-start;flex-direction:column}
+  .template-actions {width:100%}
+  .small-btn {flex:1}
+  .preview-tag {left:7px;top:7px;font-size:7px}
+  .favorite-btn {right:7px;top:7px;width:26px;height:26px}
+  .section-heading h2 {font-size:16px}
+  .modal {padding:10px}
+  .modal-content {padding:13px}
+  .modal-preview {min-height:180px;padding:12px}
+  .modal-details {grid-template-columns:1fr}
+  .modal-details .btn {width:100%}
+}
+@media(max-width:390px) {
+  .nav-links {top:56px}
+  .brand small {letter-spacing:1.5px}
+  .nav-login {display:none}
+  .hero h1 {font-size:32px}
+  .template-grid {grid-template-columns:1fr}
+  .template-preview {height:190px}
+  .template-footer {flex-direction:row;align-items:center}
+  .template-description {min-height:0}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+
+  <a class="brand" href="/">
+    <span class="brand-mark">A</span>
+    <span>ATLAS<small>AI BUILDER</small></span>
+  </a>
+
+  <nav class="nav-links" id="navLinks">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/builder">AI Builder</a>
+    <a href="/templates" class="active">Templates</a>
+    <a href="/projects">Projects</a>
+  </nav>
+
+  <div class="nav-spacer"></div>
+
+  <div class="nav-actions">
+    <a href="/login" class="nav-button nav-login">Log in</a>
+    <a href="/signup" class="nav-button nav-create">Get started ↗</a>
+  </div>
+</header>
+
+<main class="page">
+
+  <div class="breadcrumb">
+    <a href="/dashboard">Dashboard</a>
+    <span>›</span>
+    <span>Templates</span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="eyebrow">✦ THE ATLAS TEMPLATE LIBRARY</span>
+
+      <h1>
+        Your next big idea<br>
+        starts with a <span class="gradient">template.</span>
+      </h1>
+
+      <p>
+        Explore professionally planned website and application designs.
+        Find your starting point, preview the layout, and let Atlas AI
+        transform it into your own project.
+      </p>
+
+      <div class="hero-bottom">
+        <div class="hero-stat">
+          <span class="hero-stat-icon">▦</span>
+          <span><b id="totalTemplates">12</b><br>Starter blueprints</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-icon">✦</span>
+          <span><b>AI Ready</b><br>Customizable with AI</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-icon">◈</span>
+          <span><b>Responsive</b><br>Desktop and mobile</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <div class="search-row">
+    <label class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input id="searchInput" type="search"
+        placeholder="Search websites, dashboards, stores...">
+      <span class="search-shortcut">SEARCH</span>
+    </label>
+
+    <select class="sort-select" id="sortSelect" aria-label="Sort templates">
+      <option value="featured">Featured first</option>
+      <option value="az">Name: A to Z</option>
+      <option value="za">Name: Z to A</option>
+    </select>
+  </div>
+
+  <!-- FILTERS -->
+  <section>
+    <div class="filter-heading">
+      <h2>Explore categories</h2>
+      <span>Choose your starting point</span>
+    </div>
+
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-category="all">✦ All Templates</button>
+      <button class="filter-btn" data-category="business">▣ Business</button>
+      <button class="filter-btn" data-category="store">◈ E-commerce</button>
+      <button class="filter-btn" data-category="portfolio">✧ Portfolio</button>
+      <button class="filter-btn" data-category="dashboard">▥ Dashboard</button>
+      <button class="filter-btn" data-category="social">◎ Social</button>
+      <button class="filter-btn" data-category="education">▤ Education</button>
+      <button class="filter-btn" data-category="landing">↗ Landing Pages</button>
+    </div>
+  </section>
+
+  <!-- FEATURED -->
+  <section class="featured-section" id="featuredSection">
+    <div class="section-heading">
+      <div>
+        <h2>✦ Featured Template</h2>
+        <p>A powerful starting point picked from the Atlas library.</p>
+      </div>
+      <span class="eyebrow">EDITOR'S PICK</span>
+    </div>
+
+    <div class="featured-card" id="featuredCard">
+      <div class="featured-info">
+        <span class="featured-label">✦ ATLAS FEATURED</span>
+        <h3>Nova SaaS Dashboard</h3>
+        <p>
+          A modern software dashboard with analytics, user management,
+          subscription panels and a beautiful workspace layout.
+        </p>
+        <div class="featured-meta">
+          <span>▦ Dashboard</span>
+          <span>◈ Responsive layout</span>
+          <span>✦ AI ready</span>
+        </div>
+        <div class="featured-actions">
+          <button class="btn btn-primary" id="featuredUse">Use this template →</button>
+          <button class="btn btn-secondary" id="featuredPreview">Live preview</button>
+        </div>
+      </div>
+
+      <div class="featured-visual">
+        <div class="browser">
+          <div class="browser-bar"><i></i><i></i><i></i></div>
+          <div class="browser-body">
+            <div class="mock-nav">
+              <span class="mock-logo"></span>
+              <span class="mock-links"><i></i><i></i><i></i></span>
+            </div>
+            <div class="mock-hero">
+              <b>Welcome to your workspace</b>
+              <span></span>
+              <em></em>
+            </div>
+            <div class="mock-grid"><i></i><i></i><i></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALL TEMPLATES -->
+  <section class="templates-section">
+    <div class="section-heading">
+      <div>
+        <h2>Explore all templates</h2>
+        <p>Choose a design and make it yours with Atlas AI.</p>
+      </div>
+    </div>
+
+    <div class="results-line">
+      <span>Showing <b id="resultCount">12</b> templates</span>
+      <span>Designed to be customized</span>
+    </div>
+
+    <div class="template-grid" id="templateGrid"></div>
+
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+      <button class="load-more" id="loadMore">Show more templates ↓</button>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <a href="/" class="footer-brand">✦ ATLAS AI BUILDER</a>
+  <span>Build anything. Create everything.</span>
+  <span>© <span id="year"></span> ATLAS</span>
+</footer>
+
+<!-- PREVIEW MODAL -->
+<div class="modal" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <div class="modal-header">
+      <b id="modalTitle">Template Preview</b>
+      <button class="modal-close" id="closeModal" aria-label="Close preview">×</button>
+    </div>
+
+    <div class="modal-content">
+      <div class="modal-preview" id="modalPreview"></div>
+
+      <div class="modal-details">
+        <div>
+          <h2 id="modalName"></h2>
+          <p id="modalDescription"></p>
+        </div>
+        <button class="btn btn-primary" id="modalUse">Use this template →</button>
+      </div>
+
+      <div class="modal-prompt">
+        <b>✦ What Atlas AI will build</b>
+        <p id="modalPrompt"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/*
+  ATLAS TEMPLATE LIBRARY
+
+  Each template is a real starter blueprint:
+  - category
+  - design direction
+  - features
+  - detailed AI build instructions
+
+  The builder receives the template ID and prompt.
+*/
+
+const templates = [
+  {
+    id:"nova-saas",
+    name:"Nova SaaS Dashboard",
+    category:"dashboard",
+    categoryName:"Dashboard",
+    description:"A premium software dashboard with analytics, accounts and subscription management.",
+    tags:["Analytics","SaaS","Admin"],
+    featured:true,
+    color:"#1b285d",
+    style:"Modern dark SaaS",
+    prompt:`Build a complete, polished SaaS dashboard web application called Nova.
+
+DESIGN:
+Use a premium dark interface with a deep navy background, electric blue and violet accents, glass-like panels, subtle gradients, smooth transitions and responsive layouts.
+
+PAGES AND FEATURES:
+1. Dashboard overview with welcome header, KPI cards, analytics charts, recent activity and quick actions.
+2. Sidebar navigation with Dashboard, Projects, Analytics, Team, Billing and Settings.
+3. Projects page with searchable project cards, create, edit and delete controls.
+4. Team management page with member list, role labels and invitation interface.
+5. Billing page with plan cards, usage information and invoice history UI.
+6. Profile and account settings page.
+7. Notifications panel.
+
+Make the interface interactive, accessible and responsive. Use realistic sample content only where backend data is not connected. Organize the code cleanly and explain any backend integration requirements.`
+  },
+  {
+    id:"elevate-store",
+    name:"Elevate Online Store",
+    category:"store",
+    categoryName:"E-commerce",
+    description:"A stylish online shop with product collections, shopping cart and checkout experience.",
+    tags:["Shop","Products","Cart"],
+    color:"#4a1e58",
+    style:"Luxury modern commerce",
+    prompt:`Build a polished e-commerce website called Elevate Store.
+
+DESIGN:
+Premium fashion and lifestyle storefront, warm cream and charcoal colors, elegant typography, beautiful product imagery areas, refined spacing and responsive layouts.
+
+PAGES AND FEATURES:
+1. Homepage with announcement bar, navigation, large hero campaign and featured collections.
+2. Product catalogue with category filters, sorting and search.
+3. Product details with gallery, variants, quantity selector and add-to-cart.
+4. Shopping cart with quantity updates and subtotal.
+5. Checkout interface with shipping and payment form UI.
+6. Customer account and order history.
+7. Contact, FAQ and policy pages.
+
+Build functional cart interactions and responsive product cards. Do not pretend payments have been processed unless a real payment provider is connected.`
+  },
+  {
+    id:"creator-portfolio",
+    name:"Creator Portfolio",
+    category:"portfolio",
+    categoryName:"Portfolio",
+    description:"A beautiful personal portfolio for designers, developers, creators and freelancers.",
+    tags:["Personal","Creative","Projects"],
+    color:"#29205d",
+    style:"Creative editorial",
+    prompt:`Build a premium personal portfolio website for a creative professional.
+
+DESIGN:
+Bold editorial layout, oversized typography, elegant spacing, expressive gradients, smooth animations and a responsive mobile experience.
+
+SECTIONS:
+1. Hero with personal name, profession, introduction and contact CTA.
+2. About section with biography and profile image area.
+3. Skills and services.
+4. Featured projects with image previews, descriptions and links.
+5. Experience and achievements.
+6. Testimonials.
+7. Contact form and social links.
+8. Footer.
+
+Use editable placeholder content that can easily be replaced. Make navigation and project interactions work.`
+  },
+  {
+    id:"orbit-agency",
+    name:"Orbit Creative Agency",
+    category:"business",
+    categoryName:"Business",
+    description:"A confident agency website with services, case studies and a conversion-focused layout.",
+    tags:["Agency","Services","Leads"],
+    color:"#173e61",
+    style:"Bold corporate creative",
+    prompt:`Build a premium digital agency website called Orbit Creative.
+
+DESIGN:
+Modern creative agency aesthetic, dark navy and electric blue with bright accent colors, strong typography, large visual sections and polished motion.
+
+PAGES:
+1. Homepage with strong hero statement and project CTA.
+2. Services page with service descriptions and deliverables.
+3. Work page with portfolio case studies and filters.
+4. About page with team and company story.
+5. Testimonials and client logos.
+6. Contact page with inquiry form.
+7. Responsive navigation and footer.
+
+Focus on credibility, clear calls to action, strong visual hierarchy and mobile usability.`
+  },
+  {
+    id:"connect-community",
+    name:"Connect Community",
+    category:"social",
+    categoryName:"Social",
+    description:"A community platform concept with member profiles, posts, groups and activity feeds.",
+    tags:["Community","Profiles","Feed"],
+    color:"#07535c",
+    style:"Friendly social platform",
+    prompt:`Build a responsive community web application called Connect.
+
+DESIGN:
+Modern friendly social platform, deep charcoal interface, teal and violet accents, rounded cards and clear content hierarchy.
+
+FEATURES:
+1. Community home feed with posts, author profiles, timestamps and reactions.
+2. Create-post interface with text and image upload UI.
+3. Member directory with profile cards and search.
+4. Individual member profile pages.
+5. Groups and topic categories.
+6. Notifications interface.
+7. Messaging interface layout.
+8. Account settings and responsive navigation.
+
+Create realistic interactions on the frontend. Clearly identify features that require a backend, authentication or real-time service.`
+  },
+  {
+    id:"learnsphere",
+    name:"LearnSphere Academy",
+    category:"education",
+    categoryName:"Education",
+    description:"An online learning platform with courses, lessons, progress tracking and student dashboards.",
+    tags:["Courses","Learning","Students"],
+    color:"#263d79",
+    style:"Modern educational",
+    prompt:`Build an online learning platform called LearnSphere.
+
+DESIGN:
+Professional and welcoming education platform, navy blue, violet and cyan accents, clean typography and accessible responsive layout.
+
+FEATURES:
+1. Landing page explaining the learning platform.
+2. Course catalogue with categories and search.
+3. Course detail page with curriculum, instructor and enrolment CTA.
+4. Student dashboard with enrolled courses and progress indicators.
+5. Lesson viewer with video placeholder, lesson content and next lesson navigation.
+6. Instructor profile pages.
+7. Student profile and settings.
+8. FAQ and contact pages.
+
+Include interactive course filters and progress UI. Make it clear where real authentication, video hosting and course data need backend services.`
+  },
+  {
+    id:"launch-landing",
+    name:"Launch Product Page",
+    category:"landing",
+    categoryName:"Landing Page",
+    description:"A conversion-focused product landing page for launching a new product or startup.",
+    tags:["Startup","Launch","Marketing"],
+    color:"#47235e",
+    style:"Futuristic gradient",
+    prompt:`Build a high-converting product launch landing page for a startup.
+
+DESIGN:
+Futuristic premium SaaS aesthetic with dark background, glowing purple and cyan gradients, bold headline typography, elegant product mockups and subtle animations.
+
+SECTIONS:
+1. Navigation with logo, links and CTA.
+2. Hero with compelling headline, product description and two CTAs.
+3. Product visual preview.
+4. Key benefits and feature cards.
+5. How it works in three steps.
+6. Testimonials and social proof.
+7. Pricing comparison.
+8. FAQ accordion.
+9. Final CTA and footer.
+
+Ensure buttons, navigation, FAQ interactions and responsive layouts work.`
+  },
+  {
+    id:"financeflow",
+    name:"FinanceFlow Wallet",
+    category:"dashboard",
+    categoryName:"Dashboard",
+    description:"A financial dashboard concept with wallet balances, transactions and spending insights.",
+    tags:["Finance","Wallet","Charts"],
+    color:"#124b42",
+    style:"Premium financial tech",
+    prompt:`Build a financial dashboard interface called FinanceFlow.
+
+DESIGN:
+Premium fintech design with deep green, midnight navy, soft mint accents and clear financial data presentation.
+
+FEATURES:
+1. Overview with wallet balance, income, expenses and savings cards.
+2. Transaction list with search and category filters.
+3. Spending analytics with charts.
+4. Budget management interface.
+5. Savings goals and progress indicators.
+6. Account and profile settings.
+7. Responsive sidebar and mobile navigation.
+
+Use clearly labelled sample data for the demo. Do not connect to bank accounts or claim real financial transactions are happening.`
+  },
+  {
+    id:"foodie-table",
+    name:"Foodie Restaurant",
+    category:"business",
+    categoryName:"Business",
+    description:"A beautiful restaurant website with menu sections, reservations and location details.",
+    tags:["Restaurant","Menu","Booking"],
+    color:"#653326",
+    style:"Warm editorial restaurant",
+    prompt:`Build an elegant restaurant website called Foodie Table.
+
+DESIGN:
+Warm premium restaurant aesthetic, rich dark brown, cream and muted gold, large food image areas and beautiful editorial typography.
+
+PAGES:
+1. Homepage with restaurant hero, story and reservation CTA.
+2. Menu page with food categories, descriptions and prices.
+3. Individual dish detail presentation.
+4. Reservation form with date, time and party size.
+5. About page with restaurant story.
+6. Gallery page.
+7. Location, opening hours and contact.
+8. Mobile-friendly navigation.
+
+Make the reservation form interactive, but do not claim reservations are confirmed unless a real booking backend is connected.`
+  },
+  {
+    id:"estate-prime",
+    name:"Estate Prime",
+    category:"business",
+    categoryName:"Business",
+    description:"A premium property listing website with search filters, property cards and agent profiles.",
+    tags:["Real Estate","Listings","Search"],
+    color:"#34405c",
+    style:"Luxury property",
+    prompt:`Build a luxury real estate listing website called Estate Prime.
+
+DESIGN:
+Sophisticated property brand, charcoal, ivory and gold palette, premium typography and spacious image-led layouts.
+
+FEATURES:
+1. Homepage with property search and featured listings.
+2. Listings page with location, price, property type and bedroom filters.
+3. Property detail page with image gallery, description and amenities.
+4. Save/favourite properties interaction.
+5. Agent directory and agent profile pages.
+6. Contact and viewing request form.
+7. Responsive navigation and footer.
+
+Use realistic placeholder property listings and clearly mark sample information.`
+  },
+  {
+    id:"eventwave",
+    name:"EventWave",
+    category:"landing",
+    categoryName:"Landing Page",
+    description:"An event and conference website with schedules, speakers, tickets and registration.",
+    tags:["Events","Speakers","Tickets"],
+    color:"#40205e",
+    style:"Vibrant event experience",
+    prompt:`Build a vibrant event website called EventWave.
+
+DESIGN:
+High-energy event branding with deep purple, neon pink and electric blue, bold headings, gradient backgrounds and polished animations.
+
+FEATURES:
+1. Hero with event name, date, location and registration CTA.
+2. Countdown timer.
+3. Event overview and highlights.
+4. Speaker profiles.
+5. Detailed schedule with time slots and tracks.
+6. Ticket options and registration interface.
+7. Venue and travel information.
+8. FAQ and contact.
+9. Responsive mobile experience.
+
+Build a working countdown and interactive schedule. Do not process ticket payments unless a real payment service is connected.`
+  },
+  {
+    id:"taskpilot",
+    name:"TaskPilot Workspace",
+    category:"dashboard",
+    categoryName:"Dashboard",
+    description:"A productivity workspace with task boards, project tracking and team collaboration UI.",
+    tags:["Productivity","Tasks","Team"],
+    color:"#25305b",
+    style:"Clean productivity",
+    prompt:`Build a productivity and project management web application called TaskPilot.
+
+DESIGN:
+Clean professional workspace, dark navy and blue-violet accents, modern cards and easy-to-use task layouts.
+
+FEATURES:
+1. Workspace dashboard with task statistics.
+2. Projects list with progress.
+3. Kanban board with To Do, In Progress and Done columns.
+4. Add, edit and delete task interactions.
+5. Task details with description, priority and due date.
+6. Team member interface.
+7. Calendar view.
+8. Notifications and account settings.
+9. Responsive sidebar and mobile layout.
+
+Make task interactions work in the frontend. Explain what needs backend persistence and multi-user authentication.`
+  }
+];
+
+/* STATE */
+
+let activeCategory = "all";
+let searchTerm = "";
+let sortMode = "featured";
+let selectedTemplate = null;
+let visibleLimit = 12;
+let favorites = new Set();
+
+try {
+  favorites = new Set(
+    JSON.parse(localStorage.getItem("atlas-template-favorites") || "[]")
+  );
+} catch {
+  favorites = new Set();
+}
+
+/* HELPERS */
+
+const $ = id => document.getElementById(id);
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[char]);
+}
+
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => toast.classList.remove("show"), 2600);
+}
+
+function getTemplate(id) {
+  return templates.find(template => template.id === id);
+}
+
+/* MINI WEBSITE PREVIEW */
+
+function previewMarkup(template) {
+  const name = escapeHTML(template.name);
+  const title = escapeHTML(template.style);
+  const category = escapeHTML(template.categoryName);
+
+  return `
+    <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-body">
+        <div class="mock-nav">
+          <span class="mock-logo"></span>
+          <span class="mock-links"><i></i><i></i><i></i></span>
+        </div>
+        <div class="mock-hero">
+          <b>${name}</b>
+          <span></span>
+          <em></em>
+        </div>
+        <div class="mock-grid"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  `;
+}
+
+/* CARD */
+
+function templateCard(template) {
+  const saved = favorites.has(template.id);
+
+  return `
+    <article class="template-card">
+      <div class="template-preview" style="--preview-bg:${escapeHTML(template.color)}">
+        <span class="preview-tag">${escapeHTML(template.categoryName)}</span>
+
+        <button
+          class="favorite-btn ${saved ? "saved" : ""}"
+          data-favorite="${escapeHTML(template.id)}"
+          aria-label="${saved ? "Remove from favorites" : "Add to favorites"}"
+          title="Save template"
+        >${saved ? "♥" : "♡"}</button>
+
+        ${previewMarkup(template)}
+      </div>
+
+      <div class="template-info">
+        <div class="template-topline">
+          <h3>${escapeHTML(template.name)}</h3>
+          <span class="template-category">${escapeHTML(template.categoryName)}</span>
+        </div>
+
+        <p class="template-description">
+          ${escapeHTML(template.description)}
+        </p>
+
+        <div class="template-tags">
+          ${template.tags.map(tag => `<span>${escapeHTML(tag)}</span>`).join("")}
+        </div>
+
+        <div class="template-footer">
+          <small>✦ AI customizable</small>
+
+          <div class="template-actions">
+            <button class="small-btn" data-preview="${escapeHTML(template.id)}">
+              Preview
+            </button>
+            <button class="small-btn use" data-use="${escapeHTML(template.id)}">
+              Use template →
+            </button>
+          </div>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+/* FILTER + SORT */
+
+function getFilteredTemplates() {
+  let result = [...templates];
+
+  if (activeCategory === "favorites") {
+    result = result.filter(template => favorites.has(template.id));
+  } else if (activeCategory !== "all") {
+    result = result.filter(template => template.category === activeCategory);
+  }
+
+  if (searchTerm) {
+    result = result.filter(template => {
+      const text = [
+        template.name,
+        template.description,
+        template.categoryName,
+        template.style,
+        ...template.tags
+      ].join(" ").toLowerCase();
+
+      return text.includes(searchTerm);
+    });
+  }
+
+  if (sortMode === "az") {
+    result.sort((a,b) => a.name.localeCompare(b.name));
+  } else if (sortMode === "za") {
+    result.sort((a,b) => b.name.localeCompare(a.name));
+  } else {
+    result.sort((a,b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
+  }
+
+  return result;
+}
+
+/* RENDER */
+
+function renderTemplates() {
+  const results = getFilteredTemplates();
+  const grid = $("templateGrid");
+
+  $("resultCount").textContent = results.length;
+  $("totalTemplates").textContent = templates.length;
+
+  if (!results.length) {
+    grid.innerHTML = `
+      <div class="empty-state" style="display:block">
+        <div class="empty-icon">⌕</div>
+        <h3>No templates found</h3>
+        <p>Try another search or choose a different category.</p>
+        <button id="resetFilters">Clear filters</button>
+      </div>
+    `;
+    $("loadMoreWrap").style.display = "none";
+
+    $("resetFilters").addEventListener("click", resetFilters);
+    return;
+  }
+
+  const visible = results.slice(0, visibleLimit);
+
+  grid.innerHTML = visible.map(templateCard).join("");
+
+  $("loadMoreWrap").style.display =
+    results.length > visibleLimit ? "block" : "none";
+
+  grid.querySelectorAll("[data-preview]").forEach(button => {
+    button.addEventListener("click", () => {
+      openPreview(button.dataset.preview);
+    });
+  });
+
+  grid.querySelectorAll("[data-use]").forEach(button => {
+    button.addEventListener("click", () => {
+      useTemplate(button.dataset.use);
+    });
+  });
+
+  grid.querySelectorAll("[data-favorite]").forEach(button => {
+    button.addEventListener("click", () => {
+      toggleFavorite(button.dataset.favorite);
+    });
+  });
+}
+
+/* CATEGORY FILTER */
+
+$("filters").addEventListener("click", event => {
+  const button = event.target.closest("[data-category]");
+  if (!button) return;
+
+  activeCategory = button.dataset.category;
+  visibleLimit = 12;
+
+  document.querySelectorAll(".filter-btn").forEach(item => {
+    item.classList.toggle("active", item === button);
+  });
+
+  $("featuredSection").style.display =
+    activeCategory === "all" && !searchTerm ? "block" : "none";
+
+  renderTemplates();
+});
+
+/* SEARCH */
+
+$("searchInput").addEventListener("input", event => {
+  searchTerm = event.target.value.trim().toLowerCase();
+  visibleLimit = 12;
+
+  $("featuredSection").style.display =
+    !searchTerm && activeCategory === "all" ? "block" : "none";
+
+  renderTemplates();
+});
+
+/* SORT */
+
+$("sortSelect").addEventListener("change", event => {
+  sortMode = event.target.value;
+  renderTemplates();
+});
+
+/* LOAD MORE */
+
+$("loadMore").addEventListener("click", () => {
+  visibleLimit += 6;
+  renderTemplates();
+});
+
+/* FAVORITES */
+
+function toggleFavorite(id) {
+  if (favorites.has(id)) {
+    favorites.delete(id);
+    showToast("Removed from saved templates.");
+  } else {
+    favorites.add(id);
+    showToast("Template saved to favorites ♥");
+  }
+
+  try {
+    localStorage.setItem(
+      "atlas-template-favorites",
+      JSON.stringify([...favorites])
+    );
+  } catch (error) {
+    console.warn("Could not save favorites:", error);
+  }
+
+  renderTemplates();
+}
+
+/* PREVIEW MODAL */
+
+function openPreview(id) {
+  const template = getTemplate(id);
+  if (!template) return;
+
+  selectedTemplate = template;
+
+  $("modalTitle").textContent = "Template Preview";
+  $("modalName").textContent = template.name;
+  $("modalDescription").textContent =
+    `${template.description} Design direction: ${template.style}.`;
+
+  $("modalPrompt").textContent = template.prompt;
+
+  $("modalPreview").style.background =
+    `linear-gradient(135deg,${template.color},#171d43)`;
+
+  $("modalPreview").innerHTML = previewMarkup(template);
+
+  $("previewModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+  $("closeModal").focus();
+}
+
+function closePreview() {
+  $("previewModal").classList.remove("open");
+  document.body.style.overflow = "";
+  selectedTemplate = null;
+}
+
+$("closeModal").addEventListener("click", closePreview);
+
+$("previewModal").addEventListener("click", event => {
+  if (event.target === $("previewModal")) closePreview();
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closePreview();
+});
+
+/* USE TEMPLATE */
+
+function useTemplate(id) {
+  const template = getTemplate(id);
+  if (!template) return;
+
+  /*
+    The builder should read:
+    - template: template ID
+    - prompt: full template build instructions
+
+    The prompt is URL-encoded so spaces and punctuation
+    do not break the URL.
+  */
+
+  const params = new URLSearchParams({
+    template:template.id,
+    prompt:template.prompt
+  });
+
+  window.location.href = `/builder?${params.toString()}`;
+}
+
+/* FEATURED TEMPLATE */
+
+const featuredTemplate = templates.find(template => template.featured);
+
+if (featuredTemplate) {
+  $("featuredUse").addEventListener("click", () => {
+    useTemplate(featuredTemplate.id);
+  });
+
+  $("featuredPreview").addEventListener("click", () => {
+    openPreview(featuredTemplate.id);
+  });
+}
+
+/* MODAL USE BUTTON */
+
+$("modalUse").addEventListener("click", () => {
+  if (selectedTemplate) {
+    useTemplate(selectedTemplate.id);
+  }
+});
+
+/* RESET */
+
+function resetFilters() {
+  activeCategory = "all";
+  searchTerm = "";
+  sortMode = "featured";
+  visibleLimit = 12;
+
+  $("searchInput").value = "";
+  $("sortSelect").value = "featured";
+
+  document.querySelectorAll(".filter-btn").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.category === "all"
+    );
+  });
+
+  $("featuredSection").style.display = "block";
+  renderTemplates();
+}
+
+/* MOBILE NAV */
+
+$("mobileMenu").addEventListener("click", () => {
+  $("navLinks").classList.toggle("open");
+});
+
+document.addEventListener("click", event => {
+  if (
+    !event.target.closest("#navLinks") &&
+    !event.target.closest("#mobileMenu")
+  ) {
+    $("navLinks").classList.remove("open");
+  }
+});
+
+/* FOOTER YEAR */
+
+$("year").textContent = new Date().getFullYear();
+
+/* INITIAL RENDER */
+
+renderTemplates();
+</script>
+
+</body>
+</html>
