@@ -1,0 +1,1305 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050713">
+<meta name="description" content="ATLAS AI BUILDER — Build anything. Create everything.">
+<title>ATLAS AI BUILDER — Build Anything</title>
+
+<script type="module" src="/js/app.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:#050713;
+  --panel:#0b1022;
+  --card:#101831;
+  --primary:#8b5cf6;
+  --blue:#3478ff;
+  --cyan:#00d4ff;
+  --purple:#b84cff;
+  --text:#f8faff;
+  --muted:#9ba8c7;
+  --border:rgba(139,92,246,.23);
+}
+
+* {box-sizing:border-box;margin:0;padding:0}
+
+html {scroll-behavior:smooth;scroll-padding-top:90px}
+
+body {
+  background:
+    radial-gradient(ellipse at 75% 12%,rgba(54,49,190,.17),transparent 35%),
+    radial-gradient(ellipse at 5% 50%,rgba(125,35,220,.10),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  overflow-x:hidden;
+}
+
+a {text-decoration:none;color:inherit}
+
+button {font:inherit}
+
+.container {width:min(1240px,92%);margin:auto}
+
+.gradient {
+  background:linear-gradient(100deg,#c14cff,#7771ff,#00d4ff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.glow {
+  box-shadow:0 0 25px rgba(111,70,255,.35),0 0 70px rgba(0,130,255,.13);
+}
+
+.topbar {
+  width:100%;
+  height:82px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 5%;
+  background:rgba(5,7,19,.82);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  backdrop-filter:blur(22px);
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+  letter-spacing:2px;
+  font-size:19px;
+}
+
+.brand-mark {
+  width:39px;
+  height:39px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(140deg,#a855f7,#2563eb);
+  box-shadow:0 0 25px #7045ff80;
+  font-size:24px;
+  font-weight:900;
+}
+
+.brand small {
+  display:block;
+  font-size:9px;
+  letter-spacing:3px;
+  color:#aeb9d6;
+  margin-top:2px;
+}
+
+.nav {
+  display:flex;
+  gap:34px;
+  align-items:center;
+}
+
+.nav a {
+  color:#c4cce0;
+  font-size:13px;
+  transition:.25s;
+}
+
+.nav a:hover {color:#fff}
+
+.actions {display:flex;gap:12px;align-items:center}
+
+.btn {
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:9px;
+  border-radius:13px;
+  padding:13px 21px;
+  font-size:13px;
+  font-weight:700;
+  transition:.3s;
+  cursor:pointer;
+  border:1px solid transparent;
+}
+
+.btn:hover {
+  transform:translateY(-3px);
+  filter:brightness(1.15);
+}
+
+.primary {
+  color:white;
+  background:linear-gradient(110deg,#a62cff,#6255ff,#168dff);
+  box-shadow:0 5px 30px #7845ff65;
+}
+
+.ghost {
+  border-color:#8d45ff;
+  background:#100d24;
+}
+
+.outline {
+  border-color:#5367ff;
+  background:rgba(9,15,35,.8);
+}
+
+.big {padding:17px 27px;font-size:14px;border-radius:16px}
+
+.menu-toggle {
+  display:none;
+  background:none;
+  border:1px solid var(--border);
+  color:white;
+  border-radius:10px;
+  padding:9px 12px;
+  font-size:20px;
+}
+
+/* HERO */
+
+.hero {
+  position:relative;
+  padding:105px 0 55px;
+  overflow:hidden;
+}
+
+.hero::before {
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  right:-200px;
+  top:-100px;
+  background:#4621db;
+  filter:blur(180px);
+  opacity:.18;
+  pointer-events:none;
+}
+
+.hero-grid {
+  display:grid;
+  grid-template-columns: .95fr 1.05fr;
+  gap:45px;
+  align-items:center;
+}
+
+.eyebrow {
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  color:#d4b5ff;
+  border:1px solid #9b52ff66;
+  background:linear-gradient(90deg,#6320a72b,#173d9b2b);
+  padding:9px 15px;
+  border-radius:50px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  box-shadow:0 0 20px #7636ff25;
+}
+
+.eyebrow .dot {
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#00e6a0;
+  box-shadow:0 0 12px #00e6a0;
+}
+
+.hero h1 {
+  font-size:clamp(43px,5.5vw,72px);
+  line-height:1.04;
+  letter-spacing:-3.8px;
+  font-weight:900;
+  margin:27px 0 22px;
+}
+
+.hero-copy {
+  color:#aeb9d6;
+  font-size:16px;
+  line-height:1.9;
+  max-width:520px;
+}
+
+.hero-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:32px;
+}
+
+.trust {
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-top:34px;
+  color:#8794b4;
+  font-size:11px;
+}
+
+.avatars {display:flex;padding-left:7px}
+
+.avatars span {
+  width:28px;
+  height:28px;
+  margin-left:-7px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:2px solid #090d20;
+  background:linear-gradient(130deg,#7049ff,#00c5ff);
+  font-size:10px;
+  font-weight:800;
+}
+
+/* HERO VISUAL */
+
+.hero-visual {
+  min-width:0;
+  position:relative;
+  perspective:1000px;
+}
+
+.orb {
+  position:absolute;
+  width:360px;
+  height:360px;
+  border-radius:50%;
+  background:linear-gradient(120deg,#862cff,#075cff);
+  filter:blur(120px);
+  opacity:.25;
+  top:10%;
+  left:20%;
+}
+
+.ai-symbol {
+  position:absolute;
+  z-index:5;
+  top:-27px;
+  right:17%;
+  width:63px;
+  height:63px;
+  display:grid;
+  place-items:center;
+  border-radius:20px;
+  font-size:28px;
+  font-weight:900;
+  background:linear-gradient(140deg,#a52cff,#175fff);
+  box-shadow:0 0 40px #7c42ff;
+  transform:rotate(10deg);
+}
+
+.visual-window {
+  position:relative;
+  z-index:2;
+  padding:12px;
+  border:1px solid #8a54ff;
+  border-radius:23px;
+  background:linear-gradient(135deg,#171332,#09152d 70%);
+  box-shadow:0 0 35px #6c36ff45,0 0 100px #174fff24;
+  transform:rotateY(-7deg) rotateX(3deg);
+}
+
+.window-top {
+  height:37px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 10px;
+  color:#aab8d8;
+  font-size:10px;
+}
+
+.window-dots {color:#ff527a;letter-spacing:5px}
+
+.window-content {
+  display:grid;
+  grid-template-columns:135px 1fr;
+  min-height:315px;
+  border:1px solid #ffffff12;
+  border-radius:13px;
+  overflow:hidden;
+  background:#080e20;
+}
+
+.mock-sidebar {
+  background:#0c132a;
+  padding:18px 12px;
+  border-right:1px solid #ffffff0d;
+}
+
+.mock-logo {
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:2px;
+  margin-bottom:25px;
+}
+
+.mock-link {
+  display:block;
+  color:#8998bd;
+  font-size:10px;
+  padding:11px 9px;
+  margin:5px 0;
+  border-radius:8px;
+}
+
+.mock-link.active {
+  color:white;
+  background:linear-gradient(90deg,#803eff50,#285dff30);
+  border:1px solid #8954ff50;
+}
+
+.mock-main {padding:22px 19px;min-width:0}
+
+.mock-main h3 {font-size:17px;margin-bottom:8px}
+
+.mock-sub {font-size:10px;color:#8290b0}
+
+.mock-prompt {
+  margin-top:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border:1px solid #8e4aff;
+  background:#171334;
+  border-radius:11px;
+  padding:13px;
+  color:#8e9abb;
+  font-size:10px;
+  box-shadow:0 0 20px #743eff28;
+}
+
+.mock-send {
+  width:27px;
+  height:27px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(130deg,#a62fff,#396aff);
+  color:white;
+  border-radius:8px;
+  font-size:15px;
+}
+
+.template-label {
+  margin:22px 0 11px;
+  font-size:9px;
+  letter-spacing:2px;
+  color:#9ba8c7;
+}
+
+.mock-templates {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+}
+
+.mock-template {
+  min-width:0;
+  padding:13px 6px;
+  border:1px solid #ffffff13;
+  background:linear-gradient(140deg,#17254b,#11152d);
+  border-radius:10px;
+  text-align:center;
+}
+
+.mock-template .symbol {
+  font-size:23px;
+  margin-bottom:10px;
+  color:#5da9ff;
+}
+
+.mock-template b {display:block;font-size:9px}
+
+.mock-template small {
+  display:block;
+  margin-top:5px;
+  color:#8290b0;
+  font-size:8px;
+}
+
+.floating-card {
+  position:absolute;
+  z-index:4;
+  background:rgba(8,15,39,.94);
+  border:1px solid #5c7aff;
+  border-radius:13px;
+  padding:13px 17px;
+  box-shadow:0 0 30px #315cff45;
+  backdrop-filter:blur(15px);
+}
+
+.float-one {right:-20px;bottom:30px}
+.float-two {left:-28px;bottom:90px}
+
+.floating-card b {font-size:11px;display:block}
+.floating-card small {color:#94a5cb;font-size:9px}
+
+.pulse {
+  display:inline-block;
+  width:7px;
+  height:7px;
+  background:#00edac;
+  border-radius:50%;
+  margin-right:6px;
+  box-shadow:0 0 12px #00edac;
+}
+
+/* WORKSPACE */
+
+.workspace-section {padding:45px 0 100px}
+
+.workspace {
+  position:relative;
+  overflow:hidden;
+  border:1px solid #9b55ff;
+  border-radius:19px;
+  background:linear-gradient(135deg,#10162f,#070d20);
+  box-shadow:0 0 35px #6234ff38,0 0 100px #155cff17;
+}
+
+.workspace-bar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 20px;
+  border-bottom:1px solid #ffffff14;
+  color:#9ba8c7;
+  font-size:11px;
+}
+
+.workspace-body {
+  display:grid;
+  grid-template-columns:190px 1fr;
+  min-height:330px;
+}
+
+.workspace-side {
+  background:#0a1025;
+  padding:23px 15px;
+  border-right:1px solid #ffffff12;
+}
+
+.workspace-side strong {
+  display:block;
+  margin-bottom:25px;
+  font-size:15px;
+}
+
+.workspace-side a {
+  display:block;
+  padding:13px 12px;
+  border-radius:9px;
+  font-size:11px;
+  color:#9ba8c7;
+  margin-bottom:7px;
+}
+
+.workspace-side a.active {
+  color:white;
+  background:linear-gradient(90deg,#853cff66,#2768ff30);
+}
+
+.workspace-content {padding:32px;min-width:0}
+
+.workspace-content h2 {font-size:24px;margin-bottom:10px}
+
+.workspace-content>p {font-size:12px;color:#8e9abb}
+
+.workspace-input {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:23px;
+  padding:17px;
+  border:1px solid #8d4bff;
+  border-radius:13px;
+  background:#151431;
+  box-shadow:0 0 25px #743eff22;
+  color:#9ba8c7;
+  font-size:12px;
+}
+
+.workspace-input button {
+  margin-left:auto;
+  border:0;
+  color:white;
+  background:linear-gradient(120deg,#a32cff,#3769ff);
+  padding:9px 13px;
+  border-radius:8px;
+}
+
+.project-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
+  margin-top:23px;
+}
+
+.project-card {
+  overflow:hidden;
+  min-width:0;
+  border:1px solid #ffffff16;
+  background:#101a35;
+  border-radius:12px;
+  transition:.3s;
+}
+
+.project-card:hover {
+  transform:translateY(-6px);
+  border-color:#8d55ff;
+  box-shadow:0 10px 30px #613aff25;
+}
+
+.project-art {
+  height:100px;
+  display:grid;
+  place-items:center;
+  font-size:32px;
+  position:relative;
+  overflow:hidden;
+}
+
+.art-dashboard {background:linear-gradient(140deg,#132d70,#0d8bba)}
+.art-store {background:linear-gradient(140deg,#55208d,#e24d9b)}
+.art-social {background:linear-gradient(140deg,#075c73,#18bca0)}
+.art-portfolio {background:linear-gradient(140deg,#40216f,#a26aff)}
+
+.project-info {padding:12px}
+
+.project-info b {font-size:10px;display:block}
+.project-info small {color:#8290b0;font-size:9px}
+
+/* SECTIONS */
+
+.section {padding:80px 0}
+
+.section-heading {max-width:700px;margin-bottom:35px}
+
+.section h2 {
+  font-size:clamp(30px,4vw,47px);
+  letter-spacing:-2px;
+  margin:18px 0 12px;
+}
+
+.section-heading p {color:var(--muted);line-height:1.8;font-size:14px}
+
+.feature-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:17px;
+}
+
+.feature-card {
+  position:relative;
+  padding:27px;
+  border:1px solid #ffffff13;
+  background:linear-gradient(145deg,#111a35,#090f21);
+  border-radius:17px;
+  transition:.3s;
+  overflow:hidden;
+}
+
+.feature-card:hover {
+  transform:translateY(-7px);
+  border-color:#8a4fff;
+  box-shadow:0 15px 40px #6b36ff1b;
+}
+
+.feature-icon {
+  width:45px;
+  height:45px;
+  display:grid;
+  place-items:center;
+  font-size:21px;
+  color:#d5aaff;
+  background:linear-gradient(140deg,#7733ff55,#147bff33);
+  border:1px solid #9a59ff55;
+  border-radius:13px;
+  margin-bottom:22px;
+}
+
+.feature-card h3 {font-size:15px;margin-bottom:11px}
+.feature-card p {color:#98a5c4;font-size:12px;line-height:1.8}
+
+/* SHOWCASE */
+
+.showcase {
+  padding:65px 0;
+  background:linear-gradient(180deg,transparent,#0d1230 50%,transparent);
+}
+
+.showcase-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:17px;
+}
+
+.showcase-card {
+  border:1px solid #ffffff16;
+  background:#0e1630;
+  border-radius:16px;
+  overflow:hidden;
+  transition:.3s;
+}
+
+.showcase-card:hover {
+  transform:translateY(-6px);
+  border-color:#7652ff;
+}
+
+.showcase-image {
+  height:190px;
+  padding:16px;
+  position:relative;
+  overflow:hidden;
+}
+
+.showcase-image.dashboard {
+  background:linear-gradient(130deg,#122a62,#075b83);
+}
+.showcase-image.shop {
+  background:linear-gradient(130deg,#6a225f,#e55c94);
+}
+.showcase-image.finance {
+  background:linear-gradient(130deg,#123f46,#128d80);
+}
+.showcase-image.chat {
+  background:linear-gradient(130deg,#24206c,#5544c5);
+}
+.showcase-image.portfolio {
+  background:linear-gradient(130deg,#252b48,#596b9e);
+}
+.showcase-image.agency {
+  background:linear-gradient(130deg,#542a22,#c16d38);
+}
+
+.preview-window {
+  height:100%;
+  border:1px solid #ffffff45;
+  border-radius:10px;
+  background:#ffffffed;
+  color:#18223b;
+  padding:12px;
+  box-shadow:0 10px 30px #0005;
+  transform:rotate(-2deg);
+}
+
+.preview-top {
+  display:flex;
+  justify-content:space-between;
+  font-size:8px;
+  font-weight:800;
+  padding-bottom:9px;
+  border-bottom:1px solid #dce2ef;
+}
+
+.preview-hero {
+  margin-top:15px;
+  height:55px;
+  border-radius:7px;
+  background:linear-gradient(110deg,#263d83,#7589ed);
+  display:grid;
+  place-items:center;
+  color:white;
+  font-size:13px;
+  font-weight:900;
+}
+
+.preview-lines {
+  display:flex;
+  gap:6px;
+  margin-top:12px;
+}
+
+.preview-lines span {
+  height:27px;
+  flex:1;
+  border-radius:5px;
+  background:#e4e9f5;
+}
+
+.showcase-info {padding:18px}
+.showcase-info h3 {font-size:14px;margin-bottom:7px}
+.showcase-info p {font-size:11px;color:#96a4c4;line-height:1.7}
+
+/* STEPS */
+
+.steps {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:30px;
+  position:relative;
+  margin-top:40px;
+}
+
+.step {
+  text-align:center;
+  padding:20px;
+}
+
+.step-number {
+  width:66px;
+  height:66px;
+  display:grid;
+  place-items:center;
+  margin:0 auto 22px;
+  border-radius:50%;
+  border:1px solid #985aff;
+  color:#d5aaff;
+  font-size:24px;
+  background:#211342;
+  box-shadow:0 0 30px #8b40ff45;
+}
+
+.step h3 {font-size:16px;margin-bottom:10px}
+.step p {font-size:12px;color:#96a4c4;line-height:1.8}
+
+/* CTA */
+
+.cta-wrap {padding:70px 0}
+
+.cta {
+  position:relative;
+  overflow:hidden;
+  padding:55px 35px;
+  text-align:center;
+  border:1px solid #9656ff;
+  border-radius:23px;
+  background:
+    radial-gradient(circle at 10% 100%,#8a29e9aa,transparent 36%),
+    radial-gradient(circle at 90% 0%,#086dff99,transparent 40%),
+    linear-gradient(120deg,#27135c,#101b56,#092b62);
+  box-shadow:0 0 50px #5c37ff35;
+}
+
+.cta h2 {
+  font-size:clamp(28px,4vw,45px);
+  margin:17px 0 25px;
+  letter-spacing:-2px;
+}
+
+.cta p {color:#d0d9ff;font-size:13px;margin-bottom:25px}
+
+/* FOOTER */
+
+footer {
+  padding:35px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:20px;
+  border-top:1px solid #ffffff12;
+  color:#8f9cba;
+  font-size:11px;
+}
+
+footer .brand {color:white;font-size:14px}
+
+.socials {display:flex;gap:17px}
+.socials a:hover {color:white}
+
+/* ANIMATIONS */
+
+@keyframes float {
+  0%,100% {transform:translateY(0)}
+  50% {transform:translateY(-12px)}
+}
+
+@keyframes shimmer {
+  0% {background-position:0%}
+  100% {background-position:200%}
+}
+
+.ai-symbol,.float-one {animation:float 5s ease-in-out infinite}
+.float-two {animation:float 6s ease-in-out infinite reverse}
+
+.reveal {
+  opacity:0;
+  transform:translateY(25px);
+  transition:opacity .7s,transform .7s;
+}
+
+.reveal.visible {opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+
+@media(max-width:950px) {
+  .hero-grid {grid-template-columns:1fr;gap:65px}
+  .hero-copy {max-width:650px}
+  .hero-visual {width:min(700px,100%);margin:auto}
+  .feature-grid {grid-template-columns:repeat(2,1fr)}
+  .project-grid {grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:650px) {
+  .topbar {height:70px;padding:0 4%}
+  .brand {font-size:15px}
+  .brand-mark {width:34px;height:34px}
+  .nav {
+    display:none;
+    position:absolute;
+    top:69px;
+    left:0;
+    right:0;
+    padding:20px;
+    background:#090e20;
+    border-bottom:1px solid #ffffff18;
+    flex-direction:column;
+    align-items:stretch;
+    gap:20px;
+  }
+  .nav.open {display:flex}
+  .nav a {font-size:14px}
+  .menu-toggle {display:block}
+  .actions .ghost {display:none}
+  .actions .btn {padding:10px 13px;font-size:11px}
+  .hero {padding:75px 0 35px}
+  .hero h1 {letter-spacing:-2.5px}
+  .hero-copy {font-size:14px}
+  .hero-actions .btn {width:100%}
+  .window-content {grid-template-columns:95px 1fr;min-height:270px}
+  .mock-sidebar {padding:13px 7px}
+  .mock-link {font-size:8px;padding:10px 5px}
+  .mock-main {padding:17px 10px}
+  .mock-main h3 {font-size:13px}
+  .mock-template {padding:10px 3px}
+  .mock-template b {font-size:8px}
+  .mock-template small {font-size:7px}
+  .float-one {right:-5px;bottom:12px}
+  .float-two {left:-5px;bottom:85px}
+  .floating-card {padding:10px}
+  .workspace-body {grid-template-columns:1fr}
+  .workspace-side {display:none}
+  .workspace-content {padding:22px 15px}
+  .workspace-content h2 {font-size:19px}
+  .project-grid {grid-template-columns:repeat(2,1fr)}
+  .feature-grid,.showcase-grid {grid-template-columns:1fr}
+  .section {padding:60px 0}
+  .steps {grid-template-columns:1fr;gap:10px}
+  .step {padding:15px}
+  .cta {padding:42px 18px}
+  footer {flex-direction:column;text-align:center}
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    scroll-behavior:auto!important;
+    animation:none!important;
+    transition:none!important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <a class="brand" href="/">
+    <span class="brand-mark">A</span>
+    <span>ATLAS<small>AI BUILDER</small></span>
+  </a>
+
+  <nav class="nav" id="nav">
+    <a href="#features">Features</a>
+    <a href="#showcase">Explore projects</a>
+    <a href="#how">How it works</a>
+  </nav>
+
+  <div class="actions">
+    <a class="btn ghost" href="/login">Log in</a>
+    <a class="btn primary" href="/signup">Get started ↗</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+
+    <div class="hero-text">
+      <span class="eyebrow">✦ YOUR IDEAS, BUILT WITH AI</span>
+
+      <h1>
+        Turn your ideas into
+        <span class="gradient">real applications.</span>
+      </h1>
+
+      <p class="hero-copy">
+        Describe what you want to build. Atlas transforms your imagination
+        into beautiful interfaces, working code and projects you can truly own.
+        Your next big idea starts here.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn primary big" href="/signup">Start building ↗</a>
+        <a class="btn outline big" href="#how">▶ See how it works</a>
+      </div>
+
+      <div class="trust">
+        <div class="avatars">
+          <span>A</span><span>N</span><span>+</span>
+        </div>
+        <span>One idea. Endless possibilities.</span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="orb"></div>
+      <div class="ai-symbol">AI</div>
+
+      <div class="visual-window">
+        <div class="window-top">
+          <span class="window-dots">● ● ●</span>
+          <span>ATLAS / AI WORKSPACE</span>
+          <span>◉ Live</span>
+        </div>
+
+        <div class="window-content">
+          <aside class="mock-sidebar">
+            <div class="mock-logo">✦ ATLAS</div>
+            <span class="mock-link active">✧ AI Builder</span>
+            <span class="mock-link">▦ Projects</span>
+            <span class="mock-link">◇ Templates</span>
+            <span class="mock-link">⚙ Settings</span>
+            <span class="mock-link">♛ Upgrade</span>
+          </aside>
+
+          <div class="mock-main">
+            <h3>What are we building today?</h3>
+            <p class="mock-sub">Your imagination is the only limit.</p>
+
+            <div class="mock-prompt">
+              <span>✦ Describe your app idea...</span>
+              <span class="mock-send">➤</span>
+            </div>
+
+            <div class="template-label">START WITH A TEMPLATE</div>
+
+            <div class="mock-templates">
+              <div class="mock-template">
+                <div class="symbol">▥</div>
+                <b>Dashboard</b>
+                <small>Analytics</small>
+              </div>
+              <div class="mock-template">
+                <div class="symbol">◈</div>
+                <b>Marketplace</b>
+                <small>Shopping</small>
+              </div>
+              <div class="mock-template">
+                <div class="symbol">▣</div>
+                <b>Community</b>
+                <small>Social apps</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="floating-card float-one">
+        <b><span class="pulse"></span> Live Preview</b>
+        <small>Your creation, in real time</small>
+      </div>
+
+      <div class="floating-card float-two">
+        <b>✦ AI Generation</b>
+        <small>Turning ideas into code</small>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WORKSPACE PREVIEW -->
+<section class="workspace-section container reveal">
+  <div class="workspace">
+    <div class="workspace-bar">
+      <span>🔴 🟡 🟢</span>
+      <span>🔒 atlas.build / workspace</span>
+      <span style="color:#00e6a0">● Ready</span>
+    </div>
+
+    <div class="workspace-body">
+      <aside class="workspace-side">
+        <strong>✦ ATLAS</strong>
+        <a class="active" href="/signup">✧ AI Builder</a>
+        <a href="/login">▦ My projects</a>
+        <a href="#showcase">◇ Templates</a>
+        <a href="/login">⚙ Settings</a>
+        <a href="/signup">♛ Upgrade to Pro</a>
+      </aside>
+
+      <div class="workspace-content">
+        <h2>What are we building today?</h2>
+        <p>Start with a simple description. Let Atlas handle the complexity.</p>
+
+        <div class="workspace-input">
+          <span>✦</span>
+          <span>Describe your dream application...</span>
+          <button onclick="location.href='/signup'">➤</button>
+        </div>
+
+        <div class="template-label">EXPLORE WHAT YOU CAN CREATE</div>
+
+        <div class="project-grid">
+          <div class="project-card">
+            <div class="project-art art-dashboard">▥</div>
+            <div class="project-info"><b>Analytics Dashboard</b><small>Charts · Data · Insights</small></div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-art art-store">◈</div>
+            <div class="project-info"><b>Online Marketplace</b><small>Products · Shopping</small></div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-art art-social">◎</div>
+            <div class="project-info"><b>Social Community</b><small>Profiles · Posts · Chat</small></div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-art art-portfolio">✧</div>
+            <div class="project-info"><b>Creative Portfolio</b><small>Design · Showcase</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section container reveal" id="features">
+  <div class="section-heading">
+    <span class="eyebrow">✦ WHY ATLAS</span>
+    <h2>From first thought to <span class="gradient">first launch.</span></h2>
+    <p>Everything you need to turn an idea into something real. Create, customize, preview and take control of your projects.</p>
+  </div>
+
+  <div class="feature-grid">
+    <article class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>AI-powered building</h3>
+      <p>Describe your idea in everyday language and let AI help generate your project.</p>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-icon">⌘</div>
+      <h3>Your code, your control</h3>
+      <p>Inspect, edit and customize your generated project files. Your creation belongs to you.</p>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-icon">◉</div>
+      <h3>Live project preview</h3>
+      <p>See your creation as you build and make improvements along the way.</p>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-icon">◇</div>
+      <h3>Beautiful templates</h3>
+      <p>Start with professionally inspired layouts for different types of applications.</p>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-icon">↗</div>
+      <h3>Publish your creation</h3>
+      <p>Prepare your project for launch and give your creation its own online address.</p>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-icon">♛</div>
+      <h3>Built to grow</h3>
+      <p>Keep your projects organized and continue improving them as your ideas evolve.</p>
+    </article>
+  </div>
+</section>
+
+<!-- PROJECT SHOWCASE -->
+<section class="showcase reveal" id="showcase">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">✦ ENDLESS POSSIBILITIES</span>
+      <h2>What will you <span class="gradient">create?</span></h2>
+      <p>From powerful dashboards to beautiful online stores, your next project could be anything.</p>
+    </div>
+
+    <div class="showcase-grid">
+
+      <article class="showcase-card">
+        <div class="showcase-image dashboard">
+          <div class="preview-window">
+            <div class="preview-top"><span>OVERVIEW</span><span>Dashboard</span></div>
+            <div class="preview-hero">Analytics overview</div>
+            <div class="preview-lines"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="showcase-info"><h3>Analytics Dashboard</h3><p>Visualize data, monitor performance and understand your business.</p></div>
+      </article>
+
+      <article class="showcase-card">
+        <div class="showcase-image shop">
+          <div class="preview-window">
+            <div class="preview-top"><span>YOUR STORE</span><span>SHOP</span></div>
+            <div class="preview-hero">Discover something new</div>
+            <div class="preview-lines"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="showcase-info"><h3>E-commerce Store</h3><p>Build product pages, shopping experiences and online storefronts.</p></div>
+      </article>
+
+      <article class="showcase-card">
+        <div class="showcase-image finance">
+          <div class="preview-window">
+            <div class="preview-top"><span>FINANCE</span><span>WALLET</span></div>
+            <div class="preview-hero">Your money, organized</div>
+            <div class="preview-lines"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="showcase-info"><h3>Finance Application</h3><p>Create modern financial interfaces and personal management tools.</p></div>
+      </article>
+
+      <article class="showcase-card">
+        <div class="showcase-image chat">
+          <div class="preview-window">
+            <div class="preview-top"><span>MESSAGES</span><span>ONLINE</span></div>
+            <div class="preview-hero">Connect with everyone</div>
+            <div class="preview-lines"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="showcase-info"><h3>Messaging Platform</h3><p>Design chat interfaces, communities and communication tools.</p></div>
+      </article>
+
+      <article class="showcase-card">
+        <div class="showcase-image portfolio">
+          <div class="preview-window">
+            <div class="preview-top"><span>CREATIVE</span><span>PORTFOLIO</span></div>
+            <div class="preview-hero">Ideas become art</div>
+            <div class="preview-lines"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="showcase-info"><h3>Personal Portfolio</h3><p>Showcase your work, skills, experience and creative identity.</p></div>
+      </article>
+
+      <article class="showcase-card">
+        <div class="showcase-image agency">
+          <div class="preview-window">
+            <div class="preview-top"><span>STUDIO</span><span>CREATIVE</span></div>
+            <div class="preview-hero">Make it remarkable</div>
+            <div class="preview-lines"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="showcase-info"><h3>Business Website</h3><p>Create polished websites for brands, agencies and businesses.</p></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section container reveal" id="how">
+  <div class="section-heading">
+    <span class="eyebrow">✦ HOW IT WORKS</span>
+    <h2>Three steps. <span class="gradient">One big idea.</span></h2>
+    <p>Go from an idea to a project you can customize and prepare for launch.</p>
+  </div>
+
+  <div class="steps">
+    <article class="step">
+      <div class="step-number">✧</div>
+      <h3>01 — Describe it</h3>
+      <p>Explain what you want to create. Your idea is the starting point.</p>
+    </article>
+
+    <article class="step">
+      <div class="step-number">⌘</div>
+      <h3>02 — Build it</h3>
+      <p>Generate your project, explore the code and preview your work.</p>
+    </article>
+
+    <article class="step">
+      <div class="step-number">↗</div>
+      <h3>03 — Make it yours</h3>
+      <p>Customize your creation and prepare it for publishing.</p>
+    </article>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-wrap container reveal">
+  <div class="cta">
+    <span class="eyebrow">✦ YOUR NEXT PROJECT STARTS HERE</span>
+    <h2>Have an idea? Let's <span class="gradient">make it real.</span></h2>
+    <p>Stop waiting for the perfect moment. Start building something extraordinary.</p>
+    <a class="btn primary big" href="/signup">Create your free account ↗</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <a class="brand" href="/">
+    <span class="brand-mark">A</span>
+    <span>ATLAS<small>AI BUILDER</small></span>
+  </a>
+
+  <span>Build anything. Create everything.</span>
+
+  <div class="socials">
+    <a href="#features">Features</a>
+    <a href="#showcase">Projects</a>
+    <a href="/login">Login</a>
+  </div>
+
+  <span>© <span id="year"></span> ATLAS</span>
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+const menuToggle = document.getElementById("menuToggle");
+const nav = document.getElementById("nav");
+
+menuToggle.addEventListener("click", () => {
+  nav.classList.toggle("open");
+  menuToggle.textContent = nav.classList.contains("open") ? "✕" : "☰";
+});
+
+nav.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    nav.classList.remove("open");
+    menuToggle.textContent = "☰";
+  });
+});
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      observer.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.12});
+
+document.querySelectorAll(".reveal").forEach(element => {
+  observer.observe(element);
+});
+</script>
+
+</body>
+</html>
