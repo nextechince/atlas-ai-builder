@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b14">
+<title>Log in · ATLAS AI BUILDER</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --bg:#080b14;
+ --panel:#0e1422;
+ --border:rgba(148,163,184,.14);
+ --muted:#8995aa;
+ --text:#f8fafc;
+ --cyan:#00d4ff;
+ --blue:#5865f2;
+ --purple:#9333ea;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+.container{width:min(1160px,90%);margin:auto}
+
+/* NAV */
+
+.nav{
+ height:76px;padding:0 5%;display:flex;align-items:center;
+ justify-content:space-between;border-bottom:1px solid var(--border);
+ background:#080b14dc;backdrop-filter:blur(20px);
+ position:relative;z-index:5;
+}
+.brand{display:flex;align-items:center;gap:11px;font:700 20px 'Space Grotesk';letter-spacing:-.8px}
+.logo{
+ width:37px;height:37px;display:grid;place-items:center;
+ border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--cyan));
+ box-shadow:0 0 25px #00d4ff35;font-size:20px;
+}
+.brand .ai{color:var(--cyan)}
+.nav-right{display:flex;align-items:center;gap:22px;font-size:13px;color:#9aa8bd}
+.nav-right a:hover{color:white}
+.nav-btn{padding:10px 16px;border-radius:9px;background:linear-gradient(100deg,var(--blue),var(--purple));color:white!important;font-weight:700}
+
+/* LOGIN HERO */
+
+.hero-layout{
+ min-height:710px;display:grid;grid-template-columns:1.05fr .95fr;
+ border-bottom:1px solid var(--border);
+}
+.visual{
+ padding:65px 8%;display:flex;align-items:center;
+ position:relative;overflow:hidden;
+ background:radial-gradient(ellipse at 15% 25%,#00d4ff13,transparent 50%),radial-gradient(ellipse at 80% 80%,#9333ea20,transparent 50%);
+}
+.visual:before{
+ content:"";position:absolute;inset:0;pointer-events:none;opacity:.6;
+ background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);
+ background-size:42px 42px;
+ mask-image:linear-gradient(to bottom,black,transparent);
+}
+.hero-content{position:relative;z-index:2;max-width:550px}
+.eyebrow{
+ display:inline-flex;align-items:center;gap:8px;
+ padding:9px 14px;border-radius:30px;
+ border:1px solid #00d4ff40;background:#00d4ff0b;
+ color:#8deaff;font-size:11px;font-weight:800;letter-spacing:.7px;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:#00e5a0;box-shadow:0 0 12px #00e5a0}
+.hero h1{margin-top:25px;font:700 clamp(43px,5vw,65px)/1.08 'Space Grotesk';letter-spacing:-3px}
+.gradient{background:linear-gradient(100deg,#fff,#70e7ff 50%,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero>p{margin-top:20px;max-width:450px;color:#98a5ba;font-size:15px;line-height:1.9}
+
+/* PREVIEW */
+
+.preview{
+ margin-top:40px;max-width:480px;position:relative;padding:14px;
+ border:1px solid #94a3b833;border-radius:17px;
+ background:#111827e8;box-shadow:0 25px 70px #0006;
+ transform:perspective(1000px) rotateY(-4deg);
+}
+.preview-top{display:flex;gap:6px;align-items:center;border-bottom:1px solid var(--border);padding-bottom:13px}
+.circle{width:8px;height:8px;border-radius:50%;background:#64748b}
+.preview-title{font-size:10px;color:#aab6c9;margin-left:8px}
+.preview-content{display:grid;grid-template-columns:75px 1fr;gap:12px;padding-top:13px}
+.preview-side{display:grid;align-content:start;gap:9px}
+.side-line{height:7px;border-radius:8px;background:#94a3b825}
+.side-line.active{background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.preview-main{min-height:140px;padding:16px;border-radius:11px;background:linear-gradient(135deg,#17213d,#17132c)}
+.mini-label{font-size:9px;color:#91a4c3}
+.mini-heading{font:700 21px 'Space Grotesk';margin:12px 0}
+.mini-button{display:inline-block;padding:7px 12px;border-radius:6px;background:linear-gradient(100deg,var(--blue),var(--purple));font-size:9px;font-weight:700}
+.floating{
+ position:absolute;right:-12px;bottom:20px;padding:12px;
+ border:1px solid #00d4ff40;border-radius:11px;background:#111b2b;
+ font-size:11px;box-shadow:0 10px 30px #0008;
+}
+.floating strong{color:#65e7ff}
+
+/* LOGIN FORM */
+
+.form-panel{
+ display:flex;justify-content:center;align-items:center;
+ padding:65px 9%;
+ background:radial-gradient(circle at 50% 10%,#5865f21c,transparent 50%);
+}
+.form-wrap{width:100%;max-width:410px}
+.form-top{margin-bottom:30px}
+.form-top .small{color:#8b9bb2;font-size:12px;margin-bottom:12px}
+.form-top h2{font:700 34px 'Space Grotesk';letter-spacing:-1.3px}
+.form-top p{color:var(--muted);margin-top:9px;font-size:13px;line-height:1.8}
+.field{margin-bottom:19px}
+label{display:block;font-size:12px;font-weight:700;color:#dce5f3;margin-bottom:9px}
+.input-wrap{position:relative}
+input{
+ width:100%;height:52px;padding:0 15px;
+ border:1px solid #28364b;border-radius:10px;
+ outline:none;background:#0d1422;color:white;font-size:14px;transition:.2s;
+}
+input::placeholder{color:#526078}
+input:focus{border-color:#6875ff;box-shadow:0 0 0 3px #5865f220}
+.password-input{padding-right:55px}
+.toggle{
+ position:absolute;right:13px;top:50%;transform:translateY(-50%);
+ border:0;background:none;color:#8493aa;cursor:pointer;font-size:12px;
+}
+.form-options{display:flex;justify-content:space-between;align-items:center;margin:0 0 20px;font-size:11px;color:#8995aa}
+.remember{display:flex;align-items:center;gap:7px;cursor:pointer}
+.remember input{width:14px;height:14px;accent-color:#5865f2}
+#forgot-password{border:0;background:none;color:#63dcff;cursor:pointer;font-size:11px}
+#forgot-password:hover{text-decoration:underline}
+.submit{
+ width:100%;height:53px;border:0;border-radius:10px;
+ cursor:pointer;color:white;font-weight:800;font-size:14px;
+ background:linear-gradient(100deg,var(--blue),#7651e8,var(--purple));
+ box-shadow:0 8px 28px #5865f240;transition:.2s;
+}
+.submit:hover{transform:translateY(-2px);box-shadow:0 12px 35px #5865f260}
+.submit:disabled{opacity:.65;cursor:wait;transform:none}
+.message{padding:12px 14px;border-radius:10px;margin-top:15px;font-size:12px;line-height:1.6;display:none}
+.message:not(:empty){display:block}
+.message.error{background:#ef44441a;border:1px solid #ef444440;color:#fca5a5}
+.message.success{background:#10b9811a;border:1px solid #10b98140;color:#6ee7b7}
+.switch{margin-top:25px;text-align:center;font-size:12px;color:#8b9bb2}
+.switch a{color:#55dfff;font-weight:700}
+.security-note{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:24px;color:#64748b;font-size:10px}
+
+/* SHOWCASE */
+
+.section{padding:100px 0}
+.section-heading{text-align:center;margin-bottom:48px}
+.kicker{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
+.section-heading h2{margin-top:13px;font:700 clamp(29px,4vw,43px) 'Space Grotesk';letter-spacing:-1.5px}
+.section-heading p{color:var(--muted);max-width:540px;margin:13px auto 0;font-size:14px;line-height:1.8}
+
+/* PROJECT CARDS */
+
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.project-card{border:1px solid var(--border);border-radius:17px;overflow:hidden;background:#0e1422;transition:.3s}
+.project-card:hover{transform:translateY(-7px);border-color:#5865f280;box-shadow:0 20px 50px #0005}
+.project-art{height:205px;padding:13px;overflow:hidden;position:relative}
+.browser{height:100%;overflow:hidden;border-radius:9px;background:#fff;color:#111827}
+.browser-bar{height:23px;background:#e5e7eb;display:flex;align-items:center;gap:4px;padding:0 9px}
+.browser-bar i{width:6px;height:6px;border-radius:50%;background:#94a3b8}
+.browser-content{padding:14px;height:100%}
+
+.art-saas{background:linear-gradient(135deg,#14214a,#31215b)}
+.art-saas .browser-content{background:white}
+.saas-nav{font-size:8px;font-weight:800;display:flex;justify-content:space-between}
+.saas-hero{text-align:center;margin-top:22px}
+.saas-hero strong{display:block;font-size:18px;line-height:1.1}
+.saas-hero span{font-size:7px;color:#64748b}
+.saas-cta{display:inline-block;background:#5865f2;color:white;padding:6px 12px;margin-top:10px;border-radius:5px;font-size:7px}
+
+.art-portfolio{background:linear-gradient(135deg,#33251f,#a36b4c)}
+.art-portfolio .browser-content{background:#f1e9df}
+.port-nav{display:flex;justify-content:space-between;font-size:8px;color:#6a4936}
+.port-hero{margin-top:24px}
+.port-hero strong{font:700 23px Georgia;color:#38271f}
+.port-hero p{font-size:8px;color:#806b5d;margin-top:7px}
+.port-image{height:45px;width:65%;margin-top:12px;background:linear-gradient(135deg,#c99b7b,#493b37);border-radius:5px}
+
+.art-shop{background:linear-gradient(135deg,#213b36,#6a9477)}
+.art-shop .browser-content{background:#f8f8f1}
+.shop-nav{display:flex;justify-content:space-between;font-size:8px;font-weight:800}
+.shop-hero{text-align:center;margin:17px 0}
+.shop-hero strong{font:700 18px Georgia}
+.shop-products{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.shop-product{height:52px;border-radius:5px;background:linear-gradient(140deg,#d7e3d0,#758c73)}
+.shop-product:nth-child(2){background:linear-gradient(140deg,#f0d6bc,#b27c55)}
+.shop-product:nth-child(3){background:linear-gradient(140deg,#e2dce9,#8c789d)}
+
+.art-agency{background:linear-gradient(135deg,#221444,#6550c5)}
+.art-agency .browser-content{background:#15132c;color:white}
+.agency-nav{display:flex;justify-content:space-between;font-size:8px}
+.agency-hero{margin-top:24px}
+.agency-hero strong{font:700 20px 'Space Grotesk';line-height:1.1}
+.agency-hero p{font-size:7px;color:#b9b2d8;margin-top:7px}
+.agency-shapes{display:flex;gap:5px;margin-top:12px}
+.agency-shapes span{height:32px;flex:1;border-radius:5px;background:linear-gradient(135deg,#9a6cff,#39276e)}
+
+.art-dashboard{background:linear-gradient(135deg,#15253b,#30557a)}
+.art-dashboard .browser-content{background:#101a2a;color:white}
+.dash-title{font-size:11px;font-weight:800}
+.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:12px}
+.dash-stat{padding:9px 5px;background:#1e3047;border-radius:5px}
+.dash-stat b{display:block;font-size:11px;color:#6ce7ff}
+.dash-stat span{font-size:6px;color:#9aabc0}
+.dash-chart{height:58px;margin-top:9px;background:linear-gradient(150deg,#253d5b,#17273d);border-radius:5px;position:relative}
+.dash-chart:after{content:"";position:absolute;left:10%;right:10%;bottom:15px;height:24px;border-top:2px solid #00d4ff;transform:skewY(-15deg)}
+
+.art-restaurant{background:linear-gradient(135deg,#513024,#b36c3e)}
+.art-restaurant .browser-content{background:#211a16;color:white}
+.food-nav{display:flex;justify-content:space-between;font-size:8px}
+.food-hero{text-align:center;margin-top:23px}
+.food-hero strong{font:700 20px Georgia}
+.food-hero p{font-size:7px;color:#d9c3b1;margin-top:6px}
+.food-circle{width:50px;height:50px;margin:12px auto 0;border-radius:50%;background:radial-gradient(circle at 35% 35%,#e8b26b,#763d24 70%)}
+
+.project-info{padding:17px}
+.project-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.project-top h3{font:700 15px 'Space Grotesk'}
+.project-tag{font-size:9px;color:#78e8ff;background:#00d4ff12;padding:5px 8px;border-radius:20px}
+.project-info p{color:#8995aa;font-size:11px;line-height:1.7;margin-top:9px}
+
+/* STYLE GRID */
+
+.styles-section{background:#0b101c;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.style-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.style-card{min-height:145px;border:1px solid var(--border);border-radius:14px;padding:20px;background:#111827;transition:.25s}
+.style-card:hover{border-color:#5865f2;transform:translateY(-4px)}
+.style-icon{width:37px;height:37px;display:grid;place-items:center;border-radius:11px;background:#5865f222;color:#80eaff;font-size:17px;margin-bottom:15px}
+.style-card h3{font:600 14px 'Space Grotesk'}
+.style-card p{color:#8492a8;font-size:11px;margin-top:7px;line-height:1.6}
+
+/* FEATURES */
+
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.feature{padding:23px;border:1px solid var(--border);background:#0e1422;border-radius:14px}
+.feature-icon{font-size:23px}
+.feature h3{font:700 14px 'Space Grotesk';margin-top:14px}
+.feature p{font-size:11px;line-height:1.8;color:#8995aa;margin-top:8px}
+
+/* CTA AND FOOTER */
+
+.cta{
+ padding:75px 25px;text-align:center;
+ border:1px solid #5865f24d;border-radius:22px;
+ background:radial-gradient(ellipse at 50% 120%,#9333ea30,transparent 60%),radial-gradient(ellipse at 10% 0%,#00d4ff16,transparent 55%),#101729;
+ margin-bottom:90px;
+}
+.cta h2{font:700 clamp(29px,4vw,43px) 'Space Grotesk';letter-spacing:-1.4px}
+.cta p{margin:13px auto 24px;color:#99a8be;font-size:13px;max-width:440px;line-height:1.8}
+.cta-button{display:inline-block;padding:14px 23px;border-radius:10px;background:linear-gradient(100deg,var(--blue),var(--purple));font-size:13px;font-weight:800;box-shadow:0 10px 30px #5865f240;transition:.2s}
+.cta-button:hover{transform:translateY(-3px)}
+footer{border-top:1px solid var(--border);padding:28px 5%;display:flex;justify-content:space-between;gap:15px;color:#66748a;font-size:11px}
+footer a{color:#9aa8bd}
+
+@media(max-width:900px){
+ .hero-layout{grid-template-columns:1fr}
+ .visual{min-height:580px;padding:65px 8%}
+ .form-panel{padding:70px 8%}
+ .gallery{grid-template-columns:repeat(2,1fr)}
+ .style-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+ .nav{height:65px;padding:0 5%}
+ .nav-right{gap:12px;font-size:11px}
+ .brand{font-size:16px}
+ .logo{width:32px;height:32px}
+ .nav-btn{padding:9px 11px}
+ .visual{min-height:570px;padding:55px 7%}
+ .hero h1{font-size:44px}
+ .hero>p{font-size:13px}
+ .form-panel{padding:65px 7%}
+ .form-top h2{font-size:29px}
+ .section{padding:70px 0}
+ .gallery{grid-template-columns:1fr}
+ .project-art{height:220px}
+ .style-grid{grid-template-columns:repeat(2,1fr)}
+ .features{grid-template-columns:1fr}
+ .section-heading h2{font-size:30px}
+ .cta{padding:55px 20px;margin-bottom:60px}
+ footer{flex-direction:column;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{scroll-behavior:auto!important;transition:none!important}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="nav">
+ <a href="/" class="brand">
+  <div class="logo">✦</div>
+  <span>ATLAS <span class="ai">AI</span> BUILDER</span>
+ </a>
+ <div class="nav-right">
+  <a href="#showcase">Explore</a>
+  <a href="#features">Features</a>
+  <a href="/signup" class="nav-btn">Create account</a>
+ </div>
+</nav>
+
+<section class="hero-layout">
+
+ <section class="visual">
+  <div class="hero-content">
+   <div class="eyebrow"><span class="dot"></span> WELCOME BACK TO ATLAS</div>
+
+   <h1>Your ideas are waiting to become <span class="gradient">reality.</span></h1>
+
+   <p>
+    Pick up where you left off. Create, customize and publish
+    amazing websites with your AI-powered creative workspace.
+   </p>
+
+   <div class="preview">
+    <div class="preview-top">
+     <span class="circle"></span><span class="circle"></span><span class="circle"></span>
+     <span class="preview-title">atlas-project / website-preview</span>
+    </div>
+    <div class="preview-content">
+     <div class="preview-side">
+      <div class="side-line active"></div>
+      <div class="side-line"></div>
+      <div class="side-line"></div>
+      <div class="side-line"></div>
+      <div class="side-line"></div>
+     </div>
+     <div class="preview-main">
+      <div class="mini-label">YOUR NEXT BIG IDEA</div>
+      <div class="mini-heading">Imagine. Create.<br>Launch.</div>
+      <div class="mini-button">Continue building →</div>
+     </div>
+    </div>
+    <div class="floating">✦ <strong>Your workspace</strong> awaits</div>
+   </div>
+  </div>
+ </section>
+
+ <main class="form-panel">
+  <div class="form-wrap">
+
+   <div class="form-top">
+    <div class="small">✦ &nbsp; YOUR CREATIVE SPACE AWAITS</div>
+    <h2>Welcome back.</h2>
+    <p>Log in to your ATLAS account and continue building your next big idea.</p>
+   </div>
+
+   <form id="login-form">
+    <div class="field">
+     <label for="email">Email address</label>
+     <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
+    </div>
+
+    <div class="field">
+     <label for="password">Password</label>
+     <div class="input-wrap">
+      <input id="password" class="password-input" type="password"
+       autocomplete="current-password" minlength="6" required placeholder="Your password">
+      <button class="toggle" type="button" id="togglePassword">Show</button>
+     </div>
+    </div>
+
+    <div class="form-options">
+     <label class="remember"><input type="checkbox" id="remember" checked> Remember me</label>
+     <button id="forgot-password" type="button">Forgot password?</button>
+    </div>
+
+    <button class="submit" id="login-submit" type="submit">Log in to ATLAS →</button>
+
+    <p id="auth-message" class="message" role="status" aria-live="polite"></p>
+   </form>
+
+   <p class="switch">New to ATLAS? <a href="/signup">Create an account →</a></p>
+
+   <div class="security-note">🔒 &nbsp; Your account and projects stay protected.</div>
+  </div>
+ </main>
+
+</section>
+
+<!-- WEBSITE SHOWCASE -->
+
+<section class="section" id="showcase">
+ <div class="container">
+
+  <div class="section-heading">
+   <div class="kicker">EXPLORE WHAT'S POSSIBLE</div>
+   <h2>Build something <span class="gradient">extraordinary.</span></h2>
+   <p>From business websites to creative portfolios, discover the kinds of experiences you can create with ATLAS.</p>
+  </div>
+
+  <div class="gallery">
+
+   <article class="project-card">
+    <div class="project-art art-saas">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="saas-nav"><span>FLOWSPACE</span><span>Features &nbsp; Pricing</span></div>
+       <div class="saas-hero">
+        <strong>Work smarter.<br>Move faster.</strong>
+        <span>Everything your team needs in one place.</span><br>
+        <span class="saas-cta">Get started free</span>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>SaaS Website</h3><span class="project-tag">Modern</span></div>
+     <p>Software landing pages, pricing sections and product experiences.</p>
+    </div>
+   </article>
+
+   <article class="project-card">
+    <div class="project-art art-portfolio">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="port-nav"><b>JAMES STUDIO</b><span>WORK &nbsp; ABOUT</span></div>
+       <div class="port-hero">
+        <strong>Design is how<br>we tell stories.</strong>
+        <p>Creative designer & digital storyteller.</p>
+        <div class="port-image"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>Portfolio</h3><span class="project-tag">Creative</span></div>
+     <p>Personal portfolios, creative showcases and professional profiles.</p>
+    </div>
+   </article>
+
+   <article class="project-card">
+    <div class="project-art art-shop">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="shop-nav"><span>EVERGREEN</span><span>SHOP &nbsp; CART</span></div>
+       <div class="shop-hero"><strong>Find your<br>everyday essentials.</strong></div>
+       <div class="shop-products"><div class="shop-product"></div><div class="shop-product"></div><div class="shop-product"></div></div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>Online Store</h3><span class="project-tag">E-commerce</span></div>
+     <p>Product pages, online catalogues and beautiful storefronts.</p>
+    </div>
+   </article>
+
+   <article class="project-card">
+    <div class="project-art art-agency">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="agency-nav"><b>VISION®</b><span>STUDIO &nbsp; CONTACT</span></div>
+       <div class="agency-hero">
+        <strong>We make brands<br>impossible to ignore.</strong>
+        <p>Strategy, design and digital experiences.</p>
+        <div class="agency-shapes"><span></span><span></span><span></span></div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>Agency Website</h3><span class="project-tag">Bold</span></div>
+     <p>Business websites, agency pages and professional services.</p>
+    </div>
+   </article>
+
+   <article class="project-card">
+    <div class="project-art art-dashboard">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="dash-title">Analytics Overview</div>
+       <div class="dash-stats">
+        <div class="dash-stat"><b>12.8k</b><span>VISITORS</span></div>
+        <div class="dash-stat"><b>8.4%</b><span>GROWTH</span></div>
+        <div class="dash-stat"><b>2.4k</b><span>USERS</span></div>
+       </div>
+       <div class="dash-chart"></div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>Admin Dashboard</h3><span class="project-tag">Data</span></div>
+     <p>Analytics, management panels and application interfaces.</p>
+    </div>
+   </article>
+
+   <article class="project-card">
+    <div class="project-art art-restaurant">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="food-nav"><b>THE TABLE</b><span>MENU &nbsp; RESERVE</span></div>
+       <div class="food-hero">
+        <strong>Good food.<br>Beautiful moments.</strong>
+        <p>A little taste of something special.</p>
+        <div class="food-circle"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>Restaurant Website</h3><span class="project-tag">Elegant</span></div>
+     <p>Restaurant menus, booking pages and hospitality experiences.</p>
+    </div>
+   </article>
+
+  </div>
+ </div>
+</section>
+
+<!-- DESIGN STYLES -->
+
+<section class="section styles-section">
+ <div class="container">
+  <div class="section-heading">
+   <div class="kicker">YOUR CREATIVE DIRECTION</div>
+   <h2>Make it look <span class="gradient">the way you imagine.</span></h2>
+   <p>Explore different visual styles and find the right direction for your next project.</p>
+  </div>
+
+  <div class="style-grid">
+   <div class="style-card"><div class="style-icon">✦</div><h3>Minimalist</h3><p>Clean layouts, simple typography and beautiful spacing.</p></div>
+   <div class="style-card"><div class="style-icon">◈</div><h3>Glassmorphism</h3><p>Frosted glass effects, transparency and soft depth.</p></div>
+   <div class="style-card"><div class="style-icon">⚡</div><h3>Neon & Futuristic</h3><p>Glowing accents and futuristic interfaces.</p></div>
+   <div class="style-card"><div class="style-icon">◉</div><h3>Luxury</h3><p>Elegant layouts and sophisticated typography.</p></div>
+   <div class="style-card"><div class="style-icon">▦</div><h3>Corporate</h3><p>Professional business layouts that build trust.</p></div>
+   <div class="style-card"><div class="style-icon">✿</div><h3>Creative</h3><p>Expressive colors and unique compositions.</p></div>
+   <div class="style-card"><div class="style-icon">▤</div><h3>Editorial</h3><p>Typography-led magazine-inspired layouts.</p></div>
+   <div class="style-card"><div class="style-icon">⌘</div><h3>Modern Tech</h3><p>Product-focused layouts for technology and startups.</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- FEATURES -->
+
+<section class="section" id="features">
+ <div class="container">
+  <div class="section-heading">
+   <div class="kicker">YOUR WORKSPACE</div>
+   <h2>Everything starts with <span class="gradient">an idea.</span></h2>
+   <p>Your creative workspace is ready whenever inspiration strikes.</p>
+  </div>
+
+  <div class="features">
+   <div class="feature"><div class="feature-icon">🤖</div><h3>AI-powered creation</h3><p>Turn plain-language descriptions into website designs and code.</p></div>
+   <div class="feature"><div class="feature-icon">👁️</div><h3>Live previews</h3><p>See how your generated website looks before publishing.</p></div>
+   <div class="feature"><div class="feature-icon">💾</div><h3>Save your projects</h3><p>Keep your creations in your account and return later.</p></div>
+   <div class="feature"><div class="feature-icon">🌐</div><h3>Custom project addresses</h3><p>Publish with an editable ATLAS subdomain when domain routing is configured.</p></div>
+   <div class="feature"><div class="feature-icon">📱</div><h3>Responsive designs</h3><p>Create layouts designed for phones, tablets and desktops.</p></div>
+   <div class="feature"><div class="feature-icon">🎨</div><h3>Creative freedom</h3><p>Explore different visual styles and bring your ideas to life.</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- FINAL CTA -->
+
+<section class="container">
+ <div class="cta">
+  <h2>Ready to create something <span class="gradient">amazing?</span></h2>
+  <p>Your next big project is waiting. Log in to your account and bring it to life.</p>
+  <a href="#login-form" class="cta-button">Back to login ↑</a>
+ </div>
+</section>
+
+<footer>
+ <span>© 2026 ATLAS AI BUILDER. All rights reserved.</span>
+ <span>Build anything. Create everything. &nbsp; <a href="#login-form">Log in ↑</a></span>
+</footer>
+
+<script>
+/* Password visibility */
+const password=document.getElementById('password');
+const toggle=document.getElementById('togglePassword');
+
+toggle.addEventListener('click',()=>{
+ const visible=password.type==='password';
+ password.type=visible?'text':'password';
+ toggle.textContent=visible?'Hide':'Show';
+});
+
+/* Preserve the existing auth.js integration */
+const loginForm=document.getElementById('login-form');
+const loginButton=document.getElementById('login-submit');
+const authMessage=document.getElementById('auth-message');
+
+loginForm.addEventListener('submit',()=>{
+ loginButton.disabled=true;
+ loginButton.textContent='Logging in...';
+ authMessage.className='message';
+ authMessage.textContent='';
+});
+
+/* Restore button if auth.js reports an error */
+const observer=new MutationObserver(()=>{
+ if(authMessage.textContent.trim()){
+  loginButton.disabled=false;
+  loginButton.textContent='Log in to ATLAS →';
+ }
+});
+observer.observe(authMessage,{childList:true,characterData:true,subtree:true});
+</script>
+
+<script type="module" src="/js/auth.js"></script>
+</body>
+</html>
