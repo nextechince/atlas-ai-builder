@@ -5,120 +5,559 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#080b14">
-<title>AI Builder — ATLAS</title>
+<title>ATLAS AI BUILDER — Studio</title>
+
 <style>
-:root{--bg:#080b14;--panel:#101726;--panel2:#0c1320;--line:#253249;--text:#f8fafc;--muted:#91a0b7;--blue:#5865f2;--cyan:#00d4ff;--purple:#9333ea;--green:#35d49a}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}button,input,textarea{font:inherit}button{cursor:pointer;color:inherit}.app{min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% -20%,#20265a55,transparent 50%),var(--bg)}
-.topbar{height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--line);background:#090e19eF;position:sticky;top:0;z-index:10;backdrop-filter:blur(18px)}
-.brand{display:flex;align-items:center;gap:10px;color:white;text-decoration:none;font-weight:850;letter-spacing:.8px}.brandmark{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 0 22px #5865f266;font-size:19px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:2px;margin-top:1px}
-.top-left,.top-actions{display:flex;align-items:center;gap:14px}.back{color:var(--muted);text-decoration:none;font-size:13px}.back:hover{color:white}.project-name{font-size:13px;color:#dce5f5;border-left:1px solid var(--line);padding-left:14px}.status{font-size:11px;color:var(--green);display:flex;align-items:center;gap:7px}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
-.btn{border:1px solid var(--line);background:#151e2e;padding:9px 13px;border-radius:10px;font-size:12px;font-weight:700}.btn:hover{border-color:#6578ff;background:#1b2740}.btn.primary{border:0;background:linear-gradient(110deg,var(--blue),#7652ed);box-shadow:0 6px 24px #5865f233}.btn.primary:hover{filter:brightness(1.12)}.btn:disabled{opacity:.5;cursor:not-allowed}
-.workspace{display:grid;grid-template-columns:370px minmax(0,1fr);gap:14px;padding:14px;min-height:calc(100vh - 66px);max-width:1800px;width:100%;margin:auto}
-.left-panel{background:linear-gradient(180deg,#111a2a,#0c1320);border:1px solid var(--line);border-radius:17px;display:flex;flex-direction:column;min-height:calc(100vh - 94px);overflow:hidden}
-.panel-head{padding:19px 18px 15px;border-bottom:1px solid var(--line)}.eyebrow{color:var(--cyan);font-size:10px;letter-spacing:2px;font-weight:800}.panel-head h1{font-size:21px;margin:8px 0 5px;letter-spacing:-.7px}.panel-head p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}
-.prompt-area{padding:17px;display:flex;flex-direction:column;gap:11px}.prompt-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:750}.prompt-label span:last-child{color:var(--muted);font-weight:500;font-size:10px}
-textarea{width:100%;min-height:172px;resize:vertical;border:1px solid #2a3850;border-radius:13px;background:#080f1b;color:white;padding:14px;outline:none;font-size:13px;line-height:1.65}textarea:focus{border-color:#6575ff;box-shadow:0 0 0 3px #5865f21c}textarea::placeholder{color:#697990}
-.prompt-hints{display:flex;flex-wrap:wrap;gap:7px}.hint{border:1px solid #29364d;background:#121c2b;color:#aebbd0;border-radius:20px;padding:7px 10px;font-size:10px}.hint:hover{border-color:var(--cyan);color:white}
-.build-btn{width:100%;padding:13px;border-radius:11px;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:9px}
-.activity{margin:3px 17px 15px;border:1px solid var(--line);background:#0a111d;border-radius:13px;padding:13px}.activity-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}.activity-top strong{font-size:12px}.activity-top span{font-size:10px;color:var(--muted)}.activity-list{display:flex;flex-direction:column;gap:11px}.activity-item{display:flex;gap:10px;align-items:flex-start;color:#728198;font-size:11px;line-height:1.45}.activity-item .step-icon{width:19px;height:19px;border-radius:7px;display:grid;place-items:center;background:#172235;color:#8291a8;flex:none;font-size:10px}.activity-item.active{color:#e8efff}.activity-item.active .step-icon{background:#26336b;color:#aeb9ff;box-shadow:0 0 13px #5865f233}.activity-item.done{color:#a6b7ca}.activity-item.done .step-icon{background:#103a32;color:var(--green)}
-.tip{margin:auto 17px 16px;padding:12px;border-radius:12px;background:linear-gradient(110deg,#15234a,#17203a);border:1px solid #344477;color:#b9c7e5;font-size:11px;line-height:1.6}.tip b{color:white}
-.right-panel{min-width:0;display:flex;flex-direction:column;gap:12px}.preview-toolbar{min-height:57px;border:1px solid var(--line);border-radius:14px;background:#101827;display:flex;align-items:center;justify-content:space-between;padding:9px 12px;gap:10px}.view-tabs,.tool-actions{display:flex;align-items:center;gap:6px}.tab{border:0;background:transparent;color:var(--muted);padding:8px 11px;border-radius:8px;font-size:11px}.tab.active{background:#26345a;color:white}.tool-btn{border:1px solid var(--line);background:#131e2e;padding:8px 10px;border-radius:8px;font-size:11px;color:#bdc9dc}.tool-btn:hover{border-color:#6575ff;color:white}
-.preview-shell{flex:1;min-height:570px;border:1px solid var(--line);border-radius:16px;background:#0e1624;overflow:hidden;display:flex;flex-direction:column}.preview-top{height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--line);background:#111b2b}.browser-dots{display:flex;gap:5px}.browser-dots i{width:7px;height:7px;border-radius:50%;background:#47556d}.address{max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#09111e;border:1px solid #27354b;color:#8190a8;border-radius:6px;padding:5px 12px;font-size:10px}.preview-label{font-size:10px;color:#8493a9}
-.preview-content{flex:1;position:relative;background:#fff;min-height:520px}.preview-content iframe{width:100%;height:100%;min-height:520px;border:0;background:white;display:block}.empty-preview{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:25px;background:radial-gradient(ellipse at 50% 45%,#1a2b5b 0%,#0c1426 48%,#080d18 100%);color:white}.empty-icon{width:75px;height:75px;border-radius:23px;display:grid;place-items:center;background:linear-gradient(135deg,#5865f2,#00bde8);font-size:30px;box-shadow:0 0 45px #5865f255;margin-bottom:20px}.empty-preview h2{font-size:22px;margin:0 0 9px}.empty-preview p{max-width:380px;color:#9eacc3;font-size:12px;line-height:1.7;margin:0}.empty-preview .mini-tags{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:19px}.mini-tags span{border:1px solid #34476b;background:#111d35;border-radius:20px;padding:6px 10px;color:#c4d2ee;font-size:10px}
-.code-panel{display:none;min-height:570px;flex:1;border:1px solid var(--line);border-radius:16px;background:#080e19;overflow:hidden;flex-direction:column}.code-head{padding:12px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:12px}.code-panel textarea{flex:1;min-height:520px;border:0;border-radius:0;background:#080e19;font-family:ui-monospace,monospace;font-size:12px;resize:none}
-.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#17243a;border:1px solid #3a4e70;color:white;padding:11px 16px;border-radius:10px;font-size:12px;transition:.25s;z-index:30}.toast.show{opacity:1;transform:translate(-50%,0)}
-.mobile-prompt{display:none}
-@media(max-width:1050px){.workspace{grid-template-columns:320px minmax(0,1fr)}.tool-btn.optional{display:none}}
-@media(max-width:760px){.topbar{height:58px;padding:0 13px}.project-name,.status{display:none}.top-actions{gap:7px}.top-actions .btn{padding:8px 10px}.workspace{display:flex;flex-direction:column;padding:9px;gap:10px;min-height:calc(100vh - 58px)}.left-panel{min-height:unset}.panel-head{padding:15px}.panel-head h1{font-size:19px}.prompt-area{padding:13px}.prompt-area textarea{min-height:125px}.activity{margin:0 13px 13px}.tip{margin:0 13px 13px}.right-panel{min-height:560px}.preview-toolbar{padding:8px;flex-wrap:wrap}.view-tabs{flex:1}.tab{padding:8px}.tool-actions{gap:4px}.tool-btn{padding:7px 8px}.preview-shell,.code-panel{min-height:500px}.preview-content,.preview-content iframe{min-height:460px}.code-panel textarea{min-height:460px}.preview-label{display:none}}
-@media(max-width:390px){.brand small{display:none}.back{font-size:11px}.tab{font-size:10px;padding:7px}.tool-btn{font-size:10px}.preview-toolbar{gap:5px}}
+:root{
+  --bg:#080b14;
+  --panel:#0d1322;
+  --panel2:#111a2c;
+  --surface:#172238;
+  --border:#25334b;
+  --text:#f5f7ff;
+  --muted:#8b9bb5;
+  --purple:#7958ff;
+  --cyan:#00d4ff;
+  --green:#27d99a;
+  --red:#ff637d;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+  overflow:hidden;height:100vh;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;color:inherit}
+button:disabled{opacity:.5;cursor:not-allowed}
+.app{height:100vh;display:flex;flex-direction:column}
+
+/* TOP BAR */
+.topbar{
+  height:65px;flex-shrink:0;display:flex;
+  align-items:center;justify-content:space-between;
+  padding:0 18px;border-bottom:1px solid var(--border);
+  background:#0b1020;gap:12px;z-index:5;
+}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{
+  width:36px;height:36px;display:grid;place-items:center;
+  border-radius:11px;font-size:21px;font-weight:900;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  box-shadow:0 0 20px #7958ff55;
+}
+.brand-name{font-size:13px;font-weight:850}
+.brand-name small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.project-title{display:flex;align-items:center;gap:10px}
+.project-title input{
+  width:180px;background:transparent;border:0;outline:none;
+  color:white;font-size:13px;font-weight:700;
+}
+.save-status{font-size:10px;color:var(--muted)}
+.top-actions{display:flex;align-items:center;gap:8px}
+.btn{
+  border:1px solid var(--border);background:var(--panel2);
+  border-radius:9px;padding:9px 12px;font-size:11px;
+}
+.btn:hover{border-color:var(--purple)}
+.primary{
+  background:linear-gradient(110deg,#6651f5,#9b42ef);
+  border-color:#8e7bff;font-weight:800;
+}
+.green{background:#123b32;border-color:#24775e;color:#69e8b7}
+.avatar{
+  width:33px;height:33px;border-radius:50%;
+  background:#30265f;display:grid;place-items:center;
+  font-size:12px;font-weight:800;
+}
+
+/* MAIN */
+.workspace{
+  flex:1;min-height:0;
+  display:grid;grid-template-columns:330px minmax(0,1fr) 275px;
+}
+
+/* CHAT */
+.chat-panel{
+  min-height:0;display:flex;flex-direction:column;
+  background:var(--panel);border-right:1px solid var(--border);
+}
+.panel-header{
+  height:58px;flex-shrink:0;padding:0 15px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.panel-header strong{font-size:12px}
+.ai-status{font-size:10px;color:var(--green)}
+.conversation{
+  flex:1;min-height:0;overflow-y:auto;padding:16px;
+}
+.welcome{
+  padding:17px;border:1px solid #5144a0;border-radius:14px;
+  background:linear-gradient(140deg,#241c51,#121b31);
+  margin-bottom:18px;
+}
+.welcome-icon{
+  width:36px;height:36px;display:grid;place-items:center;
+  border-radius:11px;background:#7459ff33;font-size:20px;
+  margin-bottom:13px;
+}
+.welcome h2{font-size:16px;margin-bottom:8px}
+.welcome p{font-size:11px;line-height:1.7;color:#bdc9df}
+.message{margin:17px 0;display:flex;flex-direction:column;gap:7px}
+.message-author{
+  font-size:9px;color:var(--muted);
+  font-weight:800;letter-spacing:.7px;text-transform:uppercase;
+}
+.message-content{
+  background:var(--panel2);border:1px solid var(--border);
+  border-radius:11px;padding:12px;font-size:11px;
+  line-height:1.75;color:#dce5f5;overflow-wrap:anywhere;
+}
+.message.user .message-content{
+  background:#292251;border-color:#5144a0;
+}
+.message.error .message-content{
+  background:#361a27;border-color:#7d3048;
+}
+.suggestion-title{
+  font-size:9px;color:var(--muted);font-weight:800;
+  margin:20px 0 10px;
+}
+.suggestions{display:flex;flex-wrap:wrap;gap:7px}
+.suggestion{
+  background:#131e33;border:1px solid var(--border);
+  padding:8px 10px;border-radius:20px;
+  font-size:10px;color:#c9d5e9;
+}
+.suggestion:hover{border-color:var(--purple)}
+.chat-area{padding:12px;border-top:1px solid var(--border)}
+.chat-box{
+  background:#111b2d;border:1px solid #36476a;
+  padding:10px;border-radius:13px;
+}
+.chat-box:focus-within{border-color:var(--purple)}
+.chat-box textarea{
+  width:100%;min-height:76px;max-height:160px;
+  resize:vertical;background:transparent;border:0;
+  outline:none;color:white;font-size:11px;line-height:1.6;
+}
+.chat-box textarea::placeholder{color:#71819c}
+.chat-tools{display:flex;justify-content:space-between;align-items:center}
+.chat-hint{font-size:9px;color:var(--muted)}
+.send-btn{
+  width:34px;height:34px;border:0;border-radius:9px;
+  background:linear-gradient(135deg,var(--purple),#9844ef);
+  font-size:17px;
+}
+.disclaimer{text-align:center;color:#64738d;font-size:9px;margin-top:8px}
+
+/* PREVIEW */
+.preview-panel{
+  min-width:0;min-height:0;display:flex;
+  flex-direction:column;background:#080e1a;
+}
+.preview-toolbar{
+  height:58px;flex-shrink:0;padding:0 15px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);gap:8px;
+}
+.preview-title{font-size:12px;font-weight:800}
+.preview-controls{display:flex;align-items:center;gap:4px}
+.device-btn{
+  padding:8px 10px;border:1px solid transparent;
+  background:transparent;color:var(--muted);
+  border-radius:8px;font-size:11px;
+}
+.device-btn.active{
+  background:#292253;border-color:#6555bc;color:white;
+}
+.preview-window{
+  flex:1;min-height:0;display:flex;flex-direction:column;
+  background:white;border:1px solid #34435f;border-radius:11px;
+  overflow:hidden;box-shadow:0 15px 60px #0008;
+  transition:width .25s;
+}
+.preview-window.tablet{width:768px;max-width:100%;align-self:center}
+.preview-window.mobile{width:390px;max-width:100%;align-self:center;border:5px solid #293650;border-radius:23px}
+.preview-stage{
+  flex:1;min-height:0;padding:18px;overflow:auto;
+  display:flex;justify-content:center;align-items:stretch;
+  background-color:#0b1221;
+  background-image:radial-gradient(#293653 1px,transparent 1px);
+  background-size:19px 19px;
+}
+#preview-frame{width:100%;height:100%;border:0;background:white;display:none}
+.empty-preview{
+  height:100%;width:100%;display:grid;place-items:center;
+  text-align:center;padding:20px;color:white;
+  background:radial-gradient(ellipse at 50% 40%,#39257966,transparent 60%),#0b1324;
+}
+.empty-inner{max-width:350px}
+.empty-logo{
+  width:67px;height:67px;border-radius:21px;
+  display:grid;place-items:center;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  font-size:35px;font-weight:900;
+}
+.empty-preview h2{font-size:20px;margin-bottom:10px}
+.empty-preview p{font-size:11px;line-height:1.8;color:#98a9c4}
+.empty-preview small{display:block;margin-top:20px;color:#ad9aff}
+
+/* ACTIVITY */
+.activity-panel{
+  display:flex;flex-direction:column;min-height:0;
+  background:var(--panel);border-left:1px solid var(--border);
+}
+.activity-content{padding:15px;overflow-y:auto}
+.activity-intro{
+  background:var(--panel2);border:1px solid var(--border);
+  border-radius:11px;padding:12px;margin-bottom:17px;
+}
+.activity-intro strong{font-size:11px}
+.activity-intro p{font-size:10px;color:var(--muted);line-height:1.6;margin-top:6px}
+.activity-status{
+  display:flex;align-items:center;gap:8px;
+  font-size:10px;color:var(--muted);margin-bottom:17px;
+}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#64748b}
+.status-dot.running{background:var(--green);box-shadow:0 0 10px var(--green)}
+.activity-list{display:flex;flex-direction:column}
+.activity-item{display:flex;gap:10px;position:relative;padding-bottom:20px}
+.activity-icon{
+  width:25px;height:25px;flex-shrink:0;border-radius:50%;
+  display:grid;place-items:center;background:#1b2941;
+  border:1px solid #344766;font-size:10px;color:#9aacc7;
+}
+.activity-item.completed .activity-icon{
+  background:#10372e;border-color:#237a5d;color:#6ae6b6;
+}
+.activity-item.current .activity-icon{
+  background:#2c225d;border-color:#7662ef;color:#d0c5ff;
+}
+.activity-info strong{font-size:10px;display:block;margin:4px 0}
+.activity-info p{font-size:9px;color:var(--muted);line-height:1.6}
+.activity-time{display:block;font-size:8px;color:#61738d;margin-top:5px}
+.activity-empty{
+  text-align:center;border:1px dashed #34435e;
+  padding:15px;border-radius:10px;font-size:10px;
+  color:#8191aa;line-height:1.7;
+}
+.activity-footer{
+  margin-top:auto;border-top:1px solid var(--border);
+  padding:13px;font-size:9px;color:#8291aa;line-height:1.7;
+}
+
+/* MODALS */
+.modal-backdrop{
+  position:fixed;inset:0;background:#000a;
+  z-index:20;display:none;align-items:center;
+  justify-content:center;padding:15px;
+}
+.modal-backdrop.open{display:flex}
+.modal{
+  width:min(520px,100%);max-height:85vh;overflow:auto;
+  background:#10192a;border:1px solid #354461;
+  border-radius:16px;padding:20px;
+  box-shadow:0 25px 100px #000b;
+}
+.modal-head{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:18px;
+}
+.modal-head h2{font-size:15px}
+.close-btn{
+  width:30px;height:30px;border-radius:8px;
+  border:1px solid var(--border);background:var(--panel2);
+}
+.field{margin:14px 0}
+.field label{display:block;font-size:10px;color:#a8b7cf;margin-bottom:7px}
+.field input,.field select{
+  width:100%;padding:11px;border:1px solid var(--border);
+  background:#0b1220;color:white;border-radius:9px;outline:none;
+}
+.field input:focus,.field select:focus{border-color:var(--purple)}
+.modal-note{font-size:10px;line-height:1.7;color:var(--muted);margin:12px 0}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.history-list{display:flex;flex-direction:column;gap:8px}
+.history-item{
+  width:100%;text-align:left;padding:13px;
+  background:var(--panel2);border:1px solid var(--border);
+  border-radius:10px;
+}
+.history-item strong{font-size:11px;display:block}
+.history-item small{font-size:9px;color:var(--muted);display:block;margin-top:5px}
+.empty-history{font-size:11px;color:var(--muted);padding:20px;text-align:center}
+.toast{
+  position:fixed;bottom:20px;left:50%;
+  transform:translate(-50%,20px);opacity:0;
+  background:#18243a;border:1px solid #425778;
+  border-radius:10px;padding:12px 17px;
+  font-size:11px;z-index:40;pointer-events:none;
+  transition:.25s;max-width:90%;text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* MOBILE */
+.mobile-tabs{display:none}
+@media(max-width:1100px){
+  .workspace{grid-template-columns:300px minmax(0,1fr)}
+  .activity-panel{display:none}
+}
+@media(max-width:700px){
+  .topbar{height:58px;padding:0 10px}
+  .brand-name{font-size:10px}
+  .brand-name small,.project-title{display:none}
+  .top-actions{gap:5px}
+  .top-actions .btn{padding:8px;font-size:10px}
+  .avatar{display:none}
+  .workspace{display:block;position:relative}
+  .chat-panel,.preview-panel,.activity-panel{
+    position:absolute;inset:0;display:none;border:0;
+  }
+  .chat-panel.mobile-active,.preview-panel.mobile-active,
+  .activity-panel.mobile-active{display:flex}
+  .preview-stage{padding:9px}
+  .preview-window.mobile{width:100%;height:100%}
+  .mobile-tabs{
+    height:57px;flex-shrink:0;display:grid;
+    grid-template-columns:repeat(3,1fr);
+    background:#0e1627;border-top:1px solid var(--border);
+  }
+  .mobile-tab{
+    background:transparent;border:0;color:#8192ac;
+    display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:4px;font-size:9px;
+  }
+  .mobile-tab span{font-size:17px}
+  .mobile-tab.active{color:#b7aaff}
+}
 </style>
 </head>
+
 <body>
 <div class="app">
+
 <header class="topbar">
-  <div class="top-left">
-    <a class="brand" href="/dashboard"><span class="brandmark">A</span><span>ATLAS<small>AI BUILDER</small></span></a>
-    <a class="back" href="/dashboard">← Dashboard</a>
-    <span class="project-name" id="project-name">Untitled project</span>
+  <div class="brand">
+    <div class="logo">A</div>
+    <div class="brand-name">ATLAS AI BUILDER<small>AI CREATION STUDIO</small></div>
   </div>
+
+  <div class="project-title">
+    <input id="project-name" value="Untitled application" maxlength="80">
+    <span class="save-status" id="save-status">Not saved</span>
+  </div>
+
   <div class="top-actions">
-    <span class="status"><i class="dot"></i> Workspace ready</span>
-    <button class="btn" id="save-btn">Save</button>
-    <button class="btn primary" id="export-btn">Export code ↓</button>
+    <button class="btn" id="history-btn">↶ History</button>
+    <button class="btn" id="settings-btn">⚙ Settings</button>
+    <button class="btn primary" id="publish-btn">↗ Publish</button>
+    <div class="avatar" id="user-avatar">A</div>
   </div>
 </header>
 
 <main class="workspace">
-  <aside class="left-panel">
-    <div class="panel-head">
-      <span class="eyebrow">YOUR AI WORKSPACE</span>
-      <h1>What are we building?</h1>
-      <p>Describe your idea. ATLAS will turn your instructions into a website you can preview and edit.</p>
+
+<!-- AI CHAT -->
+<section class="chat-panel mobile-active" id="chat-panel">
+  <div class="panel-header">
+    <strong>✦ AI Assistant</strong>
+    <span class="ai-status">● ATLAS AI</span>
+  </div>
+
+  <div class="conversation" id="conversation">
+    <div class="welcome">
+      <div class="welcome-icon">✦</div>
+      <h2>What are we building?</h2>
+      <p>Describe your idea in plain language. I'll help turn it into a working application.</p>
     </div>
 
-    <section class="prompt-area">
-      <div class="prompt-label"><span>Describe your project</span><span id="char-count">0 / 6000</span></div>
-      <textarea id="prompt" maxlength="6000" placeholder="Example: Build a modern SaaS landing page for a productivity app. Include a beautiful hero section, pricing cards, testimonials, features, and a responsive navigation bar. Use a dark theme with glowing blue accents..."></textarea>
-      <div class="prompt-hints">
-        <button class="hint" data-prompt="Create a modern SaaS landing page with a hero, features, pricing, testimonials and footer.">✦ SaaS website</button>
-        <button class="hint" data-prompt="Create a beautiful responsive online store with product cards, categories, search and a shopping cart interface.">◈ Online store</button>
-        <button class="hint" data-prompt="Create a professional personal portfolio with an introduction, projects, skills, experience and contact section.">⌘ Portfolio</button>
-      </div>
-      <button class="btn primary build-btn" id="build-btn"><span>✦</span> Build with ATLAS AI</button>
-    </section>
-
-    <section class="activity">
-      <div class="activity-top"><strong>Build activity</strong><span id="activity-status">Waiting for prompt</span></div>
-      <div class="activity-list" id="activity-list">
-        <div class="activity-item" data-step="0"><span class="step-icon">1</span><span>Waiting for your project instructions</span></div>
-        <div class="activity-item" data-step="1"><span class="step-icon">2</span><span>Send your request to the AI engine</span></div>
-        <div class="activity-item" data-step="2"><span class="step-icon">3</span><span>Generate your website code</span></div>
-        <div class="activity-item" data-step="3"><span class="step-icon">4</span><span>Prepare your live preview</span></div>
-      </div>
-    </section>
-
-    <div class="tip"><b>✦ Pro tip</b><br>Tell ATLAS what pages, colors, sections and features you want. More detail helps produce a better first version.</div>
-  </aside>
-
-  <section class="right-panel">
-    <div class="preview-toolbar">
-      <div class="view-tabs">
-        <button class="tab active" data-view="desktop">▣ Desktop</button>
-        <button class="tab" data-view="tablet">▤ Tablet</button>
-        <button class="tab" data-view="mobile">▯ Mobile</button>
-        <button class="tab" id="code-tab">〈/〉 Code</button>
-      </div>
-      <div class="tool-actions">
-        <button class="tool-btn" id="refresh-btn" title="Refresh preview">↻ Refresh</button>
-        <button class="tool-btn optional" id="fullscreen-btn">⛶ Full screen</button>
+    <div class="message">
+      <div class="message-author">ATLAS AI</div>
+      <div class="message-content">
+        Welcome to your creation studio! Tell me what you want to build, including its pages, features and design.
       </div>
     </div>
 
-    <div class="preview-shell" id="preview-shell">
-      <div class="preview-top">
-        <div class="browser-dots"><i></i><i></i><i></i></div>
-        <div class="address" id="preview-address">your-project.atlas-preview</div>
-        <span class="preview-label">LIVE PREVIEW</span>
+    <div class="suggestion-title">START WITH AN IDEA</div>
+    <div class="suggestions">
+      <button class="suggestion" data-prompt="Build a social media platform with authentication, profiles, posts, likes, comments and notifications.">✦ Social platform</button>
+      <button class="suggestion" data-prompt="Build an e-commerce store with product listings, cart, checkout and admin dashboard.">🛍 Online store</button>
+      <button class="suggestion" data-prompt="Build a SaaS application with authentication, analytics, user dashboard and settings.">◈ SaaS application</button>
+      <button class="suggestion" data-prompt="Build a modern portfolio with projects, contact form and responsive pages.">✧ Portfolio</button>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <div class="chat-box">
+      <textarea id="prompt" maxlength="6000" placeholder="Describe your application or request a change..."></textarea>
+      <div class="chat-tools">
+        <span class="chat-hint" id="char-count">0 / 6000</span>
+        <button class="send-btn" id="build-btn" title="Send">↑</button>
       </div>
-      <div class="preview-content" id="preview-content">
-        <div class="empty-preview" id="empty-preview">
-          <div class="empty-icon">✦</div>
-          <h2>Your idea starts here.</h2>
-          <p>Describe what you want to build, then let ATLAS AI create your website. Your generated result will appear right here.</p>
-          <div class="mini-tags"><span>AI powered</span><span>Responsive design</span><span>Live preview</span></div>
+    </div>
+    <div class="disclaimer">Review your application before publishing.</div>
+  </div>
+</section>
+
+<!-- LIVE PREVIEW -->
+<section class="preview-panel mobile-active" id="preview-panel">
+  <div class="preview-toolbar">
+    <div class="preview-title">Live Preview</div>
+    <div class="preview-controls">
+      <button class="device-btn active" data-device="desktop">▰</button>
+      <button class="device-btn" data-device="tablet">▯</button>
+      <button class="device-btn" data-device="mobile">▯</button>
+    </div>
+    <div>
+      <button class="btn" id="refresh-btn">↻</button>
+      <button class="btn" id="fullscreen-btn">⛶</button>
+    </div>
+  </div>
+
+  <div class="preview-stage">
+    <div class="preview-window" id="preview-shell">
+      <div class="empty-preview" id="empty-preview">
+        <div class="empty-inner">
+          <div class="empty-logo">A</div>
+          <h2>Your app starts here.</h2>
+          <p>Describe your idea to ATLAS AI. Your generated application will appear in this workspace.</p>
+          <small>Build · Preview · Improve · Publish</small>
         </div>
-        <iframe id="preview-frame" title="Generated website preview" sandbox="allow-scripts allow-forms allow-modals allow-popups"></iframe>
       </div>
+      <iframe id="preview-frame" title="Generated application preview"
+        sandbox="allow-scripts allow-forms allow-modals allow-popups"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- REAL ACTIVITY EVENTS -->
+<aside class="activity-panel" id="activity-panel">
+  <div class="panel-header">
+    <strong>Build activity</strong>
+    <span style="font-size:10px;color:var(--muted)">LIVE EVENTS</span>
+  </div>
+
+  <div class="activity-content">
+    <div class="activity-intro">
+      <strong>✦ Development timeline</strong>
+      <p>Events reported by the generation and deployment services appear here.</p>
     </div>
 
-    <div class="code-panel" id="code-panel">
-      <div class="code-head"><strong>Generated HTML</strong><span id="code-status">No code generated yet</span></div>
-      <textarea id="code-output" spellcheck="false" placeholder="Your generated HTML code will appear here..." readonly></textarea>
+    <div class="activity-status">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="activity-status">Waiting for instructions</span>
     </div>
-  </section>
+
+    <div class="activity-list" id="activity-list">
+      <div class="activity-empty" id="activity-empty">
+        No build events yet. Start by describing your application.
+      </div>
+    </div>
+  </div>
+
+  <div class="activity-footer">
+    ATLAS AI DEVELOPMENT ENGINE<br>
+    Build intelligently. Create without limits.
+  </div>
+</aside>
+
 </main>
+
+<nav class="mobile-tabs">
+  <button class="mobile-tab" data-panel="chat-panel"><span>✦</span>AI Chat</button>
+  <button class="mobile-tab active" data-panel="preview-panel"><span>▣</span>Preview</button>
+  <button class="mobile-tab" data-panel="activity-panel"><span>◷</span>Activity</button>
+</nav>
 </div>
-<div class="toast" id="toast"></div>
+
+<!-- HISTORY MODAL -->
+<div class="modal-backdrop" id="history-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Project history</h2>
+      <button class="close-btn" data-close="history-modal">✕</button>
+    </div>
+    <div class="history-list" id="history-list">
+      <div class="empty-history">Loading project history...</div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-backdrop" id="settings-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Project settings</h2>
+      <button class="close-btn" data-close="settings-modal">✕</button>
+    </div>
+
+    <div class="field">
+      <label>Application name</label>
+      <input id="setting-name" maxlength="80">
+    </div>
+
+    <div class="field">
+      <label>Application description</label>
+      <input id="setting-description" maxlength="300" placeholder="Describe your application">
+    </div>
+
+    <div class="field">
+      <label>Application visibility</label>
+      <select id="setting-visibility">
+        <option value="private">Private</option>
+        <option value="public">Public after publishing</option>
+      </select>
+    </div>
+
+    <p class="modal-note">These settings are project metadata. Publishing visibility and access permissions must also be enforced by the deployment backend.</p>
+
+    <div class="modal-actions">
+      <button class="btn" data-close="settings-modal">Cancel</button>
+      <button class="btn primary" id="save-settings-btn">Save settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- PUBLISH MODAL -->
+<div class="modal-backdrop" id="publish-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Publish application</h2>
+      <button class="close-btn" data-close="publish-modal">✕</button>
+    </div>
+
+    <div class="field">
+      <label>Application name</label>
+      <input id="publish-name" maxlength="50" placeholder="my-awesome-app">
+    </div>
+
+    <div class="field">
+      <label>Deployment visibility</label>
+      <select id="publish-visibility">
+        <option value="public">Public application</option>
+        <option value="private">Private deployment</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Deployment status</label>
+      <div id="publish-status" class="modal-note">Ready to check your project.</div>
+    </div>
+
+    <p class="modal-note">ATLAS will validate and deploy the saved project using the configured deployment service. A public URL will appear after a successful deployment.</p>
+
+    <div class="modal-actions">
+      <button class="btn" data-close="publish-modal">Cancel</button>
+      <button class="btn primary" id="confirm-publish-btn">Deploy application ↗</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script type="module" src="/js/builder.js"></script>
+
 </body>
 </html>
