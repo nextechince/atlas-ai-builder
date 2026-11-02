@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b14">
+<title>ATLAS AI BUILDER</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+ --bg:#080b14;
+ --panel:#0e1422;
+ --card:#111827;
+ --border:rgba(148,163,184,.14);
+ --muted:#8995aa;
+ --text:#f8fafc;
+ --cyan:#00d4ff;
+ --blue:#5865f2;
+ --purple:#9333ea;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+ background:var(--bg);
+ color:var(--text);
+ font-family:'DM Sans',sans-serif;
+ overflow-x:hidden;
+}
+
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+
+.container{width:min(1160px,90%);margin:auto}
+
+/* NAVIGATION */
+
+.nav{
+ height:76px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ border-bottom:1px solid var(--border);
+ padding:0 5%;
+ background:rgba(8,11,20,.8);
+ backdrop-filter:blur(20px);
+ position:relative;
+ z-index:10;
+}
+
+.brand{
+ display:flex;
+ align-items:center;
+ gap:11px;
+ font-family:'Space Grotesk',sans-serif;
+ font-size:20px;
+ font-weight:700;
+ letter-spacing:-.8px;
+}
+
+.logo{
+ width:37px;height:37px;
+ display:grid;place-items:center;
+ border-radius:12px;
+ background:linear-gradient(135deg,var(--blue),var(--cyan));
+ box-shadow:0 0 25px #00d4ff35;
+ font-size:20px;
+}
+
+.brand span span{color:var(--cyan)}
+
+.nav-right{
+ display:flex;
+ align-items:center;
+ gap:23px;
+ color:#9aa8bd;
+ font-size:13px;
+}
+
+.nav-right a:hover{color:white}
+
+.nav-button{
+ padding:10px 17px;
+ border-radius:9px;
+ background:linear-gradient(100deg,var(--blue),var(--purple));
+ color:white!important;
+ font-weight:700;
+}
+
+/* HERO / SIGNUP */
+
+.signup-layout{
+ min-height:720px;
+ display:grid;
+ grid-template-columns:1.05fr .95fr;
+ border-bottom:1px solid var(--border);
+}
+
+.visual{
+ padding:65px 8%;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ position:relative;
+ overflow:hidden;
+ background:
+ radial-gradient(ellipse at 15% 25%,#00d4ff13,transparent 50%),
+ radial-gradient(ellipse at 80% 80%,#9333ea20,transparent 50%);
+}
+
+.visual:before{
+ content:"";
+ position:absolute;inset:0;
+ background-image:
+ linear-gradient(#ffffff08 1px,transparent 1px),
+ linear-gradient(90deg,#ffffff08 1px,transparent 1px);
+ background-size:42px 42px;
+ mask-image:linear-gradient(to bottom,black,transparent);
+ pointer-events:none;
+}
+
+.hero-content{position:relative;z-index:2;max-width:550px}
+
+.eyebrow{
+ display:inline-flex;
+ align-items:center;
+ gap:8px;
+ border:1px solid #00d4ff40;
+ background:#00d4ff0b;
+ padding:9px 14px;
+ border-radius:30px;
+ color:#8deaff;
+ font-size:11px;
+ font-weight:800;
+ letter-spacing:.7px;
+}
+
+.dot{
+ width:7px;height:7px;
+ border-radius:50%;
+ background:#00e5a0;
+ box-shadow:0 0 12px #00e5a0;
+}
+
+.hero h1{
+ margin-top:25px;
+ font:700 clamp(43px,5vw,65px)/1.08 'Space Grotesk',sans-serif;
+ letter-spacing:-3px;
+}
+
+.gradient{
+ background:linear-gradient(100deg,#fff,#70e7ff 50%,#a78bfa);
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+}
+
+.hero p{
+ margin-top:20px;
+ max-width:450px;
+ color:#98a5ba;
+ font-size:15px;
+ line-height:1.9;
+}
+
+.preview{
+ margin-top:40px;
+ max-width:480px;
+ position:relative;
+ padding:14px;
+ border:1px solid #94a3b833;
+ border-radius:17px;
+ background:#111827d9;
+ box-shadow:0 25px 70px #0006;
+ transform:perspective(1000px) rotateY(-4deg);
+}
+
+.preview-top{
+ display:flex;
+ gap:6px;
+ align-items:center;
+ border-bottom:1px solid var(--border);
+ padding-bottom:13px;
+}
+
+.circle{width:8px;height:8px;border-radius:50%;background:#64748b}
+.preview-title{font-size:10px;color:#aab6c9;margin-left:8px}
+
+.preview-content{
+ display:grid;
+ grid-template-columns:75px 1fr;
+ gap:12px;
+ padding-top:13px;
+}
+
+.preview-side{display:grid;align-content:start;gap:9px}
+.side-line{height:7px;border-radius:8px;background:#94a3b825}
+.side-line.active{background:linear-gradient(90deg,var(--blue),var(--cyan))}
+
+.preview-main{
+ min-height:140px;
+ padding:16px;
+ border-radius:11px;
+ background:linear-gradient(135deg,#17213d,#17132c);
+}
+
+.mini-label{font-size:9px;color:#91a4c3}
+.mini-heading{font:700 21px 'Space Grotesk';margin:12px 0}
+.mini-button{
+ display:inline-block;
+ padding:7px 12px;
+ border-radius:6px;
+ background:linear-gradient(100deg,var(--blue),var(--purple));
+ font-size:9px;font-weight:700;
+}
+
+.floating{
+ position:absolute;
+ right:-12px;
+ bottom:20px;
+ padding:12px;
+ border:1px solid #00d4ff40;
+ border-radius:11px;
+ background:#111b2b;
+ font-size:11px;
+ box-shadow:0 10px 30px #0008;
+}
+.floating strong{color:#65e7ff}
+
+/* FORM */
+
+.form-panel{
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ padding:65px 9%;
+ background:radial-gradient(circle at 50% 10%,#5865f21c,transparent 50%);
+}
+
+.form-wrap{width:100%;max-width:410px}
+
+.form-top{margin-bottom:30px}
+.form-top .small{color:#8b9bb2;font-size:12px;margin-bottom:12px}
+.form-top h2{font:700 33px 'Space Grotesk';letter-spacing:-1.3px}
+.form-top p{color:var(--muted);margin-top:9px;font-size:13px;line-height:1.8}
+
+.field{margin-bottom:18px}
+
+label{
+ display:block;
+ font-size:12px;
+ font-weight:700;
+ color:#dce5f3;
+ margin-bottom:9px;
+}
+
+.input-wrap{position:relative}
+
+input{
+ width:100%;height:51px;
+ padding:0 15px;
+ border:1px solid #28364b;
+ border-radius:10px;
+ outline:none;
+ background:#0d1422;
+ color:white;
+ font-size:14px;
+ transition:.2s;
+}
+
+input::placeholder{color:#526078}
+
+input:focus{
+ border-color:#6875ff;
+ box-shadow:0 0 0 3px #5865f220;
+}
+
+.password-input{padding-right:55px}
+
+.toggle{
+ position:absolute;
+ right:13px;top:50%;
+ transform:translateY(-50%);
+ border:0;background:none;color:#8493aa;
+ cursor:pointer;font-size:12px;
+}
+
+.submit{
+ width:100%;height:52px;
+ border:0;border-radius:10px;
+ margin-top:7px;
+ cursor:pointer;color:white;
+ font-weight:800;font-size:14px;
+ background:linear-gradient(100deg,var(--blue),#7651e8,var(--purple));
+ box-shadow:0 8px 28px #5865f240;
+ transition:.2s;
+}
+
+.submit:hover{transform:translateY(-2px);box-shadow:0 12px 35px #5865f260}
+.submit:disabled{opacity:.65;cursor:wait;transform:none}
+
+.terms{
+ margin-top:17px;color:#78869c;
+ font-size:10px;line-height:1.8;text-align:center;
+}
+
+.terms a,.login a{color:#55dfff}
+
+.login{
+ margin-top:24px;text-align:center;
+ font-size:12px;color:#8b9bb2;
+}
+
+.login a{font-weight:700;margin-left:4px}
+
+.notice{
+ padding:12px 14px;border-radius:10px;
+ margin-top:15px;font-size:12px;line-height:1.6;
+}
+
+.notice.error{background:#ef44441a;border:1px solid #ef444440;color:#fca5a5}
+.notice.success{background:#10b9811a;border:1px solid #10b98140;color:#6ee7b7}
+.notice[hidden]{display:none}
+
+/* GENERAL SECTIONS */
+
+.section{padding:100px 0}
+
+.section-heading{text-align:center;margin-bottom:48px}
+
+.kicker{
+ color:var(--cyan);
+ font-size:11px;
+ font-weight:800;
+ letter-spacing:1.5px;
+ text-transform:uppercase;
+}
+
+.section-heading h2{
+ margin-top:13px;
+ font:700 clamp(29px,4vw,43px) 'Space Grotesk',sans-serif;
+ letter-spacing:-1.5px;
+}
+
+.section-heading p{
+ color:var(--muted);
+ max-width:540px;
+ margin:13px auto 0;
+ font-size:14px;
+ line-height:1.8;
+}
+
+/* WEBSITE PREVIEW GALLERY */
+
+.gallery{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:22px;
+}
+
+.project-card{
+ border:1px solid var(--border);
+ border-radius:17px;
+ overflow:hidden;
+ background:#0e1422;
+ transition:.3s;
+}
+
+.project-card:hover{
+ transform:translateY(-7px);
+ border-color:#5865f280;
+ box-shadow:0 20px 50px #0005;
+}
+
+.project-art{
+ height:205px;
+ padding:13px;
+ overflow:hidden;
+ position:relative;
+}
+
+.browser{
+ height:100%;
+ overflow:hidden;
+ border-radius:9px;
+ background:#fff;
+ color:#111827;
+}
+
+.browser-bar{
+ height:23px;
+ background:#e5e7eb;
+ display:flex;
+ align-items:center;
+ gap:4px;
+ padding:0 9px;
+}
+
+.browser-bar i{
+ width:6px;height:6px;border-radius:50%;background:#94a3b8;
+}
+
+.browser-content{padding:14px;height:100%}
+
+.art-saas{background:linear-gradient(135deg,#14214a,#31215b)}
+.art-saas .browser-content{background:#fff}
+.saas-nav{font-size:8px;font-weight:800;display:flex;justify-content:space-between}
+.saas-hero{text-align:center;margin-top:22px}
+.saas-hero strong{display:block;font-size:18px;line-height:1.1}
+.saas-hero span{font-size:7px;color:#64748b}
+.saas-cta{display:inline-block;background:#5865f2;color:white;padding:6px 12px;margin-top:10px;border-radius:5px;font-size:7px}
+
+.art-portfolio{background:linear-gradient(135deg,#33251f,#a36b4c)}
+.art-portfolio .browser-content{background:#f1e9df}
+.port-nav{display:flex;justify-content:space-between;font-size:8px;color:#6a4936}
+.port-hero{margin-top:24px}
+.port-hero strong{font:700 23px Georgia;color:#38271f}
+.port-hero p{font-size:8px;color:#806b5d;margin-top:7px}
+.port-image{height:45px;width:65%;margin-top:12px;background:linear-gradient(135deg,#c99b7b,#493b37);border-radius:5px}
+
+.art-shop{background:linear-gradient(135deg,#213b36,#6a9477)}
+.art-shop .browser-content{background:#f8f8f1}
+.shop-nav{display:flex;justify-content:space-between;font-size:8px;font-weight:800}
+.shop-hero{text-align:center;margin:17px 0}
+.shop-hero strong{font:700 18px Georgia}
+.shop-products{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.shop-product{height:52px;border-radius:5px;background:linear-gradient(140deg,#d7e3d0,#758c73)}
+.shop-product:nth-child(2){background:linear-gradient(140deg,#f0d6bc,#b27c55)}
+.shop-product:nth-child(3){background:linear-gradient(140deg,#e2dce9,#8c789d)}
+
+.art-agency{background:linear-gradient(135deg,#221444,#6550c5)}
+.art-agency .browser-content{background:#15132c;color:white}
+.agency-nav{display:flex;justify-content:space-between;font-size:8px}
+.agency-hero{margin-top:24px}
+.agency-hero strong{font:700 20px 'Space Grotesk';line-height:1.1}
+.agency-hero p{font-size:7px;color:#b9b2d8;margin-top:7px}
+.agency-shapes{display:flex;gap:5px;margin-top:12px}
+.agency-shapes span{height:32px;flex:1;border-radius:5px;background:linear-gradient(135deg,#9a6cff,#39276e)}
+
+.art-dashboard{background:linear-gradient(135deg,#15253b,#30557a)}
+.art-dashboard .browser-content{background:#101a2a;color:white}
+.dash-title{font-size:11px;font-weight:800}
+.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:12px}
+.dash-stat{padding:9px 5px;background:#1e3047;border-radius:5px}
+.dash-stat b{display:block;font-size:11px;color:#6ce7ff}
+.dash-stat span{font-size:6px;color:#9aabc0}
+.dash-chart{height:58px;margin-top:9px;background:linear-gradient(150deg,#253d5b,#17273d);border-radius:5px;position:relative}
+.dash-chart:after{content:"";position:absolute;left:10%;right:10%;bottom:15px;height:24px;border-top:2px solid #00d4ff;transform:skewY(-15deg)}
+
+.art-restaurant{background:linear-gradient(135deg,#513024,#b36c3e)}
+.art-restaurant .browser-content{background:#211a16;color:white}
+.food-nav{display:flex;justify-content:space-between;font-size:8px}
+.food-hero{text-align:center;margin-top:23px}
+.food-hero strong{font:700 20px Georgia}
+.food-hero p{font-size:7px;color:#d9c3b1;margin-top:6px}
+.food-circle{width:50px;height:50px;margin:12px auto 0;border-radius:50%;background:radial-gradient(circle at 35% 35%,#e8b26b,#763d24 70%)}
+
+.project-info{padding:17px}
+.project-top{display:flex;align-items:center;justify-content:space-between}
+.project-top h3{font:700 15px 'Space Grotesk'}
+.project-tag{font-size:9px;color:#78e8ff;background:#00d4ff12;padding:5px 8px;border-radius:20px}
+.project-info p{color:#8995aa;font-size:11px;line-height:1.7;margin-top:9px}
+.project-link{display:inline-block;margin-top:12px;color:#70dfff;font-size:11px;font-weight:700}
+
+/* STYLE SECTION */
+
+.styles-section{background:#0b101c;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+
+.style-grid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:14px;
+}
+
+.style-card{
+ min-height:145px;
+ border:1px solid var(--border);
+ border-radius:14px;
+ padding:20px;
+ background:#111827;
+ transition:.25s;
+}
+
+.style-card:hover{border-color:#5865f2;transform:translateY(-4px)}
+
+.style-icon{
+ width:37px;height:37px;
+ display:grid;place-items:center;
+ border-radius:11px;
+ background:#5865f222;
+ color:#80eaff;font-size:17px;
+ margin-bottom:15px;
+}
+
+.style-card h3{font:600 14px 'Space Grotesk'}
+.style-card p{color:#8492a8;font-size:11px;margin-top:7px;line-height:1.6}
+
+/* HOW IT WORKS */
+
+.steps{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:22px;
+}
+
+.step{
+ border:1px solid var(--border);
+ border-radius:15px;
+ padding:25px;
+ background:linear-gradient(145deg,#111827,#0d1320);
+}
+
+.step-number{
+ font:700 27px 'Space Grotesk';
+ color:#6575ff;
+}
+
+.step h3{margin-top:18px;font:700 17px 'Space Grotesk'}
+.step p{margin-top:9px;color:#8995aa;font-size:12px;line-height:1.8}
+
+/* FEATURES */
+
+.features{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:17px;
+}
+
+.feature{
+ padding:23px;
+ border:1px solid var(--border);
+ background:#0e1422;
+ border-radius:14px;
+}
+
+.feature-icon{font-size:23px}
+.feature h3{font:700 14px 'Space Grotesk';margin-top:14px}
+.feature p{font-size:11px;line-height:1.8;color:#8995aa;margin-top:8px}
+
+/* FINAL CTA */
+
+.cta{
+ padding:75px 25px;
+ text-align:center;
+ border:1px solid #5865f24d;
+ border-radius:22px;
+ background:
+ radial-gradient(ellipse at 50% 120%,#9333ea30,transparent 60%),
+ radial-gradient(ellipse at 10% 0%,#00d4ff16,transparent 55%),
+ #101729;
+ margin-bottom:90px;
+}
+
+.cta h2{font:700 clamp(29px,4vw,43px) 'Space Grotesk';letter-spacing:-1.4px}
+.cta p{margin:13px auto 24px;color:#99a8be;font-size:13px;max-width:440px;line-height:1.8}
+
+.cta-button{
+ display:inline-block;
+ padding:14px 23px;
+ border-radius:10px;
+ background:linear-gradient(100deg,var(--blue),var(--purple));
+ font-size:13px;font-weight:800;
+ box-shadow:0 10px 30px #5865f240;
+ transition:.2s;
+}
+
+.cta-button:hover{transform:translateY(-3px)}
+
+footer{
+ border-top:1px solid var(--border);
+ padding:28px 5%;
+ display:flex;
+ justify-content:space-between;
+ gap:15px;
+ color:#66748a;
+ font-size:11px;
+}
+
+footer a{color:#9aa8bd}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+ .signup-layout{grid-template-columns:1fr}
+ .visual{min-height:600px;padding:65px 8%}
+ .form-panel{padding:70px 8%}
+ .gallery{grid-template-columns:repeat(2,1fr)}
+ .style-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:600px){
+ .nav{height:65px;padding:0 5%}
+ .nav-right{gap:12px;font-size:11px}
+ .brand{font-size:16px}
+ .logo{width:32px;height:32px}
+ .nav-button{padding:9px 11px}
+ .visual{min-height:570px;padding:55px 7%}
+ .hero h1{font-size:44px}
+ .hero p{font-size:13px}
+ .preview{margin-top:32px}
+ .form-panel{padding:65px 7%}
+ .form-top h2{font-size:29px}
+ .section{padding:70px 0}
+ .gallery{grid-template-columns:1fr}
+ .project-art{height:220px}
+ .style-grid{grid-template-columns:repeat(2,1fr)}
+ .steps{grid-template-columns:1fr}
+ .features{grid-template-columns:1fr}
+ .section-heading h2{font-size:30px}
+ .cta{padding:55px 20px;margin-bottom:60px}
+ footer{flex-direction:column;text-align:center}
+}
+
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{scroll-behavior:auto!important;transition:none!important}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+
+<nav class="nav">
+ <a href="/" class="brand">
+  <div class="logo">✧</div>
+  <span>ATLAS <span>AI</span> BUILDER</span>
+ </a>
+
+ <div class="nav-right">
+  <a href="#showcase">Explore</a>
+  <a href="#how">How it works</a>
+  <a class="nav-button" href="#signup">Get started</a>
+ </div>
+</nav>
+
+<!-- SIGNUP HERO -->
+
+<section class="signup-layout" id="signup">
+
+ <div class="visual">
+  <div class="hero-content">
+
+   <div class="eyebrow"><span class="dot"></span> YOUR IDEAS, BUILT WITH AI</div>
+
+   <h1>Turn your ideas into <span class="gradient">reality.</span></h1>
+
+   <p>
+    Create stunning websites, bring your ideas to life,
+    and publish your projects with the power of artificial intelligence.
+   </p>
+
+   <div class="preview">
+    <div class="preview-top">
+     <span class="circle"></span><span class="circle"></span><span class="circle"></span>
+     <span class="preview-title">atlas-project / website-preview</span>
+    </div>
+
+    <div class="preview-content">
+     <div class="preview-side">
+      <div class="side-line active"></div>
+      <div class="side-line"></div>
+      <div class="side-line"></div>
+      <div class="side-line"></div>
+      <div class="side-line"></div>
+     </div>
+
+     <div class="preview-main">
+      <div class="mini-label">YOUR NEXT BIG IDEA</div>
+      <div class="mini-heading">Imagine. Create.<br>Launch.</div>
+      <div class="mini-button">Start building →</div>
+     </div>
+    </div>
+
+    <div class="floating">✦ <strong>AI is building</strong> your future</div>
+   </div>
+
+  </div>
+ </div>
+
+ <main class="form-panel">
+  <div class="form-wrap">
+
+   <div class="form-top">
+    <div class="small">✦ &nbsp; START CREATING FOR FREE</div>
+    <h2>Create your account</h2>
+    <p>Join ATLAS and turn your next big idea into something real.</p>
+   </div>
+
+   <form id="form">
+
+    <div class="field">
+     <label for="name">Full name</label>
+     <input id="name" type="text" placeholder="Enter your name"
+      autocomplete="name" required maxlength="60">
+    </div>
+
+    <div class="field">
+     <label for="email">Email address</label>
+     <input id="email" type="email" placeholder="you@example.com"
+      autocomplete="email" required>
+    </div>
+
+    <div class="field">
+     <label for="password">Create password</label>
+     <div class="input-wrap">
+      <input id="password" class="password-input" type="password"
+       placeholder="At least 6 characters"
+       autocomplete="new-password" required minlength="6">
+      <button type="button" class="toggle" id="togglePassword">Show</button>
+     </div>
+    </div>
+
+    <button class="submit" id="submit" type="submit">
+     <span id="buttonText">Create my account</span> →
+    </button>
+
+   </form>
+
+   <div id="notice" class="notice" hidden></div>
+
+   <div class="terms">
+    By creating an account, you agree to our
+    <a href="/terms">Terms of Service</a> and
+    <a href="/privacy">Privacy Policy</a>.
+   </div>
+
+   <div class="login">
+    Already have an account?
+    <a href="/login.html">Log in →</a>
+   </div>
+
+  </div>
+ </main>
+
+</section>
+
+<!-- WEBSITE SHOWCASE -->
+
+<section class="section" id="showcase">
+ <div class="container">
+
+  <div class="section-heading">
+   <div class="kicker">WHAT CAN YOU BUILD?</div>
+   <h2>Imagine it. <span class="gradient">ATLAS creates it.</span></h2>
+   <p>
+    From beautiful landing pages to complete online experiences,
+    explore the possibilities you can create with AI.
+   </p>
+  </div>
+
+  <div class="gallery">
+
+   <article class="project-card">
+    <div class="project-art art-saas">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="saas-nav"><span>FLOWSPACE</span><span>Features &nbsp; Pricing</span></div>
+       <div class="saas-hero">
+        <strong>Work smarter.<br>Move faster.</strong>
+        <span>Everything your team needs in one place.</span><br>
+        <span class="saas-cta">Get started free</span>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>SaaS Website</h3><span class="project-tag">Modern</span></div>
+     <p>Beautiful software landing pages with pricing, features and conversion sections.</p>
+     <a class="project-link" href="#signup">Create something similar →</a>
+    </div>
+   </article>
+
+   <article class="project-card">
+    <div class="project-art art-portfolio">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="port-nav"><b>JAMES STUDIO</b><span>WORK &nbsp; ABOUT</span></div>
+       <div class="port-hero">
+        <strong>Design is how<br>we tell stories.</strong>
+        <p>Creative designer & digital storyteller.</p>
+        <div class="port-image"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>Portfolio</h3><span class="project-tag">Creative</span></div>
+     <p>Personal portfolios, creative showcases and professional profile websites.</p>
+     <a class="project-link" href="#signup">Create something similar →</a>
+    </div>
+   </article>
+
+   <article class="project-card">
+    <div class="project-art art-shop">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="shop-nav"><span>EVERGREEN</span><span>SHOP &nbsp; CART</span></div>
+       <div class="shop-hero"><strong>Find your<br>everyday essentials.</strong></div>
+       <div class="shop-products"><div class="shop-product"></div><div class="shop-product"></div><div class="shop-product"></div></div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>Online Store</h3><span class="project-tag">E-commerce</span></div>
+     <p>Product pages, shopping experiences, brand stores and online catalogues.</p>
+     <a class="project-link" href="#signup">Create something similar →</a>
+    </div>
+   </article>
+
+   <article class="project-card">
+    <div class="project-art art-agency">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="agency-nav"><b>VISION®</b><span>STUDIO &nbsp; CONTACT</span></div>
+       <div class="agency-hero">
+        <strong>We make brands<br>impossible to ignore.</strong>
+        <p>Strategy, design and digital experiences.</p>
+        <div class="agency-shapes"><span></span><span></span><span></span></div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>Agency Website</h3><span class="project-tag">Bold</span></div>
+     <p>Powerful business, agency, company and service websites.</p>
+     <a class="project-link" href="#signup">Create something similar →</a>
+    </div>
+   </article>
+
+   <article class="project-card">
+    <div class="project-art art-dashboard">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="dash-title">Analytics Overview</div>
+       <div class="dash-stats">
+        <div class="dash-stat"><b>12.8k</b><span>VISITORS</span></div>
+        <div class="dash-stat"><b>8.4%</b><span>GROWTH</span></div>
+        <div class="dash-stat"><b>2.4k</b><span>USERS</span></div>
+       </div>
+       <div class="dash-chart"></div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>Admin Dashboard</h3><span class="project-tag">Data</span></div>
+     <p>Analytics interfaces, management dashboards and application layouts.</p>
+     <a class="project-link" href="#signup">Create something similar →</a>
+    </div>
+   </article>
+
+   <article class="project-card">
+    <div class="project-art art-restaurant">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i></div>
+      <div class="browser-content">
+       <div class="food-nav"><b>THE TABLE</b><span>MENU &nbsp; RESERVE</span></div>
+       <div class="food-hero">
+        <strong>Good food.<br>Beautiful moments.</strong>
+        <p>A little taste of something special.</p>
+        <div class="food-circle"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="project-info">
+     <div class="project-top"><h3>Restaurant Website</h3><span class="project-tag">Elegant</span></div>
+     <p>Restaurant menus, booking pages, food brands and hospitality websites.</p>
+     <a class="project-link" href="#signup">Create something similar →</a>
+    </div>
+   </article>
+
+  </div>
+ </div>
+</section>
+
+<!-- STYLE OPTIONS -->
+
+<section class="section styles-section">
+ <div class="container">
+
+  <div class="section-heading">
+   <div class="kicker">YOUR STYLE, YOUR RULES</div>
+   <h2>Choose your <span class="gradient">creative direction.</span></h2>
+   <p>Give ATLAS your idea and describe the look you want. Your imagination sets the limits.</p>
+  </div>
+
+  <div class="style-grid">
+   <div class="style-card">
+    <div class="style-icon">✦</div>
+    <h3>Minimalist</h3>
+    <p>Clean layouts, simple typography and beautiful spacing.</p>
+   </div>
+
+   <div class="style-card">
+    <div class="style-icon">◈</div>
+    <h3>Glassmorphism</h3>
+    <p>Frosted glass effects, transparency and soft depth.</p>
+   </div>
+
+   <div class="style-card">
+    <div class="style-icon">⚡</div>
+    <h3>Neon & Futuristic</h3>
+    <p>Glowing accents, dark backgrounds and futuristic interfaces.</p>
+   </div>
+
+   <div class="style-card">
+    <div class="style-icon">◉</div>
+    <h3>Luxury</h3>
+    <p>Elegant layouts, premium typography and sophisticated colors.</p>
+   </div>
+
+   <div class="style-card">
+    <div class="style-icon">▦</div>
+    <h3>Corporate</h3>
+    <p>Professional business layouts that build trust.</p>
+   </div>
+
+   <div class="style-card">
+    <div class="style-icon">✿</div>
+    <h3>Creative</h3>
+    <p>Expressive colors, bold visuals and unique compositions.</p>
+   </div>
+
+   <div class="style-card">
+    <div class="style-icon">▤</div>
+    <h3>Editorial</h3>
+    <p>Typography-led layouts inspired by digital magazines.</p>
+   </div>
+
+   <div class="style-card">
+    <div class="style-icon">⌘</div>
+    <h3>Modern Tech</h3>
+    <p>Product-focused layouts for apps, startups and technology.</p>
+   </div>
+  </div>
+
+ </div>
+</section>
+
+<!-- HOW IT WORKS -->
+
+<section class="section" id="how">
+ <div class="container">
+
+  <div class="section-heading">
+   <div class="kicker">SIMPLE TO START</div>
+   <h2>From idea to <span class="gradient">live website.</span></h2>
+   <p>You don't need to be a professional developer to start creating with ATLAS.</p>
+  </div>
+
+  <div class="steps">
+   <div class="step">
+    <div class="step-number">01</div>
+    <h3>Describe your idea</h3>
+    <p>Tell ATLAS what you want to build. Explain your website, features, colors and preferred style.</p>
+   </div>
+
+   <div class="step">
+    <div class="step-number">02</div>
+    <h3>Generate and customize</h3>
+    <p>Let AI create your website. Preview the result, refine your instructions and save your project.</p>
+   </div>
+
+   <div class="step">
+    <div class="step-number">03</div>
+    <h3>Publish your creation</h3>
+    <p>Choose an available project address and publish your website when it is ready.</p>
+   </div>
+  </div>
+
+ </div>
+</section>
+
+<!-- FEATURES -->
+
+<section class="section styles-section">
+ <div class="container">
+
+  <div class="section-heading">
+   <div class="kicker">MADE FOR CREATORS</div>
+   <h2>Everything starts with <span class="gradient">an idea.</span></h2>
+  </div>
+
+  <div class="features">
+   <div class="feature">
+    <div class="feature-icon">🤖</div>
+    <h3>AI-powered creation</h3>
+    <p>Turn plain-language descriptions into website designs and code.</p>
+   </div>
+
+   <div class="feature">
+    <div class="feature-icon">👁️</div>
+    <h3>Live previews</h3>
+    <p>See how your generated website looks before you publish it.</p>
+   </div>
+
+   <div class="feature">
+    <div class="feature-icon">💾</div>
+    <h3>Save your projects</h3>
+    <p>Keep your creations in your account and return to them later.</p>
+   </div>
+
+   <div class="feature">
+    <div class="feature-icon">🌐</div>
+    <h3>Custom project addresses</h3>
+    <p>Publish with an editable ATLAS subdomain when domain routing is configured.</p>
+   </div>
+
+   <div class="feature">
+    <div class="feature-icon">📱</div>
+    <h3>Responsive designs</h3>
+    <p>Create layouts designed to work across phones, tablets and desktops.</p>
+   </div>
+
+   <div class="feature">
+    <div class="feature-icon">🎨</div>
+    <h3>Creative freedom</h3>
+    <p>Explore different visual styles and bring your own ideas to life.</p>
+   </div>
+  </div>
+
+ </div>
+</section>
+
+<!-- FINAL CTA -->
+
+<section class="container">
+ <div class="cta">
+  <h2>Your next big idea starts <span class="gradient">here.</span></h2>
+  <p>Create an account and start building something amazing with ATLAS AI BUILDER.</p>
+  <a href="#signup" class="cta-button">Create your free account →</a>
+ </div>
+</section>
+
+<footer>
+ <span>© 2026 ATLAS AI BUILDER. All rights reserved.</span>
+ <span>Build anything. Create everything. &nbsp; <a href="#signup">Get started ↑</a></span>
+</footer>
+
+<!-- FIREBASE SIGNUP -->
+
+<script type="module">
+import {auth} from './js/firebase.js';
+
+import {
+ createUserWithEmailAndPassword,
+ updateProfile,
+ onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
+
+const form=document.getElementById('form');
+const nameInput=document.getElementById('name');
+const emailInput=document.getElementById('email');
+const passwordInput=document.getElementById('password');
+const submit=document.getElementById('submit');
+const buttonText=document.getElementById('buttonText');
+const notice=document.getElementById('notice');
+const toggle=document.getElementById('togglePassword');
+
+function showNotice(message,type='error'){
+ notice.hidden=false;
+ notice.className='notice '+type;
+ notice.textContent=message;
+}
+
+function setLoading(loading){
+ submit.disabled=loading;
+ buttonText.textContent=loading?'Creating your account...':'Create my account';
+}
+
+toggle.addEventListener('click',()=>{
+ const visible=passwordInput.type==='password';
+ passwordInput.type=visible?'text':'password';
+ toggle.textContent=visible?'Hide':'Show';
+});
+
+onAuthStateChanged(auth,user=>{
+ if(user) window.location.replace('/dashboard.html');
+});
+
+form.addEventListener('submit',async event=>{
+ event.preventDefault();
+
+ const name=nameInput.value.trim();
+ const email=emailInput.value.trim();
+ const password=passwordInput.value;
+
+ if(name.length<2){
+  showNotice('Please enter your full name.');
+  return;
+ }
+
+ if(password.length<6){
+  showNotice('Your password must contain at least 6 characters.');
+  return;
+ }
+
+ setLoading(true);
+ notice.hidden=true;
+
+ try{
+  const credential=await createUserWithEmailAndPassword(
+   auth,email,password
+  );
+
+  await updateProfile(credential.user,{
+   displayName:name
+  });
+
+  showNotice('Account created successfully. Welcome to ATLAS!','success');
+
+  window.location.replace('/dashboard.html');
+
+ }catch(error){
+  const messages={
+   'auth/email-already-in-use':'This email already has an account. Please log in.',
+   'auth/invalid-email':'Please enter a valid email address.',
+   'auth/weak-password':'Please choose a stronger password.',
+   'auth/network-request-failed':'Network error. Check your internet connection.',
+   'auth/operation-not-allowed':'Email/password signup is not enabled in Firebase.'
+  };
+
+  showNotice(messages[error.code]||error.message);
+
+ }finally{
+  setLoading(false);
+ }
+});
+</script>
+
+</body>
+</html>
