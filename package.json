@@ -1,0 +1,23 @@
+
+{
+  "name": "atlas-ai-builder",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ATLAS AI BUILDER - Build anything. Create everything.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "firebase": "^12.0.0",
+    "firebase-admin": "^13.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^48.0.0"
+  }
+}
