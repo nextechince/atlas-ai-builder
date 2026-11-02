@@ -1,22 +1,23 @@
 
 import admin from "firebase-admin";
 
-let firebaseApp;
+let firebaseApp = null;
 
 function getFirebaseAdmin() {
-  if (firebaseApp) {
-    return firebaseApp;
-  }
+  if (firebaseApp) return firebaseApp;
 
   if (admin.apps.length > 0) {
     firebaseApp = admin.app();
     return firebaseApp;
   }
 
-  const serviceAccountJSON = process.env.FIREBASE_SERVICE_ACCOUNT;
+  const serviceAccountJSON =
+    process.env.FIREBASE_SERVICE_ACCOUNT;
 
   if (!serviceAccountJSON) {
-    throw new Error("FIREBASE_SERVICE_ACCOUNT is missing.");
+    throw new Error(
+      "FIREBASE_SERVICE_ACCOUNT is missing."
+    );
   }
 
   let serviceAccount;
@@ -24,7 +25,9 @@ function getFirebaseAdmin() {
   try {
     serviceAccount = JSON.parse(serviceAccountJSON);
   } catch {
-    throw new Error("FIREBASE_SERVICE_ACCOUNT must contain valid JSON.");
+    throw new Error(
+      "FIREBASE_SERVICE_ACCOUNT contains invalid JSON."
+    );
   }
 
   firebaseApp = admin.initializeApp({
@@ -46,28 +49,35 @@ export async function verifyFirebaseToken(req) {
   const token = authorization.slice(7).trim();
 
   if (!token) {
-    const error = new Error("Firebase ID token is missing.");
+    const error = new Error("Missing authentication token.");
     error.status = 401;
     throw error;
   }
 
+  let decodedToken;
+
   try {
     const app = getFirebaseAdmin();
-    const decodedToken = await app.auth().verifyIdToken(token);
-
-    return {
-      uid: decodedToken.uid,
-      email: decodedToken.email || null,
-      name: decodedToken.name || null,
-      emailVerified: decodedToken.email_verified || false
-    };
+    decodedToken = await app.auth().verifyIdToken(token);
   } catch (error) {
-    console.error("Firebase token verification failed:", error.message);
+    console.error("Firebase authentication error:", error);
 
-    const authError = new Error("Invalid or expired login session.");
+    if (error.status) throw error;
+
+    const authError = new Error(
+      "Invalid or expired login session."
+    );
+
     authError.status = 401;
     throw authError;
   }
+
+  return {
+    uid: decodedToken.uid,
+    email: decodedToken.email || null,
+    name: decodedToken.name || null,
+    emailVerified: decodedToken.email_verified || false
+  };
 }
 
 export function getAdminAuth() {
