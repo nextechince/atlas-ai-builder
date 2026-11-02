@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b14">
+<title>AI Builder — ATLAS</title>
+<style>
+:root{--bg:#080b14;--panel:#101726;--panel2:#0c1320;--line:#253249;--text:#f8fafc;--muted:#91a0b7;--blue:#5865f2;--cyan:#00d4ff;--purple:#9333ea;--green:#35d49a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}button,input,textarea{font:inherit}button{cursor:pointer;color:inherit}.app{min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% -20%,#20265a55,transparent 50%),var(--bg)}
+.topbar{height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--line);background:#090e19eF;position:sticky;top:0;z-index:10;backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:10px;color:white;text-decoration:none;font-weight:850;letter-spacing:.8px}.brandmark{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 0 22px #5865f266;font-size:19px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:2px;margin-top:1px}
+.top-left,.top-actions{display:flex;align-items:center;gap:14px}.back{color:var(--muted);text-decoration:none;font-size:13px}.back:hover{color:white}.project-name{font-size:13px;color:#dce5f5;border-left:1px solid var(--line);padding-left:14px}.status{font-size:11px;color:var(--green);display:flex;align-items:center;gap:7px}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.btn{border:1px solid var(--line);background:#151e2e;padding:9px 13px;border-radius:10px;font-size:12px;font-weight:700}.btn:hover{border-color:#6578ff;background:#1b2740}.btn.primary{border:0;background:linear-gradient(110deg,var(--blue),#7652ed);box-shadow:0 6px 24px #5865f233}.btn.primary:hover{filter:brightness(1.12)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.workspace{display:grid;grid-template-columns:370px minmax(0,1fr);gap:14px;padding:14px;min-height:calc(100vh - 66px);max-width:1800px;width:100%;margin:auto}
+.left-panel{background:linear-gradient(180deg,#111a2a,#0c1320);border:1px solid var(--line);border-radius:17px;display:flex;flex-direction:column;min-height:calc(100vh - 94px);overflow:hidden}
+.panel-head{padding:19px 18px 15px;border-bottom:1px solid var(--line)}.eyebrow{color:var(--cyan);font-size:10px;letter-spacing:2px;font-weight:800}.panel-head h1{font-size:21px;margin:8px 0 5px;letter-spacing:-.7px}.panel-head p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}
+.prompt-area{padding:17px;display:flex;flex-direction:column;gap:11px}.prompt-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:750}.prompt-label span:last-child{color:var(--muted);font-weight:500;font-size:10px}
+textarea{width:100%;min-height:172px;resize:vertical;border:1px solid #2a3850;border-radius:13px;background:#080f1b;color:white;padding:14px;outline:none;font-size:13px;line-height:1.65}textarea:focus{border-color:#6575ff;box-shadow:0 0 0 3px #5865f21c}textarea::placeholder{color:#697990}
+.prompt-hints{display:flex;flex-wrap:wrap;gap:7px}.hint{border:1px solid #29364d;background:#121c2b;color:#aebbd0;border-radius:20px;padding:7px 10px;font-size:10px}.hint:hover{border-color:var(--cyan);color:white}
+.build-btn{width:100%;padding:13px;border-radius:11px;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:9px}
+.activity{margin:3px 17px 15px;border:1px solid var(--line);background:#0a111d;border-radius:13px;padding:13px}.activity-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}.activity-top strong{font-size:12px}.activity-top span{font-size:10px;color:var(--muted)}.activity-list{display:flex;flex-direction:column;gap:11px}.activity-item{display:flex;gap:10px;align-items:flex-start;color:#728198;font-size:11px;line-height:1.45}.activity-item .step-icon{width:19px;height:19px;border-radius:7px;display:grid;place-items:center;background:#172235;color:#8291a8;flex:none;font-size:10px}.activity-item.active{color:#e8efff}.activity-item.active .step-icon{background:#26336b;color:#aeb9ff;box-shadow:0 0 13px #5865f233}.activity-item.done{color:#a6b7ca}.activity-item.done .step-icon{background:#103a32;color:var(--green)}
+.tip{margin:auto 17px 16px;padding:12px;border-radius:12px;background:linear-gradient(110deg,#15234a,#17203a);border:1px solid #344477;color:#b9c7e5;font-size:11px;line-height:1.6}.tip b{color:white}
+.right-panel{min-width:0;display:flex;flex-direction:column;gap:12px}.preview-toolbar{min-height:57px;border:1px solid var(--line);border-radius:14px;background:#101827;display:flex;align-items:center;justify-content:space-between;padding:9px 12px;gap:10px}.view-tabs,.tool-actions{display:flex;align-items:center;gap:6px}.tab{border:0;background:transparent;color:var(--muted);padding:8px 11px;border-radius:8px;font-size:11px}.tab.active{background:#26345a;color:white}.tool-btn{border:1px solid var(--line);background:#131e2e;padding:8px 10px;border-radius:8px;font-size:11px;color:#bdc9dc}.tool-btn:hover{border-color:#6575ff;color:white}
+.preview-shell{flex:1;min-height:570px;border:1px solid var(--line);border-radius:16px;background:#0e1624;overflow:hidden;display:flex;flex-direction:column}.preview-top{height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--line);background:#111b2b}.browser-dots{display:flex;gap:5px}.browser-dots i{width:7px;height:7px;border-radius:50%;background:#47556d}.address{max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#09111e;border:1px solid #27354b;color:#8190a8;border-radius:6px;padding:5px 12px;font-size:10px}.preview-label{font-size:10px;color:#8493a9}
+.preview-content{flex:1;position:relative;background:#fff;min-height:520px}.preview-content iframe{width:100%;height:100%;min-height:520px;border:0;background:white;display:block}.empty-preview{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:25px;background:radial-gradient(ellipse at 50% 45%,#1a2b5b 0%,#0c1426 48%,#080d18 100%);color:white}.empty-icon{width:75px;height:75px;border-radius:23px;display:grid;place-items:center;background:linear-gradient(135deg,#5865f2,#00bde8);font-size:30px;box-shadow:0 0 45px #5865f255;margin-bottom:20px}.empty-preview h2{font-size:22px;margin:0 0 9px}.empty-preview p{max-width:380px;color:#9eacc3;font-size:12px;line-height:1.7;margin:0}.empty-preview .mini-tags{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:19px}.mini-tags span{border:1px solid #34476b;background:#111d35;border-radius:20px;padding:6px 10px;color:#c4d2ee;font-size:10px}
+.code-panel{display:none;min-height:570px;flex:1;border:1px solid var(--line);border-radius:16px;background:#080e19;overflow:hidden;flex-direction:column}.code-head{padding:12px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:12px}.code-panel textarea{flex:1;min-height:520px;border:0;border-radius:0;background:#080e19;font-family:ui-monospace,monospace;font-size:12px;resize:none}
+.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#17243a;border:1px solid #3a4e70;color:white;padding:11px 16px;border-radius:10px;font-size:12px;transition:.25s;z-index:30}.toast.show{opacity:1;transform:translate(-50%,0)}
+.mobile-prompt{display:none}
+@media(max-width:1050px){.workspace{grid-template-columns:320px minmax(0,1fr)}.tool-btn.optional{display:none}}
+@media(max-width:760px){.topbar{height:58px;padding:0 13px}.project-name,.status{display:none}.top-actions{gap:7px}.top-actions .btn{padding:8px 10px}.workspace{display:flex;flex-direction:column;padding:9px;gap:10px;min-height:calc(100vh - 58px)}.left-panel{min-height:unset}.panel-head{padding:15px}.panel-head h1{font-size:19px}.prompt-area{padding:13px}.prompt-area textarea{min-height:125px}.activity{margin:0 13px 13px}.tip{margin:0 13px 13px}.right-panel{min-height:560px}.preview-toolbar{padding:8px;flex-wrap:wrap}.view-tabs{flex:1}.tab{padding:8px}.tool-actions{gap:4px}.tool-btn{padding:7px 8px}.preview-shell,.code-panel{min-height:500px}.preview-content,.preview-content iframe{min-height:460px}.code-panel textarea{min-height:460px}.preview-label{display:none}}
+@media(max-width:390px){.brand small{display:none}.back{font-size:11px}.tab{font-size:10px;padding:7px}.tool-btn{font-size:10px}.preview-toolbar{gap:5px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="top-left">
+    <a class="brand" href="/dashboard"><span class="brandmark">A</span><span>ATLAS<small>AI BUILDER</small></span></a>
+    <a class="back" href="/dashboard">← Dashboard</a>
+    <span class="project-name" id="project-name">Untitled project</span>
+  </div>
+  <div class="top-actions">
+    <span class="status"><i class="dot"></i> Workspace ready</span>
+    <button class="btn" id="save-btn">Save</button>
+    <button class="btn primary" id="export-btn">Export code ↓</button>
+  </div>
+</header>
+
+<main class="workspace">
+  <aside class="left-panel">
+    <div class="panel-head">
+      <span class="eyebrow">YOUR AI WORKSPACE</span>
+      <h1>What are we building?</h1>
+      <p>Describe your idea. ATLAS will turn your instructions into a website you can preview and edit.</p>
+    </div>
+
+    <section class="prompt-area">
+      <div class="prompt-label"><span>Describe your project</span><span id="char-count">0 / 6000</span></div>
+      <textarea id="prompt" maxlength="6000" placeholder="Example: Build a modern SaaS landing page for a productivity app. Include a beautiful hero section, pricing cards, testimonials, features, and a responsive navigation bar. Use a dark theme with glowing blue accents..."></textarea>
+      <div class="prompt-hints">
+        <button class="hint" data-prompt="Create a modern SaaS landing page with a hero, features, pricing, testimonials and footer.">✦ SaaS website</button>
+        <button class="hint" data-prompt="Create a beautiful responsive online store with product cards, categories, search and a shopping cart interface.">◈ Online store</button>
+        <button class="hint" data-prompt="Create a professional personal portfolio with an introduction, projects, skills, experience and contact section.">⌘ Portfolio</button>
+      </div>
+      <button class="btn primary build-btn" id="build-btn"><span>✦</span> Build with ATLAS AI</button>
+    </section>
+
+    <section class="activity">
+      <div class="activity-top"><strong>Build activity</strong><span id="activity-status">Waiting for prompt</span></div>
+      <div class="activity-list" id="activity-list">
+        <div class="activity-item" data-step="0"><span class="step-icon">1</span><span>Waiting for your project instructions</span></div>
+        <div class="activity-item" data-step="1"><span class="step-icon">2</span><span>Send your request to the AI engine</span></div>
+        <div class="activity-item" data-step="2"><span class="step-icon">3</span><span>Generate your website code</span></div>
+        <div class="activity-item" data-step="3"><span class="step-icon">4</span><span>Prepare your live preview</span></div>
+      </div>
+    </section>
+
+    <div class="tip"><b>✦ Pro tip</b><br>Tell ATLAS what pages, colors, sections and features you want. More detail helps produce a better first version.</div>
+  </aside>
+
+  <section class="right-panel">
+    <div class="preview-toolbar">
+      <div class="view-tabs">
+        <button class="tab active" data-view="desktop">▣ Desktop</button>
+        <button class="tab" data-view="tablet">▤ Tablet</button>
+        <button class="tab" data-view="mobile">▯ Mobile</button>
+        <button class="tab" id="code-tab">〈/〉 Code</button>
+      </div>
+      <div class="tool-actions">
+        <button class="tool-btn" id="refresh-btn" title="Refresh preview">↻ Refresh</button>
+        <button class="tool-btn optional" id="fullscreen-btn">⛶ Full screen</button>
+      </div>
+    </div>
+
+    <div class="preview-shell" id="preview-shell">
+      <div class="preview-top">
+        <div class="browser-dots"><i></i><i></i><i></i></div>
+        <div class="address" id="preview-address">your-project.atlas-preview</div>
+        <span class="preview-label">LIVE PREVIEW</span>
+      </div>
+      <div class="preview-content" id="preview-content">
+        <div class="empty-preview" id="empty-preview">
+          <div class="empty-icon">✦</div>
+          <h2>Your idea starts here.</h2>
+          <p>Describe what you want to build, then let ATLAS AI create your website. Your generated result will appear right here.</p>
+          <div class="mini-tags"><span>AI powered</span><span>Responsive design</span><span>Live preview</span></div>
+        </div>
+        <iframe id="preview-frame" title="Generated website preview" sandbox="allow-scripts allow-forms allow-modals allow-popups"></iframe>
+      </div>
+    </div>
+
+    <div class="code-panel" id="code-panel">
+      <div class="code-head"><strong>Generated HTML</strong><span id="code-status">No code generated yet</span></div>
+      <textarea id="code-output" spellcheck="false" placeholder="Your generated HTML code will appear here..." readonly></textarea>
+    </div>
+  </section>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<script type="module" src="/js/builder.js"></script>
+</body>
+</html>
