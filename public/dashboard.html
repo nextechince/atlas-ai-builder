@@ -1,0 +1,2052 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050713">
+<meta name="description" content="ATLAS AI BUILDER Dashboard">
+<title>Dashboard — ATLAS AI BUILDER</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:#050713;
+  --sidebar:#080d1e;
+  --panel:#0c1329;
+  --card:#101a35;
+  --primary:#8b5cf6;
+  --blue:#3478ff;
+  --cyan:#00d4ff;
+  --purple:#b84cff;
+  --green:#00e6a0;
+  --text:#f8faff;
+  --muted:#95a3c4;
+  --border:rgba(139,92,246,.22);
+  --sidebar-width:245px;
+  --right-width:270px;
+}
+
+* {box-sizing:border-box;margin:0;padding:0}
+
+html {scroll-behavior:smooth}
+
+body {
+  background:
+    radial-gradient(ellipse at 65% 0%,rgba(65,50,190,.10),transparent 35%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+button,input {font:inherit}
+button,a {-webkit-tap-highlight-color:transparent}
+a {text-decoration:none;color:inherit}
+button {cursor:pointer}
+
+.gradient {
+  background:linear-gradient(100deg,#c34cff,#7771ff,#00d4ff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.muted {color:var(--muted)}
+.hidden {display:none!important}
+
+/* APP LAYOUT */
+
+.app {
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:var(--sidebar-width) minmax(0,1fr);
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  position:fixed;
+  z-index:100;
+  top:0;
+  bottom:0;
+  left:0;
+  width:var(--sidebar-width);
+  padding:24px 17px;
+  display:flex;
+  flex-direction:column;
+  background:linear-gradient(180deg,#090e20,#070b19);
+  border-right:1px solid rgba(255,255,255,.07);
+  overflow-y:auto;
+  transition:transform .3s ease;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:2px 8px 30px;
+}
+
+.brand-mark {
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  font-size:25px;
+  font-weight:900;
+  background:linear-gradient(140deg,#a855f7,#2563eb);
+  box-shadow:0 0 28px #7045ff75;
+}
+
+.brand-name {
+  font-weight:900;
+  font-size:17px;
+  letter-spacing:2px;
+}
+
+.brand-name small {
+  display:block;
+  color:#9ca9ca;
+  font-size:9px;
+  letter-spacing:3px;
+  margin-top:3px;
+}
+
+.nav-label {
+  color:#687696;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:2px;
+  padding:17px 12px 9px;
+}
+
+.nav-link {
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:13px 13px;
+  margin:3px 0;
+  border-radius:11px;
+  color:#9ba9c9;
+  font-size:12px;
+  font-weight:600;
+  transition:.25s;
+  border:1px solid transparent;
+}
+
+.nav-link:hover {
+  color:white;
+  background:#ffffff09;
+}
+
+.nav-link.active {
+  color:white;
+  background:linear-gradient(100deg,#762cff7a,#304fff35);
+  border-color:#9b54ff55;
+  box-shadow:0 0 23px #713dff22;
+}
+
+.nav-icon {
+  width:22px;
+  text-align:center;
+  font-size:18px;
+}
+
+.nav-badge {
+  margin-left:auto;
+  padding:3px 7px;
+  font-size:9px;
+  border-radius:20px;
+  color:#d7c0ff;
+  background:#7436ff36;
+}
+
+.sidebar-spacer {flex:1;min-height:20px}
+
+.pro-card {
+  padding:17px;
+  border:1px solid #8b4cff75;
+  border-radius:15px;
+  background:
+    radial-gradient(circle at 100% 0%,#6335b94c,transparent 50%),
+    linear-gradient(140deg,#171335,#0b1127);
+  box-shadow:0 0 25px #703aff20;
+  margin-bottom:15px;
+}
+
+.pro-icon {
+  font-size:24px;
+  margin-bottom:10px;
+}
+
+.pro-card h3 {font-size:13px;margin-bottom:7px}
+.pro-card p {font-size:10px;color:#9eaccb;line-height:1.7;margin-bottom:13px}
+
+.pro-button {
+  display:block;
+  text-align:center;
+  padding:10px;
+  font-size:11px;
+  font-weight:800;
+  border-radius:9px;
+  background:linear-gradient(110deg,#a42cff,#365cff);
+  box-shadow:0 5px 20px #653aff40;
+}
+
+.sidebar-bottom {
+  border-top:1px solid #ffffff10;
+  padding-top:13px;
+}
+
+.sidebar-bottom .nav-link {font-size:11px}
+
+/* MAIN */
+
+.main-area {
+  grid-column:2;
+  min-width:0;
+}
+
+.topbar {
+  height:76px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:0 28px;
+  background:rgba(5,7,19,.86);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid #ffffff0c;
+}
+
+.mobile-menu {
+  display:none;
+  width:39px;
+  height:39px;
+  color:white;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#11152c;
+  font-size:19px;
+}
+
+.search-box {
+  width:min(400px,50%);
+  height:42px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 14px;
+  border:1px solid #ffffff16;
+  border-radius:11px;
+  background:#0d1429;
+}
+
+.search-box span {font-size:17px;color:#8290b2}
+
+.search-box input {
+  flex:1;
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:white;
+  font-size:11px;
+}
+
+.search-box input::placeholder {color:#7785a6}
+
+.topbar-spacer {flex:1}
+
+.top-icon {
+  width:39px;
+  height:39px;
+  border:1px solid #ffffff14;
+  border-radius:11px;
+  background:#10172c;
+  color:white;
+  font-size:16px;
+  position:relative;
+}
+
+.notification-dot {
+  position:absolute;
+  width:7px;
+  height:7px;
+  right:8px;
+  top:8px;
+  border-radius:50%;
+  background:#ff4e80;
+}
+
+.profile-button {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:transparent;
+  border:0;
+  color:white;
+  text-align:left;
+}
+
+.avatar {
+  width:39px;
+  height:39px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:linear-gradient(140deg,#9d4cff,#246cff);
+  border:2px solid #a16aff;
+  font-weight:800;
+  font-size:14px;
+  overflow:hidden;
+}
+
+.profile-info b {display:block;font-size:11px}
+.profile-info small {display:block;color:var(--green);font-size:9px;margin-top:4px}
+
+/* CONTENT */
+
+.content {
+  padding:26px 27px 45px;
+  max-width:1800px;
+  margin:auto;
+}
+
+.dashboard-layout {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) var(--right-width);
+  gap:22px;
+  align-items:start;
+}
+
+.center-column {min-width:0}
+.right-column {min-width:0}
+
+/* WELCOME HERO */
+
+.welcome {
+  min-height:320px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid #8c50ff;
+  border-radius:20px;
+  padding:35px 30px;
+  display:flex;
+  align-items:center;
+  background:
+    radial-gradient(ellipse at 80% 50%,#1054d85c,transparent 45%),
+    radial-gradient(ellipse at 20% 100%,#8c2cff40,transparent 50%),
+    linear-gradient(110deg,#151032,#0c1432 65%,#07162c);
+  box-shadow:0 0 35px #673cff2c,0 0 90px #124cff13;
+}
+
+.welcome::before {
+  content:"";
+  position:absolute;
+  width:380px;
+  height:380px;
+  right:5%;
+  top:-110px;
+  border:1px solid #5787ff45;
+  border-radius:50%;
+  box-shadow:0 0 0 28px #4275ff0b,0 0 0 60px #4275ff08,0 0 70px #397bff25;
+}
+
+.welcome-copy {
+  position:relative;
+  z-index:2;
+  max-width:470px;
+}
+
+.online-label {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:11px;
+  color:#c6d4f5;
+  margin-bottom:20px;
+}
+
+.online-dot {
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#00e6a0;
+  box-shadow:0 0 15px #00e6a0;
+}
+
+.welcome h1 {
+  font-size:clamp(30px,3.5vw,49px);
+  letter-spacing:-2.3px;
+  line-height:1.13;
+  margin-bottom:15px;
+}
+
+.welcome p {
+  color:#b3c0df;
+  font-size:12px;
+  line-height:1.9;
+  max-width:430px;
+}
+
+.welcome-actions {
+  display:flex;
+  gap:11px;
+  flex-wrap:wrap;
+  margin-top:24px;
+}
+
+.button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:1px solid transparent;
+  border-radius:11px;
+  padding:12px 18px;
+  font-size:11px;
+  font-weight:800;
+  transition:.25s;
+}
+
+.button:hover {transform:translateY(-3px);filter:brightness(1.15)}
+
+.button-primary {
+  background:linear-gradient(110deg,#a72dff,#5555ff,#168dff);
+  color:white;
+  box-shadow:0 5px 25px #7443ff55;
+}
+
+.button-outline {
+  border-color:#8a4dff;
+  background:#10132d99;
+  color:white;
+}
+
+.welcome-art {
+  position:absolute;
+  right:5%;
+  top:50%;
+  transform:translateY(-50%);
+  width:37%;
+  height:230px;
+  display:grid;
+  place-items:center;
+}
+
+.art-orbit {
+  width:190px;
+  height:190px;
+  border:1px solid #4d8bff80;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  box-shadow:0 0 35px #386dff35,inset 0 0 35px #5c3cff25;
+  transform:rotate(-20deg);
+}
+
+.art-orbit::before,.art-orbit::after {
+  content:"";
+  position:absolute;
+  width:240px;
+  height:80px;
+  border:2px solid #8b4dff;
+  border-radius:50%;
+  transform:rotate(35deg);
+  box-shadow:0 0 20px #604bff;
+}
+
+.art-orbit::after {
+  transform:rotate(-35deg);
+  border-color:#168dff;
+}
+
+.art-logo {
+  width:105px;
+  height:105px;
+  display:grid;
+  place-items:center;
+  border-radius:27px;
+  font-size:57px;
+  font-weight:900;
+  background:linear-gradient(145deg,#180d3c,#101b49);
+  border:1px solid #8e58ff;
+  color:#ad71ff;
+  box-shadow:0 0 50px #793dff8c;
+  transform:rotate(8deg);
+}
+
+.art-chip {
+  position:absolute;
+  padding:10px 13px;
+  border-radius:10px;
+  background:#101a3bdf;
+  border:1px solid #5485ff;
+  color:white;
+  font-size:10px;
+  box-shadow:0 0 20px #3b68ff40;
+}
+
+.chip-one {top:10px;left:0}
+.chip-two {right:0;bottom:25px}
+
+/* STATISTICS */
+
+.stats-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:13px;
+  margin:20px 0 28px;
+}
+
+.stat-card {
+  min-width:0;
+  padding:17px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:1px solid #ffffff14;
+  border-radius:14px;
+  background:linear-gradient(140deg,#111a34,#0b1226);
+  transition:.25s;
+}
+
+.stat-card:hover {
+  border-color:#8050ff;
+  transform:translateY(-3px);
+}
+
+.stat-icon {
+  flex-shrink:0;
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  font-size:21px;
+}
+
+.stat-icon.purple {background:#783bff2b;color:#ba83ff}
+.stat-icon.blue {background:#176cff2b;color:#55baff}
+.stat-icon.green {background:#00d49c20;color:#00e6a0}
+.stat-icon.pink {background:#e22b9b20;color:#ff70ce}
+
+.stat-info {min-width:0}
+.stat-info span {display:block;font-size:9px;color:#9ba9c8;white-space:nowrap}
+.stat-info strong {display:block;font-size:21px;margin-top:5px}
+.stat-info small {display:block;font-size:9px;color:#8d9bbb;margin-top:3px}
+
+/* SECTION HEADERS */
+
+.section-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:16px;
+}
+
+.section-head h2 {
+  font-size:16px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.section-head h2 span {color:#a879ff;font-size:19px}
+
+.text-link {
+  font-size:10px;
+  color:#b9a4ff;
+}
+
+.text-link:hover {color:white}
+
+/* PROJECTS */
+
+.project-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.project-card {
+  min-width:0;
+  overflow:hidden;
+  border:1px solid #ffffff16;
+  background:linear-gradient(145deg,#111a34,#0a1022);
+  border-radius:14px;
+  transition:.25s;
+}
+
+.project-card:hover {
+  transform:translateY(-5px);
+  border-color:#8652ff;
+  box-shadow:0 12px 30px #693cff20;
+}
+
+.project-thumb {
+  height:125px;
+  position:relative;
+  padding:10px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.project-thumb.dashboard {background:linear-gradient(135deg,#132f70,#087eae)}
+.project-thumb.store {background:linear-gradient(135deg,#542078,#d94d96)}
+.project-thumb.portfolio {background:linear-gradient(135deg,#1a2356,#7250cb)}
+.project-thumb.social {background:linear-gradient(135deg,#075f70,#16b39b)}
+.project-thumb.finance {background:linear-gradient(135deg,#124c42,#16a77c)}
+.project-thumb.other {background:linear-gradient(135deg,#2a236e,#2859b9)}
+
+.thumb-window {
+  width:88%;
+  height:85%;
+  padding:9px;
+  border-radius:8px;
+  border:1px solid #ffffff55;
+  background:#10172bdc;
+  box-shadow:0 8px 20px #0005;
+}
+
+.thumb-top {
+  height:7px;
+  width:45%;
+  border-radius:5px;
+  background:#b7c5ff;
+  opacity:.7;
+  margin-bottom:10px;
+}
+
+.thumb-hero {
+  height:35px;
+  border-radius:5px;
+  background:linear-gradient(90deg,#713fff,#148aff);
+  margin-bottom:8px;
+}
+
+.thumb-bars {display:flex;gap:5px}
+.thumb-bars i {height:18px;flex:1;border-radius:3px;background:#879dff50}
+
+.project-status {
+  position:absolute;
+  right:10px;
+  top:10px;
+  padding:5px 8px;
+  border-radius:20px;
+  background:#00d99a;
+  color:#052419;
+  font-size:8px;
+  font-weight:900;
+}
+
+.project-status.draft {
+  background:#2875ff;
+  color:white;
+}
+
+.project-details {padding:13px}
+
+.project-details h3 {
+  font-size:11px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  margin-bottom:7px;
+}
+
+.project-details p {
+  color:#8290b0;
+  font-size:9px;
+}
+
+.project-bottom {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid #ffffff10;
+}
+
+.project-bottom span {font-size:9px;color:#9aa8c8}
+
+.project-open {
+  border:0;
+  background:transparent;
+  color:#bd9bff;
+  font-size:10px;
+  font-weight:700;
+}
+
+.project-open:hover {color:white}
+
+.project-menu {
+  background:transparent;
+  border:0;
+  color:#9eacd0;
+  font-size:17px;
+}
+
+/* NEW PROJECT CARD */
+
+.new-project-card {
+  min-height:205px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:18px;
+  border:1px dashed #8854ff;
+  border-radius:14px;
+  background:linear-gradient(140deg,#15103266,#0c163066);
+  transition:.25s;
+}
+
+.new-project-card:hover {
+  background:#201542;
+  box-shadow:0 0 25px #713dff30;
+  transform:translateY(-4px);
+}
+
+.new-plus {
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border:1px solid #8e4eff;
+  border-radius:50%;
+  font-size:25px;
+  color:#c28cff;
+  box-shadow:0 0 20px #7840ff40;
+  margin-bottom:14px;
+}
+
+.new-project-card b {font-size:11px}
+.new-project-card small {font-size:9px;color:#8796b8;margin-top:7px}
+
+/* RIGHT PANEL */
+
+.panel-card {
+  padding:18px;
+  border:1px solid #ffffff16;
+  border-radius:16px;
+  background:linear-gradient(145deg,#111a35,#0a1022);
+  margin-bottom:17px;
+}
+
+.panel-title {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:17px;
+}
+
+.panel-title h3 {font-size:12px}
+
+.plan-label {
+  color:#ffd36b;
+  background:#9a641b25;
+  border:1px solid #d99a3b55;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:8px;
+  font-weight:800;
+}
+
+.account-profile {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:17px;
+}
+
+.account-avatar {
+  width:53px;
+  height:53px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  border-radius:50%;
+  border:2px solid #955aff;
+  background:linear-gradient(135deg,#713bdb,#216bca);
+  font-weight:900;
+  font-size:19px;
+}
+
+.account-profile b {display:block;font-size:12px}
+.account-profile small {display:block;color:#8998b8;font-size:9px;margin-top:5px;overflow-wrap:anywhere}
+
+.upgrade-button {
+  display:block;
+  text-align:center;
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  color:white;
+  font-size:10px;
+  font-weight:800;
+  background:linear-gradient(100deg,#a52bff,#6350ff,#167fff);
+  box-shadow:0 5px 20px #633dff35;
+  margin-bottom:18px;
+}
+
+.account-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:11px 0;
+  border-top:1px solid #ffffff0b;
+  font-size:10px;
+  color:#a4b1d0;
+}
+
+.account-row strong {color:white}
+
+/* AI ASSISTANT */
+
+.ai-card {
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 80% 100%,#4c24b550,transparent 45%),
+    linear-gradient(145deg,#17113b,#0a1228);
+  border-color:#8551ff88;
+}
+
+.ai-card::after {
+  content:"✦";
+  position:absolute;
+  right:12px;
+  top:42px;
+  font-size:75px;
+  color:#8b5cf6;
+  opacity:.10;
+}
+
+.ai-description {
+  color:#a1aed0;
+  font-size:10px;
+  line-height:1.7;
+  margin-bottom:15px;
+}
+
+.ai-message {
+  position:relative;
+  z-index:1;
+  padding:13px;
+  border-radius:12px 12px 12px 3px;
+  background:#34246b88;
+  border:1px solid #9162ff40;
+  color:#e1d9ff;
+  font-size:10px;
+  line-height:1.7;
+  margin-bottom:14px;
+}
+
+.ai-form {
+  display:flex;
+  gap:6px;
+  padding:6px;
+  border:1px solid #8251ff;
+  background:#080d20;
+  border-radius:11px;
+}
+
+.ai-form input {
+  width:100%;
+  min-width:0;
+  border:0;
+  outline:0;
+  color:white;
+  background:transparent;
+  padding:6px;
+  font-size:10px;
+}
+
+.ai-form input::placeholder {color:#7f8daf}
+
+.ai-form button {
+  width:34px;
+  height:34px;
+  flex-shrink:0;
+  border:0;
+  border-radius:9px;
+  background:linear-gradient(130deg,#a42cff,#4162ff);
+  color:white;
+  font-size:16px;
+}
+
+/* ACTIVITY */
+
+.activity-item {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #ffffff0c;
+}
+
+.activity-item:last-child {border:0}
+
+.activity-dot {
+  width:8px;
+  height:8px;
+  flex-shrink:0;
+  border-radius:50%;
+  margin-top:4px;
+  background:#8b5cf6;
+  box-shadow:0 0 10px #8b5cf6;
+}
+
+.activity-item p {font-size:9px;color:#b0bdd9;line-height:1.6}
+.activity-item small {display:block;color:#7180a3;font-size:8px;margin-top:4px}
+
+/* TEMPLATES */
+
+.template-mini {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 0;
+  border-bottom:1px solid #ffffff0c;
+}
+
+.template-mini:last-child {border:0}
+
+.template-mini-icon {
+  width:37px;
+  height:37px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  border-radius:10px;
+  background:#5935a533;
+  font-size:17px;
+}
+
+.template-mini b {font-size:10px;display:block}
+.template-mini small {font-size:8px;color:#8190b2;display:block;margin-top:4px}
+
+/* EMPTY STATE / LOADING */
+
+.loading {
+  padding:35px 15px;
+  text-align:center;
+  color:#96a4c5;
+  font-size:11px;
+}
+
+.spinner {
+  width:25px;
+  height:25px;
+  margin:0 auto 12px;
+  border:2px solid #33345c;
+  border-top-color:#a15cff;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin {to{transform:rotate(360deg)}}
+
+.empty-state {
+  padding:35px 15px;
+  text-align:center;
+  border:1px dashed #ffffff22;
+  border-radius:14px;
+  color:#96a4c5;
+  grid-column:1/-1;
+}
+
+.empty-state .empty-icon {font-size:30px;margin-bottom:12px}
+.empty-state h3 {font-size:13px;color:white;margin-bottom:8px}
+.empty-state p {font-size:10px;line-height:1.7;margin-bottom:15px}
+
+.toast {
+  position:fixed;
+  z-index:300;
+  bottom:25px;
+  left:50%;
+  transform:translate(-50%,20px);
+  opacity:0;
+  pointer-events:none;
+  background:#182343;
+  border:1px solid #8c5aff;
+  color:white;
+  padding:12px 18px;
+  border-radius:11px;
+  font-size:11px;
+  box-shadow:0 0 25px #7140ff45;
+  transition:.3s;
+}
+
+.toast.show {opacity:1;transform:translate(-50%,0)}
+
+.overlay {
+  display:none;
+  position:fixed;
+  z-index:90;
+  inset:0;
+  background:#0009;
+  backdrop-filter:blur(3px);
+}
+
+.overlay.show {display:block}
+
+/* RESPONSIVE */
+
+@media(min-width:1500px) {
+  :root {--sidebar-width:265px;--right-width:300px}
+  .content {padding:32px 35px}
+  .welcome {min-height:350px}
+  .project-thumb {height:145px}
+}
+
+@media(max-width:1200px) {
+  :root {--right-width:245px}
+  .welcome-art {right:2%;width:33%}
+  .welcome-copy {max-width:65%}
+  .stats-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .project-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media(max-width:900px) {
+  .dashboard-layout {grid-template-columns:1fr}
+  .right-column {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+  }
+  .right-column .panel-card {margin:0}
+  .ai-card {grid-row:span 2}
+}
+
+@media(max-width:650px) {
+  :root {--sidebar-width:245px}
+
+  .app {display:block}
+
+  .sidebar {
+    transform:translateX(-105%);
+    box-shadow:15px 0 40px #0008;
+  }
+
+  .sidebar.open {transform:translateX(0)}
+
+  .main-area {width:100%}
+
+  .topbar {
+    height:65px;
+    padding:0 13px;
+    gap:10px;
+  }
+
+  .mobile-menu {display:block}
+
+  .search-box {
+    width:auto;
+    flex:1;
+    height:38px;
+    padding:0 10px;
+  }
+
+  .search-box input {font-size:10px}
+
+  .top-icon {
+    width:35px;
+    height:35px;
+    flex-shrink:0;
+  }
+
+  .profile-info {display:none}
+  .profile-button {gap:0}
+  .avatar {width:34px;height:34px}
+
+  .content {padding:17px 13px 35px}
+
+  .welcome {
+    min-height:320px;
+    padding:25px 20px;
+    align-items:flex-start;
+  }
+
+  .welcome-copy {max-width:100%}
+
+  .welcome h1 {
+    font-size:35px;
+    letter-spacing:-1.8px;
+    max-width:400px;
+  }
+
+  .welcome p {font-size:11px;max-width:360px}
+
+  .welcome-art {
+    width:125px;
+    height:125px;
+    right:7px;
+    bottom:0;
+    top:auto;
+    transform:none;
+    opacity:.38;
+  }
+
+  .art-orbit {width:100px;height:100px}
+  .art-orbit::before,.art-orbit::after {width:125px;height:42px}
+  .art-logo {width:55px;height:55px;font-size:30px;border-radius:15px}
+  .art-chip {display:none}
+
+  .welcome-actions {gap:8px}
+  .welcome-actions .button {padding:11px 13px;font-size:9px}
+
+  .stats-grid {
+    gap:9px;
+    margin:14px 0 25px;
+  }
+
+  .stat-card {
+    padding:12px 9px;
+    gap:9px;
+    border-radius:12px;
+  }
+
+  .stat-icon {width:34px;height:34px;font-size:17px}
+  .stat-info span {font-size:8px}
+  .stat-info strong {font-size:17px}
+  .stat-info small {font-size:8px}
+
+  .section-head h2 {font-size:14px}
+  .project-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .project-thumb {height:100px}
+  .project-details {padding:10px}
+  .project-details h3 {font-size:10px}
+  .project-details p {font-size:8px}
+
+  .new-project-card {min-height:170px}
+
+  .right-column {
+    grid-template-columns:1fr;
+    margin-top:15px;
+  }
+
+  .ai-card {grid-row:auto}
+
+  .panel-card {padding:16px}
+}
+
+@media(max-width:370px) {
+  .welcome h1 {font-size:30px}
+  .stats-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .project-grid {grid-template-columns:1fr}
+  .welcome-actions {flex-direction:column;align-items:flex-start}
+}
+
+/* ACCESSIBILITY */
+
+button:focus-visible,a:focus-visible,input:focus-visible {
+  outline:2px solid #b78aff;
+  outline-offset:3px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <a class="brand" href="/">
+    <span class="brand-mark">A</span>
+    <span class="brand-name">ATLAS<small>AI BUILDER</small></span>
+  </a>
+
+  <div class="nav-label">WORKSPACE</div>
+
+  <a class="nav-link active" href="/dashboard">
+    <span class="nav-icon">⌂</span> Dashboard
+  </a>
+
+  <a class="nav-link" href="/projects">
+    <span class="nav-icon">▣</span> My Projects
+  </a>
+
+  <a class="nav-link" href="/templates">
+    <span class="nav-icon">▦</span> Templates
+  </a>
+
+  <a class="nav-link" href="/builder">
+    <span class="nav-icon">✧</span> AI Builder
+    <span class="nav-badge">AI</span>
+  </a>
+
+  <div class="nav-label">PUBLISHING</div>
+
+  <a class="nav-link" href="/deployments">
+    <span class="nav-icon">⬡</span> Deployments
+  </a>
+
+  <a class="nav-link" href="/domains">
+    <span class="nav-icon">◎</span> Domains
+  </a>
+
+  <div class="nav-label">ACCOUNT</div>
+
+  <a class="nav-link" href="/settings">
+    <span class="nav-icon">⚙</span> Settings
+  </a>
+
+  <a class="nav-link" href="/billing">
+    <span class="nav-icon">♛</span> Plans & Billing
+  </a>
+
+  <div class="sidebar-spacer"></div>
+
+  <div class="pro-card">
+    <div class="pro-icon">👑</div>
+    <h3>Unlock Atlas Pro</h3>
+    <p>Get more AI credits, premium templates and powerful building tools.</p>
+    <a class="pro-button" href="/billing">Explore Premium →</a>
+  </div>
+
+  <div class="sidebar-bottom">
+    <a class="nav-link" href="/settings">⚙ Account settings</a>
+    <button class="nav-link" id="logoutButton" style="width:100%;background:transparent;border:0;text-align:left">
+      <span class="nav-icon">↪</span> Log out
+    </button>
+  </div>
+
+</aside>
+
+<!-- MAIN AREA -->
+<div class="main-area">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+
+    <button class="mobile-menu" id="menuButton" aria-label="Open navigation">☰</button>
+
+    <label class="search-box">
+      <span>⌕</span>
+      <input id="searchInput" type="search" placeholder="Search projects...">
+    </label>
+
+    <div class="topbar-spacer"></div>
+
+    <button class="top-icon" id="notificationButton" aria-label="Notifications">
+      ♧
+      <span class="notification-dot"></span>
+    </button>
+
+    <button class="profile-button" id="profileButton">
+      <span class="avatar" id="topAvatar">A</span>
+      <span class="profile-info">
+        <b id="topName">Loading...</b>
+        <small>● Online</small>
+      </span>
+      <span class="muted">⌄</span>
+    </button>
+
+  </header>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <div class="dashboard-layout">
+
+      <!-- CENTRAL COLUMN -->
+      <section class="center-column">
+
+        <!-- WELCOME -->
+        <section class="welcome">
+
+          <div class="welcome-copy">
+            <div class="online-label">
+              <span class="online-dot"></span>
+              <span id="welcomeName">Welcome to Atlas!</span>
+            </div>
+
+            <h1>
+              Ready to bring your
+              <span class="gradient">ideas to life?</span>
+            </h1>
+
+            <p>
+              Use Atlas AI to build, customize and launch amazing projects
+              with the power of artificial intelligence.
+              Your next creation starts here.
+            </p>
+
+            <div class="welcome-actions">
+              <a href="/builder" class="button button-primary">✦ Start Building</a>
+              <a href="/templates" class="button button-outline">Explore Templates ↗</a>
+            </div>
+          </div>
+
+          <div class="welcome-art">
+            <div class="art-orbit">
+              <div class="art-logo">A</div>
+            </div>
+            <div class="art-chip chip-one">✦ Build with AI</div>
+            <div class="art-chip chip-two">↗ Publish your app</div>
+          </div>
+
+        </section>
+
+        <!-- STATS -->
+        <section class="stats-grid">
+
+          <article class="stat-card">
+            <div class="stat-icon purple">▣</div>
+            <div class="stat-info">
+              <span>My Projects</span>
+              <strong id="projectCount">—</strong>
+              <small>Your saved projects</small>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon blue">⬡</div>
+            <div class="stat-info">
+              <span>Deployments</span>
+              <strong id="deploymentCount">—</strong>
+              <small>Published projects</small>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon green">ϟ</div>
+            <div class="stat-info">
+              <span>AI Credits</span>
+              <strong id="creditCount">—</strong>
+              <small>Your available credits</small>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon pink">★</div>
+            <div class="stat-info">
+              <span>Templates</span>
+              <strong>50+</strong>
+              <small><a href="/templates" class="text-link">Explore templates →</a></small>
+            </div>
+          </article>
+
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projectsSection">
+
+          <div class="section-head">
+            <h2><span>▦</span> Your Projects</h2>
+            <a href="/projects" class="text-link">View all projects →</a>
+          </div>
+
+          <div class="project-grid" id="projectGrid">
+
+            <div class="loading" id="projectLoading" style="grid-column:1/-1">
+              <div class="spinner"></div>
+              Loading your projects...
+            </div>
+
+            <a href="/builder" class="new-project-card">
+              <span class="new-plus">+</span>
+              <b>Create New Project</b>
+              <small>Start from scratch or a template</small>
+            </a>
+
+          </div>
+
+        </section>
+
+        <!-- RECENT ACTIVITY -->
+        <section style="margin-top:32px">
+          <div class="section-head">
+            <h2><span>◷</span> Getting Started</h2>
+            <a href="/builder" class="text-link">Open builder →</a>
+          </div>
+
+          <div class="panel-card">
+            <div class="activity-item">
+              <span class="activity-dot"></span>
+              <div>
+                <p><b>Start your first project</b><br>Describe your idea and let Atlas help you build it.</p>
+                <small>CREATE SOMETHING NEW</small>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <span class="activity-dot" style="background:#00c9ff"></span>
+              <div>
+                <p><b>Explore project templates</b><br>Find inspiration for your next website or application.</p>
+                <small>DISCOVER TEMPLATES</small>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <span class="activity-dot" style="background:#00e6a0"></span>
+              <div>
+                <p><b>Prepare to publish</b><br>Give your finished project its own online address.</p>
+                <small>EXPLORE DEPLOYMENTS</small>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PREMIUM BANNER -->
+        <section style="margin-top:25px">
+          <div class="cta-banner" style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:20px;
+            padding:24px;
+            border:1px solid #7952ff;
+            border-radius:16px;
+            background:
+              radial-gradient(circle at 10% 100%,#8533db88,transparent 45%),
+              radial-gradient(circle at 100% 0%,#116dff88,transparent 45%),
+              #11163d;
+            box-shadow:0 0 30px #633cff22;
+          ">
+            <div>
+              <span style="font-size:23px">🚀</span>
+              <h3 style="font-size:16px;margin:8px 0">Ready to go Pro?</h3>
+              <p style="font-size:10px;color:#b6c4e4;line-height:1.7">
+                Unlock premium tools, more AI credits and advanced features.
+              </p>
+            </div>
+            <a href="/billing" class="button button-primary">Upgrade Now →</a>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- RIGHT COLUMN -->
+      <aside class="right-column">
+
+        <!-- ACCOUNT -->
+        <section class="panel-card">
+
+          <div class="panel-title">
+            <h3>Your Account</h3>
+            <span class="plan-label" id="planLabel">FREE PLAN</span>
+          </div>
+
+          <div class="account-profile">
+            <div class="account-avatar" id="accountAvatar">A</div>
+            <div style="min-width:0">
+              <b id="accountName">Loading...</b>
+              <small id="accountEmail">Loading account...</small>
+            </div>
+          </div>
+
+          <a href="/billing" class="upgrade-button">♛ Upgrade to Pro →</a>
+
+          <div class="account-row">
+            <span>▣ Projects</span>
+            <strong id="accountProjects">—</strong>
+          </div>
+
+          <div class="account-row">
+            <span>⬡ Deployments</span>
+            <strong id="accountDeployments">—</strong>
+          </div>
+
+          <div class="account-row">
+            <span>ϟ AI Credits</span>
+            <strong id="accountCredits">—</strong>
+          </div>
+
+        </section>
+
+        <!-- AI ASSISTANT -->
+        <section class="panel-card ai-card">
+
+          <div class="panel-title">
+            <h3><span class="gradient">✦</span> Atlas AI Assistant</h3>
+            <span class="plan-label" style="color:#b9a0ff">AI</span>
+          </div>
+
+          <p class="ai-description">
+            Your intelligent building companion. Have an idea?
+            Let's turn it into something amazing.
+          </p>
+
+          <div class="ai-message">
+            Hey! 👋 What would you like to build today?
+            Tell me your idea and let's get started.
+          </div>
+
+          <form class="ai-form" id="assistantForm">
+            <input id="assistantInput" type="text" maxlength="3000"
+              placeholder="Ask Atlas anything..." required>
+            <button type="submit" aria-label="Send message">➤</button>
+          </form>
+
+        </section>
+
+        <!-- QUICK TEMPLATES -->
+        <section class="panel-card">
+
+          <div class="panel-title">
+            <h3>Quick Start</h3>
+            <a href="/templates" class="text-link">See all →</a>
+          </div>
+
+          <a href="/templates?type=dashboard" class="template-mini">
+            <span class="template-mini-icon">▥</span>
+            <span><b>Dashboard</b><small>Analytics and insights</small></span>
+          </a>
+
+          <a href="/templates?type=store" class="template-mini">
+            <span class="template-mini-icon">◈</span>
+            <span><b>Online Store</b><small>Products and shopping</small></span>
+          </a>
+
+          <a href="/templates?type=portfolio" class="template-mini">
+            <span class="template-mini-icon">✧</span>
+            <span><b>Portfolio</b><small>Personal showcase</small></span>
+          </a>
+
+          <a href="/templates?type=social" class="template-mini">
+            <span class="template-mini-icon">◎</span>
+            <span><b>Social Platform</b><small>Community and profiles</small></span>
+          </a>
+
+        </section>
+
+        <!-- HELP -->
+        <section class="panel-card">
+          <div class="panel-title"><h3>Need help?</h3></div>
+          <p style="font-size:10px;color:#99a8c9;line-height:1.8">
+            Have questions about building or publishing?
+            Visit your help center.
+          </p>
+          <a href="/help" class="text-link" style="display:inline-block;margin-top:12px">
+            Explore Help Center →
+          </a>
+        </section>
+
+      </aside>
+
+    </div>
+
+  </main>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { auth, db } from "/js/firebase.js";
+
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+/* ELEMENTS */
+
+const $ = id => document.getElementById(id);
+
+const sidebar = $("sidebar");
+const overlay = $("overlay");
+const menuButton = $("menuButton");
+const projectGrid = $("projectGrid");
+
+let currentUser = null;
+let allProjects = [];
+let userProfile = {};
+
+/* TOAST */
+
+function toast(message) {
+  const element = $("toast");
+  element.textContent = message;
+  element.classList.add("show");
+
+  setTimeout(() => {
+    element.classList.remove("show");
+  }, 3000);
+}
+
+/* MOBILE MENU */
+
+function closeMenu() {
+  sidebar.classList.remove("open");
+  overlay.classList.remove("show");
+}
+
+menuButton.addEventListener("click", () => {
+  sidebar.classList.toggle("open");
+  overlay.classList.toggle("show");
+});
+
+overlay.addEventListener("click", closeMenu);
+
+document.querySelectorAll(".sidebar a").forEach(link => {
+  link.addEventListener("click", closeMenu);
+});
+
+/* USER NAME */
+
+function displayName(user) {
+  return user.displayName ||
+    user.email?.split("@")[0] ||
+    "Atlas User";
+}
+
+function initials(name) {
+  return (name || "A").trim().charAt(0).toUpperCase();
+}
+
+/* DATE */
+
+function formatDate(value) {
+  if (!value) return "Recently updated";
+
+  const date = value.toDate ? value.toDate() : new Date(value);
+
+  if (Number.isNaN(date.getTime())) return "Recently updated";
+
+  return date.toLocaleDateString(undefined, {
+    day:"numeric",
+    month:"short",
+    year:"numeric"
+  });
+}
+
+/* LOAD USER */
+
+async function loadUser(user) {
+  currentUser = user;
+
+  const name = displayName(user);
+  const email = user.email || "";
+
+  $("topName").textContent = name;
+  $("accountName").textContent = name;
+  $("welcomeName").textContent = `Welcome back, ${name}!`;
+  $("accountEmail").textContent = email;
+
+  const letter = initials(name);
+
+  $("topAvatar").textContent = letter;
+  $("accountAvatar").textContent = letter;
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      userProfile = userSnap.data();
+
+      const profileName = userProfile.displayName || name;
+
+      $("topName").textContent = profileName;
+      $("accountName").textContent = profileName;
+
+      if (userProfile.photoURL) {
+        $("topAvatar").innerHTML =
+          `<img src="${escapeHTML(userProfile.photoURL)}" alt="Profile" style="width:100%;height:100%;object-fit:cover">`;
+
+        $("accountAvatar").innerHTML =
+          `<img src="${escapeHTML(userProfile.photoURL)}" alt="Profile" style="width:100%;height:100%;object-fit:cover">`;
+      }
+
+      const plan = String(userProfile.plan || "free").toUpperCase();
+
+      $("planLabel").textContent =
+        plan === "PRO" ? "♛ PRO PLAN" : plan + " PLAN";
+
+      $("creditCount").textContent =
+        Number.isFinite(userProfile.aiCredits)
+          ? userProfile.aiCredits.toLocaleString()
+          : "—";
+
+      $("accountCredits").textContent =
+        Number.isFinite(userProfile.aiCredits)
+          ? userProfile.aiCredits.toLocaleString()
+          : "—";
+    }
+
+  } catch (error) {
+    console.error("Profile loading error:", error);
+  }
+}
+
+/* ESCAPE HTML */
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[char]);
+}
+
+/* PROJECT PREVIEW */
+
+function projectType(project) {
+  const value = (
+    project.type ||
+    project.category ||
+    project.name ||
+    project.title ||
+    ""
+  ).toLowerCase();
+
+  if (value.includes("shop") || value.includes("store") ||
+      value.includes("market")) return "store";
+
+  if (value.includes("portfolio")) return "portfolio";
+
+  if (value.includes("social") || value.includes("chat") ||
+      value.includes("community")) return "social";
+
+  if (value.includes("finance") || value.includes("wallet")) return "finance";
+
+  if (value.includes("dashboard") || value.includes("admin")) return "dashboard";
+
+  return "other";
+}
+
+function projectCard(project) {
+  const id = escapeHTML(project.id);
+  const name = escapeHTML(project.name || project.title || "Untitled Project");
+  const type = projectType(project);
+  const date = formatDate(project.updatedAt || project.createdAt);
+
+  const published =
+    project.published === true ||
+    project.status === "published";
+
+  const status = published ? "LIVE" : "BUILD";
+
+  return `
+    <article class="project-card" data-project="${id}">
+      <div class="project-thumb ${type}">
+        <div class="thumb-window">
+          <div class="thumb-top"></div>
+          <div class="thumb-hero"></div>
+          <div class="thumb-bars"><i></i><i></i><i></i></div>
+        </div>
+        <span class="project-status ${published ? "" : "draft"}">${status}</span>
+      </div>
+
+      <div class="project-details">
+        <h3 title="${name}">${name}</h3>
+        <p>Updated ${escapeHTML(date)}</p>
+
+        <div class="project-bottom">
+          <span>${escapeHTML(project.type || "Web project")}</span>
+          <button class="project-open" data-open="${id}">Open →</button>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;margin-top:7px">
+          <button class="project-menu" data-delete="${id}" title="Delete project">⋮</button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+/* CREATE PROJECT */
+
+async function createProject() {
+  if (!currentUser) {
+    location.href = "/login";
+    return;
+  }
+
+  const name = prompt("What would you like to name your project?");
+
+  if (!name || !name.trim()) return;
+
+  try {
+    const projectRef = await addDoc(collection(db, "projects"), {
+      ownerUid: currentUser.uid,
+      name: name.trim(),
+      title: name.trim(),
+      type: "website",
+      status: "draft",
+      published: false,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+
+    location.href = `/builder?id=${encodeURIComponent(projectRef.id)}`;
+
+  } catch (error) {
+    console.error("Create project error:", error);
+    toast("Could not create project. Please try again.");
+  }
+}
+
+/* RENDER PROJECTS */
+
+function renderProjects(projects) {
+  const loading = $("projectLoading");
+  if (loading) loading.remove();
+
+  if (!projects.length) {
+    projectGrid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">✧</div>
+        <h3>Your workspace is waiting</h3>
+        <p>You haven't created a project yet.<br>
+        Start with an idea and let Atlas help you build it.</p>
+        <a href="/builder" class="button button-primary">Create your first project →</a>
+      </div>
+
+      <a href="/builder" class="new-project-card">
+        <span class="new-plus">+</span>
+        <b>Create New Project</b>
+        <small>Start from scratch or a template</small>
+      </a>
+    `;
+    return;
+  }
+
+  const recent = [...projects].sort((a,b) => {
+    const getTime = value => {
+      if (!value) return 0;
+      return value.toDate ? value.toDate().getTime() : new Date(value).getTime();
+    };
+
+    return getTime(b.updatedAt || b.createdAt) -
+           getTime(a.updatedAt || a.createdAt);
+  });
+
+  projectGrid.innerHTML =
+    recent.slice(0,5).map(projectCard).join("") +
+    `
+      <a href="/builder" class="new-project-card">
+        <span class="new-plus">+</span>
+        <b>Create New Project</b>
+        <small>Start from scratch or a template</small>
+      </a>
+    `;
+
+  projectGrid.querySelectorAll("[data-open]").forEach(button => {
+    button.addEventListener("click", () => {
+      location.href = `/builder?id=${encodeURIComponent(button.dataset.open)}`;
+    });
+  });
+
+  projectGrid.querySelectorAll("[data-delete]").forEach(button => {
+    button.addEventListener("click", async () => {
+      const id = button.dataset.delete;
+
+      const confirmed = confirm(
+        "Delete this project permanently? This action cannot be undone."
+      );
+
+      if (!confirmed) return;
+
+      try {
+        const project = allProjects.find(item => item.id === id);
+
+        if (!project || project.ownerUid !== currentUser.uid) {
+          toast("You cannot delete this project.");
+          return;
+        }
+
+        await deleteDoc(doc(db, "projects", id));
+
+        allProjects = allProjects.filter(item => item.id !== id);
+
+        $("projectCount").textContent = allProjects.length;
+        $("accountProjects").textContent = allProjects.length;
+
+        renderProjects(allProjects);
+        toast("Project deleted.");
+
+      } catch (error) {
+        console.error("Delete project error:", error);
+        toast("Could not delete project.");
+      }
+    });
+  });
+}
+
+/* LOAD PROJECTS */
+
+async function loadProjects() {
+  try {
+    const projectsQuery = query(
+      collection(db, "projects"),
+      where("ownerUid", "==", currentUser.uid)
+    );
+
+    const snapshot = await getDocs(projectsQuery);
+
+    allProjects = snapshot.docs.map(item => ({
+      id:item.id,
+      ...item.data()
+    }));
+
+    $("projectCount").textContent = allProjects.length;
+    $("accountProjects").textContent = allProjects.length;
+
+    renderProjects(allProjects);
+
+  } catch (error) {
+    console.error("Projects loading error:", error);
+
+    projectGrid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠</div>
+        <h3>Couldn't load projects</h3>
+        <p>Check your connection and try again.</p>
+        <button class="button button-outline" id="retryProjects">Try again</button>
+      </div>
+    `;
+
+    $("retryProjects")?.addEventListener("click", loadProjects);
+  }
+}
+
+/* LOAD DEPLOYMENTS */
+
+async function loadDeployments() {
+  try {
+    const deploymentsQuery = query(
+      collection(db, "deployments"),
+      where("ownerUid", "==", currentUser.uid)
+    );
+
+    const snapshot = await getDocs(deploymentsQuery);
+
+    $("deploymentCount").textContent = snapshot.size;
+    $("accountDeployments").textContent = snapshot.size;
+
+  } catch (error) {
+    console.warn("Deployments could not be loaded:", error);
+
+    $("deploymentCount").textContent = "—";
+    $("accountDeployments").textContent = "—";
+  }
+}
+
+/* SEARCH */
+
+$("searchInput").addEventListener("input", event => {
+  const search = event.target.value.trim().toLowerCase();
+
+  const filtered = allProjects.filter(project => {
+    const name = (project.name || project.title || "").toLowerCase();
+    const type = (project.type || "").toLowerCase();
+
+    return name.includes(search) || type.includes(search);
+  });
+
+  renderProjects(filtered);
+});
+
+/* CREATE PROJECT BUTTONS */
+
+document.querySelectorAll('a[href="/builder"]').forEach(link => {
+  link.addEventListener("click", event => {
+    const isPlainBuilderLink =
+      link.classList.contains("new-project-card");
+
+    if (!isPlainBuilderLink) return;
+
+    event.preventDefault();
+    createProject();
+  });
+});
+
+/* AI ASSISTANT */
+
+$("assistantForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const promptText = $("assistantInput").value.trim();
+
+  if (!promptText) return;
+
+  location.href = `/builder?prompt=${encodeURIComponent(promptText)}`;
+});
+
+/* LOGOUT */
+
+$("logoutButton").addEventListener("click", async () => {
+  const confirmed = confirm("Are you sure you want to log out?");
+
+  if (!confirmed) return;
+
+  try {
+    await signOut(auth);
+    location.href = "/login";
+  } catch (error) {
+    console.error("Logout error:", error);
+    toast("Could not log out. Try again.");
+  }
+});
+
+/* PROFILE SHORTCUT */
+
+$("profileButton").addEventListener("click", () => {
+  location.href = "/settings";
+});
+
+/* NOTIFICATIONS */
+
+$("notificationButton").addEventListener("click", () => {
+  toast("You're all caught up!");
+});
+
+/* AUTHENTICATION GUARD */
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    location.replace("/login");
+    return;
+  }
+
+  await loadUser(user);
+
+  await Promise.all([
+    loadProjects(),
+    loadDeployments()
+  ]);
+});
+
+</script>
+
+</body>
+</html>
