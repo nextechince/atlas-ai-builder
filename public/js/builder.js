@@ -134,13 +134,6 @@ const feed = (() => {
 })();
 window.atlasFeed = feed;
 
-await firebaseReady;
-onAuthStateChanged(auth, async current => {
-  if (!current) return location.replace("/login");
-  user = current;
-  if (projectId) await loadProject();
-  else await createProject();
-});
 
 function addMessage(role, text) {
   const el = document.createElement("div");
@@ -225,6 +218,7 @@ async function saveFiles(newFiles, summary) {
 async function build() {
   const prompt = promptBox.value.trim();
   if (!prompt || busy) return;
+  if (!user || !projectId) { addMessage("ai", "Still connecting to your account. Give it a moment and try again."); return; }
   busy = true;
   sendBtn.disabled = true;
   promptBox.disabled = true;
@@ -331,3 +325,25 @@ $("#historyBtn").addEventListener("click", async () => {
 });
 $("#downloadZip").addEventListener("click", () => addMessage("ai", "ZIP export is not included in this version yet."));
 window.addEventListener("beforeunload", () => { if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl); });
+
+// Start up after every button is wired, so the UI never freezes while connecting.
+(async function init() {
+  try {
+    status("Connecting…");
+    await Promise.race([firebaseReady, new Promise((_, rej) => setTimeout(() => rej(new Error("timed out")), 12000))]);
+    onAuthStateChanged(auth, async current => {
+      try {
+        if (!current) return location.replace("/login");
+        user = current;
+        if (projectId) await loadProject();
+        else await createProject();
+      } catch (e) {
+        status("Couldn't save");
+        addMessage("ai", `I couldn't set up your project: ${e.message}`);
+      }
+    });
+  } catch (e) {
+    status("Not connected");
+    addMessage("ai", `I couldn't connect to your account (${e.message}). Check your Firebase setup, then refresh.`);
+  }
+})();
