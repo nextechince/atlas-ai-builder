@@ -1,10 +1,9 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#070a12"><title>ATLAS · Builder</title><style>
-:root{color-scheme:dark;--bg:#070a12;--glass:rgba(18,25,42,.72);--panel:#0e1524;--panel2:#141d31;--line:rgba(148,163,184,.18);--text:#f1f5f9;--muted:#8b9ab3;--blue:#6366f1;--cyan:#22d3ee;--purple:#a855f7;--bubble-user:linear-gradient(135deg,#4f46e5,#7c3aed);--r:18px}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){color-scheme:light;--bg:#eef1f8;--glass:rgba(255,255,255,.8);--panel:#fff;--panel2:#f3f5fb;--line:rgba(15,23,42,.12);--text:#0f172a;--muted:#5b677d;--cyan:#0891b2}}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f6f7fc"><title>ATLAS · Builder</title><style>
+:root{color-scheme:light;--bg:#f6f7fc;--glass:rgba(255,255,255,.88);--panel:#ffffff;--panel2:#f0f2fb;--line:rgba(40,50,110,.13);--text:#10172e;--muted:#5b6784;--blue:#5b5fe9;--cyan:#0891b2;--purple:#9a4df0;--bubble-user:linear-gradient(135deg,#5b5fe9,#8b5cf6);--r:18px}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 "Inter",system-ui,-apple-system,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(600px 380px at 8% -5%,rgba(99,102,241,.25),transparent 70%),radial-gradient(520px 340px at 100% 105%,rgba(34,211,238,.14),transparent 70%)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(620px 380px at 6% -6%,rgba(139,92,246,.18),transparent 70%),radial-gradient(560px 360px at 100% 104%,rgba(34,211,238,.18),transparent 70%)}
 button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .app{position:relative;height:100dvh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
@@ -45,8 +44,8 @@ button{font:inherit;color:inherit}
 .chip{flex:none;border:1px solid var(--line);background:var(--glass);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--muted);cursor:pointer;transition:color .15s,border-color .15s}
 .chip:hover{color:var(--text);border-color:var(--cyan)}
 .composer{padding:0 0 4px}
-.composerbox{border:1px solid var(--line);background:var(--panel);border-radius:22px;padding:10px 10px 8px 14px;box-shadow:0 12px 40px rgba(0,0,0,.28);transition:border-color .15s,box-shadow .15s}
-.composerbox:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(99,102,241,.2),0 12px 40px rgba(0,0,0,.28)}
+.composerbox{border:1px solid var(--line);background:var(--panel);border-radius:22px;padding:10px 10px 8px 14px;box-shadow:0 12px 40px rgba(60,70,140,.12);transition:border-color .15s,box-shadow .15s}
+.composerbox:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,95,233,.18),0 12px 40px rgba(60,70,140,.12)}
 .composer textarea{width:100%;resize:none;min-height:70px;max-height:180px;background:transparent;border:0;outline:0;color:var(--text);font:inherit;padding:4px 0}
 .composer textarea::placeholder{color:var(--muted)}
 .composerfoot{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -55,19 +54,19 @@ button{font:inherit;color:inherit}
 .notice{font-size:11.5px;color:var(--muted);margin:8px 6px 0}
 
 /* preview: framed like a browser window */
-.preview{display:flex;flex-direction:column;min-width:0;min-height:0;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--panel);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.preview{display:flex;flex-direction:column;min-width:0;min-height:0;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--panel);box-shadow:0 20px 60px rgba(60,70,140,.14)}
 .previewhead{flex:none;height:50px;display:flex;align-items:center;gap:12px;padding:0 12px;border-bottom:1px solid var(--line);background:var(--panel2)}
 .dots{display:flex;gap:6px}.dots span{width:10px;height:10px;border-radius:50%;background:var(--line)}
 .addr{flex:1;min-width:0;text-align:center;font-size:12.5px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .previewtools{display:flex;gap:6px}.previewtools .btn{padding:6px 11px;font-size:12.5px}
 .previewframe{flex:1;border:0;background:#fff;width:100%}
 .empty{flex:1;display:grid;place-items:center;text-align:center;padding:28px;color:var(--muted)}
-.empty .glyph{width:64px;height:64px;margin:0 auto 14px;border-radius:20px;display:grid;place-items:center;font-size:28px;color:#fff;background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 10px 40px rgba(99,102,241,.4)}
+.empty .glyph{width:64px;height:64px;margin:0 auto 14px;border-radius:20px;display:grid;place-items:center;font-size:28px;color:#fff;background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 10px 40px rgba(91,95,233,.35)}
 .empty strong{display:block;color:var(--text);font-size:19px;margin-bottom:5px;letter-spacing:-.01em}
 .hidden{display:none!important}
 
 /* project details panel */
-.codepanel{display:none;position:absolute;z-index:20;right:16px;top:64px;width:min(400px,calc(100vw - 32px));max-height:70vh;overflow:auto;border:1px solid var(--line);border-radius:20px;background:var(--panel);box-shadow:0 24px 80px rgba(0,0,0,.55);padding:16px}
+.codepanel{display:none;position:absolute;z-index:20;right:16px;top:64px;width:min(400px,calc(100vw - 32px));max-height:70vh;overflow:auto;border:1px solid var(--line);border-radius:20px;background:var(--panel);box-shadow:0 24px 80px rgba(60,70,140,.22);padding:16px}
 .codepanel.open{display:block}
 .codepanel .row{display:flex;justify-content:space-between;align-items:center}
 
@@ -81,7 +80,7 @@ button{font:inherit;color:inherit}
 .preview{display:none;border-radius:0;border:0;box-shadow:none}
 .layout.show-preview .chat{display:none}.layout.show-preview .preview{display:flex}
 .dots{display:none}
-.mobilebar{display:flex;position:fixed;z-index:10;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));gap:4px;padding:5px;border:1px solid var(--line);border-radius:999px;background:var(--glass);backdrop-filter:blur(18px);box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.mobilebar{display:flex;position:fixed;z-index:10;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));gap:4px;padding:5px;border:1px solid var(--line);border-radius:999px;background:var(--glass);backdrop-filter:blur(18px);box-shadow:0 10px 30px rgba(60,70,140,.18)}
 .mobilebar button{border:0;background:transparent;color:var(--muted);font-weight:600;font-size:13px;padding:9px 20px;border-radius:999px;cursor:pointer}
 .mobilebar button.active{color:#fff;background:linear-gradient(100deg,var(--blue),var(--purple))}
 .composer{padding-bottom:70px}.notice{display:none}
@@ -127,10 +126,12 @@ button{font:inherit;color:inherit}
 <div id="projectMeta"></div><p></p><button class="btn" id="downloadZip">Export project ZIP</button></aside>
 </div>
 <script>
+window.addEventListener("error",function(e){var s=document.getElementById("saveStatus");if(s)s.textContent="Error: "+String(e.message||"script failed").slice(0,60)});
+window.addEventListener("unhandledrejection",function(e){var s=document.getElementById("saveStatus");if(s)s.textContent="Error: "+String(e.reason&&e.reason.message||e.reason).slice(0,60)});
 (function(){var p=document.getElementById("prompt"),c=document.getElementById("chips");
 c.addEventListener("click",function(e){if(e.target.classList.contains("chip")){p.value=e.target.textContent;p.focus()}});
 document.getElementById("sendBtn").addEventListener("click",function(){if(p.value.trim())c.classList.add("hidden")});
 p.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey&&p.value.trim())c.classList.add("hidden")});})();
 </script>
-<script type="module" src="/js/builder.js"></script>
+<script type="module" src="/js/builder.js" onerror="document.getElementById('saveStatus').textContent='Could not load builder.js'"></script>
 </body></html>
