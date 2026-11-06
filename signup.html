@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign up · Atlas Ai Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--b:#2f5bff;--b2:#7c4dff;--ink:#101a3a;--mut:#6b7494;--line:#e4e8f5;--bg:#fbfcff;--p:#ffd3e0;--pe:#ffe4bd;--m:#c8f1dc;--l:#e1d6ff}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+h1,h2,h3,.logo{font-family:'Bricolage Grotesque',sans-serif}[hidden]{display:none!important}
+button,select,textarea,input{font:inherit;color:inherit}
+.top{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5}
+.logo{font-weight:800;font-size:19px;display:flex;gap:8px;align-items:center}.logo i{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--b),var(--b2))}.logo span{color:var(--b)}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:500}.btn.pri{background:var(--b);border-color:var(--b);color:#fff}
+#home{position:relative;overflow:hidden;padding:56px 18px 40px;text-align:center}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.75;z-index:0}
+#home>*{position:relative;z-index:1}
+h1{font-size:clamp(34px,7vw,60px);margin:0 0 10px;line-height:1.05;font-weight:800}h1 em{font-style:normal;background:linear-gradient(90deg,var(--b),var(--b2));-webkit-background-clip:text;color:transparent}
+.sub{color:var(--mut);max-width:520px;margin:0 auto 26px}
+.pbox{max-width:640px;margin:auto;background:#fff;border:1.5px solid #c9d4ff;border-radius:20px;padding:12px;box-shadow:0 14px 40px #2f5bff1a;text-align:left}
+.pbox textarea{width:100%;border:0;outline:0;resize:none;min-height:84px}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+select{border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:#fff;max-width:150px}
+.go{width:40px;height:40px;border-radius:50%;border:0;background:var(--b);color:#fff;cursor:pointer;font-size:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}.chip{border:1px solid var(--line);background:#ffffffcc;border-radius:99px;padding:7px 14px;cursor:pointer}
+.sec{max-width:1000px;margin:0 auto;padding:30px 18px}
+.tabs{display:inline-flex;background:#eef1fb;border-radius:99px;padding:4px;margin-bottom:18px}.tabs button{border:0;background:none;padding:8px 20px;border-radius:99px;cursor:pointer}.tabs .on{background:#fff;box-shadow:0 1px 4px #0001}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden;cursor:pointer;transition:.2s}.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #2f5bff18}
+.card .th{height:120px;display:grid;place-items:center;font-size:40px}.card .ct{padding:12px 14px}.card small{color:var(--mut)}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.feat div{padding:18px;border-radius:16px}
+footer{text-align:center;color:var(--mut);padding:30px}
+/* workspace */
+#ws{display:grid;grid-template-columns:400px 1fr;height:calc(100vh - 57px)}
+#chat{display:flex;flex-direction:column;border-right:1px solid var(--line);background:#fff;min-height:0}
+.bar{display:flex;gap:6px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.seg{display:flex;background:#eef1fb;border-radius:10px;padding:3px}.seg button{border:0;background:none;padding:6px 12px;border-radius:8px;cursor:pointer}.seg .on{background:var(--b);color:#fff}
+#msgs{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.m{max-width:94%;padding:10px 13px;border-radius:14px;overflow-wrap:anywhere}.m.u{align-self:flex-end;background:var(--b);color:#fff}.m.a{background:#f3f5fd}
+.m p{margin:0 0 8px}.m li{margin-left:18px;list-style:disc}.m img{max-width:100%;border-radius:10px}.m code{background:#e8ecfb;padding:1px 5px;border-radius:5px}
+.tw{overflow:auto}table{border-collapse:collapse;font-size:13px;margin:6px 0}th,td{border:1px solid var(--line);padding:5px 9px;text-align:left}th{background:#e8ecfb}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.cards div{border-radius:12px;padding:10px;background:#fff;border:1px solid var(--line)}.cards b{display:block}.cards .e{font-size:22px}
+.opts{margin:6px 0}.opts button{display:block;width:100%;text-align:left;margin-top:6px;padding:9px 12px;border:1px solid #c9d4ff;background:#fff;border-radius:10px;cursor:pointer}.opts button:hover{background:#eef2ff}
+.steps{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;align-self:stretch}.st{display:flex;gap:8px;padding:3px 0;color:var(--mut)}.st.d{color:var(--ink)}.st.r{color:var(--b);font-weight:500}
+.sp{width:14px;height:14px;border:2px solid #c9d4ff;border-top-color:var(--b);border-radius:50%;animation:s 1s linear infinite;margin-top:4px}@keyframes s{to{rotate:360deg}}
+#inp{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}#inp textarea{flex:1;border:1px solid var(--line);border-radius:12px;padding:9px;resize:none;height:46px}
+#pvw{display:flex;flex-direction:column;background:#eef1fb;min-width:0}#pvw .fr{flex:1;display:grid;place-items:center;padding:12px;min-height:0}
+#pv{height:100%;width:100%;border:0;background:#fff;border-radius:12px;box-shadow:0 8px 30px #0002;transition:width .25s}
+.empty{color:var(--mut);text-align:center}
+/* modals */
+.ov{position:fixed;inset:0;background:#101a3a77;display:grid;place-items:center;z-index:20;padding:16px}
+.mod{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;position:relative}.mod input{width:100%;margin:6px 0;padding:11px;border:1px solid var(--line);border-radius:10px}.err{color:#d6336c;font-size:13px;min-height:18px}
+.x{position:absolute;top:10px;right:12px;border:0;background:none;font-size:22px;cursor:pointer;color:var(--mut)}
+#ad{position:fixed;right:16px;bottom:16px;width:min(340px,calc(100% - 32px));z-index:30;background:#fff;border-radius:18px;padding:16px;box-shadow:0 18px 50px #2f5bff33;border:1px solid var(--line);overflow:hidden;background-image:linear-gradient(135deg,#fff 60%,var(--p))}
+#ad .pg{position:absolute;left:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--b),var(--b2));width:100%;transition:width 10s linear}
+@media(max-width:800px){#ws{grid-template-columns:1fr;grid-template-rows:55% 45%;height:auto}#chat{height:70vh}#pvw{height:70vh}}
+.auth{min-height:100vh;display:grid;place-items:center;padding:20px;position:relative;overflow:hidden;background:#fbfcff}
+.auth .mod{z-index:1;box-shadow:0 20px 60px #2f5bff22;border:1px solid var(--line)}
+.auth .logo{justify-content:center;margin-bottom:14px}
+.auth p.alt{text-align:center;margin:14px 0 0;color:var(--mut)}a{color:var(--b);text-decoration:none}
+.live{background:#eaf9f1;border-radius:10px;padding:10px;margin-top:10px;word-break:break-all;font-size:14px}
+.subrow{display:flex;align-items:center;gap:6px}.subrow input{margin:0;flex:1}.subrow span{color:var(--mut);white-space:nowrap}
+.btn.pub{background:linear-gradient(135deg,var(--b),var(--b2));color:#fff;border:0}
+
+</style></head><body>
+<div class="auth">
+<div class="blob" style="width:300px;height:300px;background:var(--p);left:-80px;top:10%"></div>
+<div class="blob" style="width:280px;height:280px;background:var(--l);right:-60px;top:40%"></div>
+<div class="blob" style="width:240px;height:240px;background:var(--m);left:40%;bottom:-80px"></div>
+<div class="mod"><a href="index.html" class="logo" style="color:inherit"><i></i>Atlas <span>Ai Builder</span></a>
+<h2 style="margin:0 0 8px;text-align:center">Create your account</h2>
+<input id="un" placeholder="Username" autocomplete="username"><input id="em" type="email" placeholder="Email" autocomplete="email"><input id="pw" type="password" placeholder="Password" autocomplete="new-password">
+<div class="err" id="er"></div><button class="btn pri" id="go" style="width:100%">Sign up</button>
+<p class="alt">Have an account? <a href="login.html">Login</a></p></div></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+Atlas.ready.then(()=>Atlas.authReady).then(()=>{if(Atlas.user)location.replace('index.html')});
+$('#go').onclick=async()=>{const em=$('#em').value.trim(),pw=$('#pw').value;$('#er').style.color='';$('#er').textContent='';$('#go').disabled=true;
+ try{await Atlas.ready;await Atlas.signup($('#un').value.trim(),em,pw);location.href='index.html'}catch(e){$('#er').textContent=e.message;$('#go').disabled=false}};
+document.addEventListener('keydown',e=>{if(e.key==='Enter')$('#go').click()});
+</script></body></html>
