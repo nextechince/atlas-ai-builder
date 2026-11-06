@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Loading...</title>
+<style>body{font:16px system-ui;display:grid;place-items:center;min-height:100vh;margin:0;color:#6b7494;background:linear-gradient(135deg,#f3f5ff,#ffe9f0);text-align:center}a{color:#2f5bff}</style></head>
+<body><div id="m">Powered By Atlas...</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase.js"></script>
+<script>
+(async()=>{
+ await Atlas.ready;const base=(Atlas.C.publish||{}).baseDomain||'',h=location.hostname;
+ let sub=new URLSearchParams(location.search).get('s');
+ if(!sub&&base&&h.endsWith('.'+base))sub=h.slice(0,-base.length-1).split('.').pop();
+ const fail=t=>document.getElementById('m').innerHTML=t;
+ if(!sub)return fail('No site given.');
+ try{const s=await Atlas.db.collection('sites').doc(sub).get();
+  if(!s.exists)return fail('<h2>Site not found</h2><p>Nothing is published at <b>'+sub.replace(/[^a-z0-9-]/g,'')+'</b> yet.</p>');
+  const d=s.data(),html=Atlas.bundle(JSON.parse(d.files));document.open();document.write(html);document.close()}
+ catch(e){fail('PATH MAY BE LOST OR MISSING FILE.')}
+})();
+</script></body></html>
