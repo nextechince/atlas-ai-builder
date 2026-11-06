@@ -89,7 +89,7 @@ $('#msgs').onclick = e => { const b = e.target.closest('[data-o]'); if (b) { set
 /* chat + build */
 $('#send').onclick = () => { const v = $('#tx').value.trim(); if (v) { $('#tx').value = ''; send(v) } };
 $('#tx').onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#send').click() } };
-const callAI = msgs => ai($('.mdl').value, msgs, Atlas.C.xai && Atlas.C.xai.keys, Atlas.C.xai && Atlas.C.xai.endpoint);
+const callAI = msgs => location.protocol === 'file:' ? Promise.reject(Error('Open this site from a web address (Vercel or localhost), not as a local file, so Config.html can load.')) : ai($('.mdl').value, msgs, Atlas.C.xai && Atlas.C.xai.keys, Atlas.C.xai && Atlas.C.xai.endpoint);
 
 async function send(text) {
   if (busy) return; busy = true; const lang = $('.lang').value;
@@ -128,7 +128,7 @@ function preview() {
 }
 
 /* publish */
-const slug = s => (s || 'my-site').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30);
+const slug = s => (s || '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).slice(0, 3).join('-').slice(0, 30) || 'my-site';
 $('#pub').onclick = () => {
   if (!proj.files['index.html']) return bubble('a', 'Build something first, then publish it.');
   $('#pdom').textContent = '.' + ((Atlas.C.publish && Atlas.C.publish.baseDomain) || 'yourdomain.com');
