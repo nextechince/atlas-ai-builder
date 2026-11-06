@@ -8,7 +8,7 @@
     const f = document.createElement('iframe');
     f.hidden = true;
     f.onload = () => { try { A.C = f.contentWindow.ATLAS_CONFIG || {}; } catch (e) {} init(); res(A); };
-    f.src = 'config.html';
+    f.src = 'Config.html';
     document.body.appendChild(f);
   });
 
@@ -24,7 +24,7 @@
       r();
     }));
   }
-  const need = () => { if (A.off) throw Error('Add your Firebase config in Config.html first.'); };
+  const need = () => { if (location.protocol === 'file:') throw Error('Open this site from a web address (Vercel or localhost), not as a local file, so Config.html can load.'); if (A.off) throw Error('Add your Firebase config in Config.html first.'); };
   const clean = e => Error((e.message || String(e)).replace('Firebase: ', '').replace(/\(auth\/.*?\)\.?/, '').trim() || 'Something went wrong');
 
   A.signup = async (name, email, pw) => {
@@ -73,6 +73,8 @@
       if (/\.css$/.test(n)) h = h.replace(new RegExp('<link[^>]*href=["\']\\.?/?' + q + '["\'][^>]*>', 'i'), () => '<style>' + f[n] + '</style>');
       if (/\.js$/.test(n)) h = h.replace(new RegExp('<script[^>]*src=["\']\\.?/?' + q + '["\'][^>]*>\\s*</script>', 'i'), () => '<script>' + f[n].replace(/<\/script/gi, '<\\/script') + '<\/script>');
     }
-    return h;
+    // Preview frames block localStorage; this in-memory fallback stops generated sites from crashing there.
+    const SHIM = '<script>try{localStorage.getItem("x")}catch(e){var mk=function(){var d={};return{getItem:function(k){return k in d?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}};["localStorage","sessionStorage"].forEach(function(n){Object.defineProperty(window,n,{value:mk(),configurable:true})})}<\/script>';
+    return /<head[^>]*>/i.test(h) ? h.replace(/<head[^>]*>/i, m => m + SHIM) : SHIM + h;
   };
 })();
