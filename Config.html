@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Atlas Config</title>
+<script>
+window.ATLAS_CONFIG = {
+  firebase: {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "000000000000",
+    appId: "YOUR_APP_ID"
+  },
+  xai: {
+    endpoint: "https://api.x.ai/v1/chat/completions",
+    // Add several keys; Atlas rotates and falls back if one is rate-limited.
+    keys: ["YOUR_XAI_KEY_1"]
+  },
+  
+  publish: { baseDomain: "yourdomain.com" },
+  
+  models: [
+    { id: "grok-4-fast", label: "Grok 4 Fast" },
+    { id: "grok-3-mini", label: "Grok 3 Mini" },
+    { id: "grok-3", label: "Grok 3" }
+  ]
+};
+</script>
