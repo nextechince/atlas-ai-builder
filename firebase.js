@@ -74,7 +74,9 @@
     // Preview frames block localStorage; this in-memory fallback stops generated sites from crashing there.
     const SHIM = '<script>try{localStorage.getItem("x")}catch(e){var mk=function(){var d={};return{getItem:function(k){return k in d?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}};["localStorage","sessionStorage"].forEach(function(n){Object.defineProperty(window,n,{value:mk(),configurable:true})})}<\/script>';
     // In a srcdoc preview, "#links" would otherwise resolve against the builder's URL and load it inside the frame.
-    const head = (preview ? '<base href="about:srcdoc">' : '') + SHIM;
+    // The preview also reports runtime errors to the builder so Atlas can offer a one-tap fix.
+    const CATCH = '<script>(function(){var s=function(m){try{parent.postMessage({atlasErr:String(m).slice(0,300)},"*")}catch(e){}};addEventListener("error",function(e){s((e.message||"Error")+(e.lineno?" (line "+e.lineno+")":""))});addEventListener("unhandledrejection",function(e){s("Unhandled promise: "+(e.reason&&e.reason.message||e.reason))})})()<\/script>';
+    const head = (preview ? '<base href="about:srcdoc">' + CATCH : '') + SHIM;
     return /<head[^>]*>/i.test(h) ? h.replace(/<head[^>]*>/i, m => m + head) : head + h;
   };
 })();
