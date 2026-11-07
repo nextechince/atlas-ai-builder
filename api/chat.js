@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
   if (!keys.length) return err(res, 503, p.name + ' has no key on the server. Add ' + p.id.toUpperCase() + '_API_KEY to your environment.');
 
   const ctl = new AbortController(); res.on('close', () => ctl.abort());
-  const body = JSON.stringify({ model: b.model, messages: b.messages, temperature: .7, max_tokens: Math.min(+b.max_tokens || p.maxTokens, p.maxTokens), stream: true });
+  const body = JSON.stringify({ model: b.model, messages: b.messages, temperature: typeof b.temperature === 'number' ? Math.min(Math.max(b.temperature, 0), 1) : .7, max_tokens: Math.min(+b.max_tokens || p.maxTokens, p.maxTokens), stream: true });
   const extra = p.id === 'openrouter' ? { 'HTTP-Referer': process.env.SITE_URL || 'https://localhost', 'X-Title': 'Atlas Ai Builder' } : {};
   let last = { s: 502, m: 'Upstream error' };
   for (const k of keys.sort(() => Math.random() - .5)) {              // rotate keys on auth / rate-limit / server errors
