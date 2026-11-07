@@ -12,12 +12,12 @@ window.ATLAS_CONFIG = {
   appId: "1:704360031060:web:b6da89c5cbe4d08e5ddec1"
   },
   xai: {
-    endpoint: "https://api.x.ai/v1/chat/completions",
+    endpoint: "https://openrouter.ai/api/v1/chat/completions",
     // Add several keys; Atlas rotates and falls back if one is rate-limited.
-    keys: ["grok_ed5234fe292d79aa89c3ca3a8a9a1207_c836210bcbccd0cf26cecb874dc06b1191b94fb1d6ed3dda2e92b78fb22eb0cc"]
+    keys: ["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"]
   },
   
-  publish: { baseDomain: "yourdomain.com" },
+  publish: { baseDomain: "atlas-ai-builder.vercel.app" },
   
   models: [
     { id: "grok-4-fast", label: "Grok 4 Fast" },
