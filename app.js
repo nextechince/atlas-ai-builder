@@ -224,7 +224,7 @@ function preview() {
 const slug = s => (s || '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).slice(0, 3).join('-').slice(0, 30) || 'my-site';
 $('#pub').onclick = () => {
   if (!proj.files['index.html']) return bubble('a', 'Build something first, then publish it.');
-  $('#pdom').textContent = '.' + ((Atlas.C.publish && Atlas.C.publish.baseDomain) || 'yourdomain.com');
+  $('#pdom').textContent = '.' + ((Atlas.C.publish && Atlas.C.publish.baseDomain) || 'https://atlas-ai-builder.vercel.app');
   $('#psub').value = proj.published || slug(proj.name); $('#perr').textContent = ''; $('#pres').innerHTML = ''; $('#pubm').hidden = false;
 };
 $('#px').onclick = () => $('#pubm').hidden = true;
