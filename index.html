@@ -118,6 +118,16 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 .mob{display:none}
 @media(max-width:800px){.mob{display:inline-block}#ws #chat,#ws #pvw{height:calc(100vh - 57px)}#ws:not(.pvmode) #pvw{display:none}#ws.pvmode #chat{display:none}#pvw .bar .btn{padding:7px 9px;font-size:13px}#pn{display:none}}
 #msgs>*{flex-shrink:0}
+
+/* ===== custom model picker ===== */
+.mdlbtn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 10px;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;text-align:left}.mdlbtn:after{content:" ▾";color:var(--mut)}
+.mp{max-width:560px}.mp h3{margin:0 0 10px;font-size:20px}.mp .search{width:100%;margin:0}.mp input[type=checkbox]{width:auto;margin:0 6px 0 0}
+.mchips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.frl{display:block;font-size:13px;color:var(--mut);margin:2px 0 6px}
+.mlist{max-height:50vh;overflow:auto;margin:6px -6px 0;padding:0 6px}.mg{font:600 12px Inter;letter-spacing:.06em;color:var(--mut);margin:12px 0 4px;text-transform:uppercase}.mg a{text-transform:none;letter-spacing:0;margin-left:6px}
+.mi{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;margin-bottom:6px;cursor:pointer}.mi:hover{border-color:var(--b);background:#f5f7ff}.mi.on{border-color:var(--b);background:#eef2ff}.mi[disabled]{opacity:.45;cursor:not-allowed}
+.mi>div{flex:1;min-width:0}.mi b{display:block;font-weight:600}.mi small{display:block;color:var(--mut);word-break:break-all;font-size:12px}
+.tg{font-size:11px;border-radius:99px;padding:2px 8px;background:#dff7ea;color:#14804a;white-space:nowrap}.tg.pd{background:#fde7ef;color:#c0245a}.tg.nk{background:#eef1fb;color:var(--mut)}.mfoot{color:var(--mut);font-size:12px;margin:10px 0 0}
+@media(max-width:800px){.mdlbtn{max-width:48%}}
 </style>
 </head><body>
 <header class="top"><div class="logo"><i></i>Atlas <span>Ai Builder</span></div>
@@ -131,7 +141,7 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 <h1>Build websites <em>with Atlas</em></h1>
 <p class="sub">Describe your idea. Atlas designs and builds a complete, polished site you can preview, refine and publish on your own link.</p>
 <div class="pbox"><textarea id="hp" placeholder="Describe what you want to build..."></textarea>
-<div class="row"><select class="mdl"></select>><button class="go" id="hgo">↑</button></div></div>
+<div class="row"><button class="mdlbtn" type="button">Choose model</button><select class="lang"></select><button class="go" id="hgo">↑</button></div></div>
 <div class="chips" id="chips"></div><div class="chips" id="sty"></div></div>
 <div class="sec" id="dash" hidden></div>
 <div class="sec"><div class="tabs"><button class="on" data-t="tpl">Templates</button><button data-t="mine">My apps</button></div><div id="tfilter" class="chips" style="justify-content:flex-start;margin:0 0 16px"></div><div class="grid" id="grid"></div></div>
@@ -171,7 +181,7 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 </div>
 
 <main id="ws" hidden>
-<aside id="chat"><div class="bar"><div class="seg"><button data-m="build" class="on">Build</button><button data-m="chat">Discuss</button></div><select class="mdl"></select><select class="lang"></select><button class="btn" id="undo" title="Undo last change">↶</button><button class="btn mob" id="toPv">Preview ▸</button></div>
+<aside id="chat"><div class="bar"><div class="seg"><button data-m="build" class="on">Build</button><button data-m="chat">Discuss</button></div><button class="mdlbtn" type="button">Choose model</button><select class="lang"></select><button class="btn" id="undo" title="Undo last change">↶</button><button class="btn mob" id="toPv">Preview ▸</button></div>
 <div id="msgs"></div><div id="inp"><textarea id="tx" placeholder="Describe a change or ask anything..."></textarea><button class="go" id="send">↑</button></div></aside>
 <section id="pvw"><div class="bar"><button class="btn mob" id="toChat">◂ Chat</button><button class="btn" data-w="100%">Desktop</button><button class="btn" data-w="768px">Tablet</button><button class="btn" data-w="390px">Mobile</button><span id="pn" style="margin-left:auto;color:var(--mut)"></span><button class="btn pub" id="pub">Publish</button></div>
 <div class="fr"><iframe id="pv" sandbox="allow-scripts allow-forms allow-modals"></iframe></div></section></main>
@@ -193,5 +203,6 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 <script src="firebase.js"></script>
 <script src="ai.js"></script>
 <script src="templates.js"></script>
+<script src="models.js"></script>
 <script src="app.js"></script>
 </body></html>
