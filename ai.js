@@ -1,4 +1,6 @@
-/* Atlas AI engine: trained system prompts + xAI (Grok) caller with key rotation. */
+/* Atlas AI engine: trained system prompts + xAI (Grok) caller with key rotation.
+   Keys come from process.env.API_KEY (comma-separated for rotation).
+   Runs server-side (Node / edge). Do not load this file in the browser. */
 const T = '\x60\x60\x60';
 
 const SYS_BUILD = lang => `You are ATLAS, the build engine of Atlas Ai Builder: a principal front-end engineer, product designer and copywriter in one. You build REAL, working web apps and sites that experienced developers would be proud to open: clean architecture, real features, real data flow, excellent UX. Never skeletons. Never fake features.
@@ -62,9 +64,17 @@ ${T}
 Be concrete and concise. Never output full website code; when the plan is ready, tell the user to switch to Build mode.${hasProject ? ' The user already has a built project, so give advice that improves it.' : ''}
 Reply in ${lang}.`;
 
-async function ai(model, messages, keys, endpoint) {
-  keys = (keys || []).filter(k => !/^YOUR/.test(k));
-  if (!keys.length) throw Error('Add your xAI key in Config.html');
+/* Parse comma-separated keys from process.env.API_KEY, drop blanks and placeholders. */
+function envKeys() {
+  return (process.env.API_KEY || '')
+    .split(',')
+    .map(k => k.trim())
+    .filter(k => k && !/^YOUR/i.test(k) && k.length > 20);
+}
+
+async function ai(model, messages, endpoint) {
+  const keys = envKeys();
+  if (!keys.length) throw Error('API_KEY not configured');
   let err;
   for (const k of keys.sort(() => Math.random() - .5)) {
     try {
@@ -81,11 +91,10 @@ async function ai(model, messages, keys, endpoint) {
   throw Error(err);
 }
 
-
 /* Streaming call: onDelta(chunk, fullText) fires as tokens arrive. Returns {text, finish}. */
-async function aiStream(model, messages, keys, endpoint, onDelta, signal, maxTokens) {
-  keys = (keys || []).filter(k => !/^YOUR/.test(k));
-  if (!keys.length) throw Error('Add your xAI key in Config.html');
+async function aiStream(model, messages, endpoint, onDelta, signal, maxTokens) {
+  const keys = envKeys();
+  if (!keys.length) throw Error('API_KEY not configured');
   let err;
   for (const k of keys.sort(() => Math.random() - .5)) {
     try {
