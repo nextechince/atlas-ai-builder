@@ -142,11 +142,11 @@ const SP = '<span class=sp></span>', CK = '<span class=ck>✓</span>';
 $('#send').onclick = () => { if (busy) { ctl && ctl.abort(); return } const v = $('#tx').value.trim(); if (v) { $('#tx').value = ''; send(v) } };
 $('#tx').onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!busy) $('#send').click() } };
 const setBusy = b => { busy = b; $('#send').textContent = b ? '■' : '↑'; $('#send').classList.toggle('stop', b); $('#send').title = b ? 'Stop' : 'Send' };
-const stream = (msgs, onDelta) => {
+const stream = (msgs, onDelta, temp) => {
   const m = Models.current();
   if (!m) return Promise.reject(Error('No AI provider is available. Check that your server is running (see README.md).'));
   if (!m.provider.hasKey) return Promise.reject(Error('Add ' + m.provider.id.toUpperCase() + '_API_KEY to your .env (or Vercel environment variables), or pick another model.'));
-  return aiStream(m.provider.id, m.id, msgs, onDelta, ctl.signal, m.provider.maxTokens || 16000);
+  return aiStream(m.provider.id, m.id, msgs, onDelta, ctl.signal, m.provider.maxTokens || 16000, temp);
 };
 const role = n => /^readme/i.test(n) ? 'docs' : /\.html$/i.test(n) ? 'app shell' : /\.css$/i.test(n) ? 'styles' : /pages?\//i.test(n) ? 'page' : /store|state/i.test(n) ? 'state' : /router/i.test(n) ? 'router' : /api/i.test(n) ? 'data layer' : /\.js$/i.test(n) ? 'logic' : 'file';
 const unfence = c => c.trim().replace(/^\x60\x60\x60\w*\n/, '').replace(/\n?\x60\x60\x60$/, '');
@@ -161,32 +161,70 @@ function parseStream(t) {
   return { intro: tail(intro).trim(), files, outro: last && last.done && le >= 0 ? tail(t.slice(le + 9)).trim() : '' };
 }
 
-async function send(text) {
-  if (busy) return; setBusy(true); ctl = new AbortController(); const lang = $('.lang').value;
+
+/* ---- AI guardrails: model tier, context budget, syntax check, self-repair ---- */
+const FIX = 'Fix the preview errors', RETRY = 'Retry with the full project context';
+let runErrs = [], shownErrs = 0, errTimer = 0, lastReq = '', forceFull = false;
+/** Small output budgets or small models get the compact "lite" build prompt. */
+function tierOf() {
+  const m = Models.current(); if (!m) return 'full';
+  return (m.provider.maxTokens || 16000) <= 8000 || /(^|[^0-9.])([1-9]|1[0-4])b\b|instant|nano|-mini\b/i.test(m.id) ? 'lite' : 'full';
+}
+/** Send as much of the project as the model can handle. Big projects: relevant files in full, the rest only as an outline. */
+function projectContext(req, tier) {
+  const names = Object.keys(proj.files); if (!names.length) return { ctx: '', omitted: [] };
+  const budget = tier === 'lite' ? 14000 : 48000, total = names.reduce((n, k) => n + proj.files[k].length, 0), block = n => `<<<FILE:${n}>>>\n${proj.files[n]}\n<<<END>>>`;
+  if (forceFull || total <= budget) return { ctx: 'CURRENT FILES:\n' + names.map(block).join('\n') + '\n\n', omitted: [] };
+  const words = (req.toLowerCase().match(/[a-z0-9]{4,}/g) || []), score = n => (n === 'index.html' ? 1e6 : 0) + words.reduce((s, w) => s + (n.toLowerCase().includes(w) ? 50 : 0) + (proj.files[n].toLowerCase().split(w).length - 1), 0);
+  let used = 0; const full = [], omitted = [];
+  names.sort((x, y) => score(y) - score(x)).forEach(n => { if (used + proj.files[n].length <= budget || !full.length) { used += proj.files[n].length; full.push(n) } else omitted.push(n) });
+  const outline = n => proj.files[n].split('\n').filter(l => /^\s*(function|const|class|async function|\.|#|<section|<h[1-3]|<nav|<main)/.test(l)).slice(0, 14).map(l => '  ' + l.trim().slice(0, 80)).join('\n');
+  return { omitted, ctx: 'CURRENT FILES (the project is large, so some files are shown only as an outline; you may ONLY edit files shown in full):\n' + full.map(block).join('\n') + '\n' + omitted.map(n => `OMITTED ${n} (${proj.files[n].split('\n').length} lines), outline:\n${outline(n)}`).join('\n') + '\n\n' };
+}
+/** Compile-check every JS file without running it. */
+const syntaxErrors = files => files.filter(f => /\.js$/i.test(f.n) && f.c !== '__DELETE__').flatMap(f => { try { new Function(f.c); return [] } catch (e) { return [f.n + ': ' + e.message] } });
+const fixPrompt = errs => 'The app reports runtime errors in the preview. Find the root cause and fix ONLY what is needed; keep everything else identical. Errors:\n' + errs.join('\n');
+
+/* Runtime errors reported by the preview frame -> one-tap fix */
+addEventListener('message', e => {
+  if (!e.data || !e.data.atlasErr || !proj || e.source !== $('#pv').contentWindow) return;
+  if (!runErrs.includes(e.data.atlasErr) && runErrs.length < 5) runErrs.push(e.data.atlasErr);
+  clearTimeout(errTimer);
+  errTimer = setTimeout(() => {
+    if (busy || runErrs.length <= shownErrs) return; shownErrs = runErrs.length;
+    bubble('a', md('⚠️ The preview reported ' + runErrs.length + ' error' + (runErrs.length > 1 ? 's' : '') + ':\n' + runErrs.map(x => '- `' + x.replace(/`/g, "'") + '`').join('\n') + '\n' + T + 'options\n{"items":["' + FIX + '"]}\n' + T));
+  }, 1200);
+});
+
+async function send(text, aiText) {
+  if (busy) return;
+  if (text === FIX && runErrs.length) aiText = fixPrompt(runErrs);
+  if (text === RETRY) { aiText = lastReq; forceFull = true }
+  const req = aiText || text; if (!aiText && mode === 'build') lastReq = text;
+  setBusy(true); ctl = new AbortController(); const lang = $('.lang').value, tier = tierOf();
   bubble('u', esc(text)); proj.chat.push({ r: 'u', t: text });
-  const has = Object.keys(proj.files).length;
-  const ctxFiles = has ? 'CURRENT FILES:\n' + Object.entries(proj.files).map(([n, c]) => `<<<FILE:${n}>>>\n${c}\n<<<END>>>`).join('\n') + '\n\n' : '';
+  const has = Object.keys(proj.files).length, { ctx, omitted } = projectContext(req, tier); forceFull = false;
   const hist = proj.chat.slice(-7, -1).map(m => ({ role: m.r === 'u' ? 'user' : 'assistant', content: m.t.slice(0, 800) }));
   try {
     if (mode === 'chat') {
       const w = bubble('a', '<span class=typing><i></i><i></i><i></i></span>'); let raf = 0, txt = '';
       const paint = () => { raf = 0; w.innerHTML = md(txt); $('#msgs').scrollTop = 1e9 };
       try {
-        const r = await stream([{ role: 'system', content: SYS_CHAT(lang, has) }, ...hist, { role: 'user', content: text }], (d, full) => { txt = full; if (!raf) raf = requestAnimationFrame(paint) });
+        const r = await stream([{ role: 'system', content: SYS_CHAT(lang, has) }, ...hist, { role: 'user', content: req }], (d, full) => { txt = full; if (!raf) raf = requestAnimationFrame(paint) }, .7);
         txt = r.text;
       } finally { cancelAnimationFrame(raf); if (txt) { w.innerHTML = md(txt); proj.chat.push({ r: 'a', t: txt }) } else w.remove() }
-    } else await buildFlow(text, lang, ctxFiles, hist);
+    } else await buildFlow(req, lang, ctx, hist, omitted, tier);
     save();
   } catch (e) { if (e.name === 'AbortError') bubble('a', 'Stopped. Anything already finished was kept.'); else bubble('a', '⚠️ ' + esc(e.message)) }
   setBusy(false); ctl = null;
 }
 
-async function buildFlow(text, lang, ctxFiles, hist) {
+async function buildFlow(text, lang, ctxFiles, hist, omitted, tier) {
   const t0 = Date.now(), secs = () => ((Date.now() - t0) / 1000).toFixed(0), model = (Models.current() || {}).label || 'the model';
   const intro = bubble('a', ''); intro.hidden = true;
   const box = bubble('steps', ''); box.className = 'steps';
   const outro = bubble('a', ''); outro.hidden = true;
-  let full = '', got = false, raf = 0, fin = false;
+  let full = '', got = false, raf = 0, fin = false, note = '';
   const row = (c, ic, l, n) => `<div class="st ${c}">${ic}<span class=sl>${l}</span><small>${n || ''}</small></div>`;
   function paint() {
     raf = 0; const p = parseStream(full);
@@ -195,6 +233,7 @@ async function buildFlow(text, lang, ctxFiles, hist) {
     if (!got) h += row('r', SP, 'Waiting for the model', secs() + 's');
     else if (!p.files.length) h += row('r', SP, 'Planning the architecture', secs() + 's');
     p.files.forEach(f => { const ln = f.c.split('\n').length, kb = (f.c.length / 1024).toFixed(1); h += row(f.done ? 'd' : 'r', f.done ? CK : SP, (f.done ? 'Created ' : 'Writing ') + '<b>' + esc(f.n) + '</b> <em>' + role(f.n) + '</em>', ln + ' lines · ' + kb + ' KB') });
+    h += note;
     if (fin) h += row('d', CK, 'Bundled live preview', '');
     box.innerHTML = '<div class=sh><span>Building</span><span>' + secs() + 's</span></div>' + h;
     if (p.outro) { outro.hidden = false; outro.innerHTML = md(p.outro) }
@@ -203,21 +242,41 @@ async function buildFlow(text, lang, ctxFiles, hist) {
   const iv = setInterval(paint, 1000); paint();
   let r, aborted = false;
   try {
-    r = await stream([{ role: 'system', content: SYS_BUILD(lang) }, ...hist, { role: 'user', content: ctxFiles + 'REQUEST: ' + text }], (d, f) => { full = f; got = true; if (!raf) raf = requestAnimationFrame(paint) });
+    r = await stream([{ role: 'system', content: SYS_BUILD(lang, tier) }, ...hist, { role: 'user', content: ctxFiles + 'REQUEST: ' + text }], (d, f) => { full = f; got = true; if (!raf) raf = requestAnimationFrame(paint) }, .4);
     full = r.text;
   } catch (e) { if (e.name !== 'AbortError') { clearInterval(iv); box.remove(); throw e } aborted = true }
   finally { clearInterval(iv); cancelAnimationFrame(raf) }
-  const p = parseStream(full), ok = p.files.filter(f => f.done), cut = p.files.filter(f => !f.done).map(f => f.n);
-  if (!ok.length) { box.remove(); if (aborted) { const ab = Error('stopped'); ab.name = 'AbortError'; throw ab } throw Error(full.trim() ? 'Atlas did not return any files. Try again or rephrase.' : 'Nothing came back from the model.') }
+  const p = parseStream(full), cut = p.files.filter(f => !f.done).map(f => f.n);
+  let ok = p.files.filter(f => f.done).map(f => ({ n: f.n, c: unfence(f.c) }));
+  // Files that were NOT sent in full must never be overwritten by a guess.
+  const blocked = ok.filter(f => omitted.includes(f.n)).map(f => f.n); ok = ok.filter(f => !omitted.includes(f.n));
+  if (!ok.length) { box.remove(); if (aborted) { const ab = Error('stopped'); ab.name = 'AbortError'; throw ab } if (blocked.length) { bubble('a', md('⚠️ Atlas tried to rewrite **' + blocked.join(', ') + '** without seeing it, so I blocked that to protect your project.\n' + T + 'options\n{"items":["' + RETRY + '"]}\n' + T)); return } throw Error(full.trim() ? 'Atlas did not return any files. Try again or rephrase.' : 'Nothing came back from the model.') }
+
+  // Compile-check the JavaScript; if something is broken, ask once for a repair before saving.
+  let errs = aborted ? [] : syntaxErrors(ok);
+  if (errs.length) {
+    const bad = ok.filter(f => errs.some(e => e.startsWith(f.n + ':')));
+    note = row('r', SP, 'Found ' + errs.length + ' JavaScript error' + (errs.length > 1 ? 's' : '') + ' in <b>' + esc(bad.map(f => f.n).join(', ')) + '</b>, repairing', ''); paint();
+    const msg = 'These files have JavaScript SYNTAX errors. Fix ONLY the errors and return the fixed files IN FULL in the same format.\nERRORS:\n' + errs.join('\n') + '\n\n' + bad.map(f => `<<<FILE:${f.n}>>>\n${f.c}\n<<<END>>>`).join('\n');
+    try {
+      const r2 = await stream([{ role: 'system', content: SYS_BUILD(lang, tier) }, { role: 'user', content: msg }], () => {}, .2);
+      parseStream(r2.text).files.filter(f => f.done).forEach(f => { const k = ok.findIndex(x => x.n === f.n); if (k >= 0) ok[k] = { n: f.n, c: unfence(f.c) } });
+      errs = syntaxErrors(ok);
+    } catch (e) { if (e.name === 'AbortError') aborted = true }
+    note = errs.length ? row('r', '<span class=ck style="color:#d6336c">!</span>', 'Could not fully repair ' + errs.length + ' error' + (errs.length > 1 ? 's' : ''), '') : row('d', CK, 'Repaired ' + bad.length + ' file' + (bad.length > 1 ? 's' : ''), '');
+  }
   const prev = JSON.stringify(proj.files); proj.history.push(prev); if (proj.history.length > 15) proj.history.shift();
-  ok.forEach(f => { const c = unfence(f.c); if (c === '__DELETE__') delete proj.files[f.n]; else proj.files[f.n] = c });
+  ok.forEach(f => { if (f.c === '__DELETE__') delete proj.files[f.n]; else proj.files[f.n] = f.c });
   fin = true; paint(); preview(); $('#ws').classList.add('pvmode');
   const summary = [p.intro, p.outro].filter(Boolean).join('\n\n'); proj.chat.push({ r: 'a', t: summary || 'Done.' });
+  if (errs.length) { runErrs = errs.slice(); shownErrs = runErrs.length; bubble('a', md('⚠️ Some JavaScript still has errors:\n' + errs.map(x => '- `' + x.replace(/`/g, "'") + '`').join('\n') + '\n' + T + 'options\n{"items":["' + FIX + '"]}\n' + T)) }
+  if (blocked.length) bubble('a', md('Skipped **' + blocked.join(', ') + '** (not included in full this time).\n' + T + 'options\n{"items":["' + RETRY + '"]}\n' + T));
   if (cut.length || (r && r.finish === 'length'))
-    bubble('a', md((aborted ? 'Stopped.' : '⚠️ The reply was cut off') + (cut.length ? (aborted ? ' **' : ' while writing **') + cut.join(', ') + '**' + (aborted ? ' was left unfinished.' : '') : '') + ' Finished files were kept.\n' + '\x60\x60\x60' + 'options\n{"items":["Continue building the missing files"]}\n' + '\x60\x60\x60'));
+    bubble('a', md((aborted ? 'Stopped.' : '⚠️ The reply was cut off') + (cut.length ? (aborted ? ' **' : ' while writing **') + cut.join(', ') + '**' + (aborted ? ' was left unfinished.' : '') : '') + ' Finished files were kept.\n' + T + 'options\n{"items":["Continue building: write these missing files now and return only them: ' + (cut.join(', ') || 'whatever is unfinished') + '"]}\n' + T));
 }
 $('#undo').onclick = () => { if (!proj || !proj.history.length) return bubble('a', 'Nothing to undo yet.'); proj.files = JSON.parse(proj.history.pop()); preview(); save(); bubble('a', 'Reverted the last change.') };
 function preview() {
+  runErrs = []; shownErrs = 0;
   $('#pv').srcdoc = proj.files['index.html'] ? pvBundle(proj.files)
     : '<body style="font:16px system-ui;display:grid;place-items:center;height:100vh;margin:0;color:#6b7494;background:linear-gradient(135deg,#f3f5ff,#ffe9f0)">Your preview appears here</body>';
 }
