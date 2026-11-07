@@ -1,8 +1,13 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>Atlas Config</title>
+<!--
+  Safe to commit: this file holds only PUBLIC settings.
+  AI keys (Groq, OpenRouter, Airforce, xAI) do NOT go here. Put them in .env or Vercel environment variables (see .env.example).
+-->
 <script>
 window.ATLAS_CONFIG = {
+  // Firebase WEB config. These values are public by design (security comes from Firebase rules and authorized domains).
   firebase: {
     apiKey: "AIzaSyCzfg4GOA_blvLAxSEeKcc_yTDlICJcYM4",
   authDomain: "atlas-ai-builder.firebaseapp.com",
@@ -11,18 +16,7 @@ window.ATLAS_CONFIG = {
   messagingSenderId: "704360031060",
   appId: "1:704360031060:web:b6da89c5cbe4d08e5ddec1"
   },
-  xai: {
-    endpoint: "https://openrouter.ai/api/v1/chat/completions",
-    // Add several keys; Atlas rotates and falls back if one is rate-limited.
-    keys: process.env.API_KEY
-  },
-  
-  publish: { baseDomain: "atlas-ai-builder.vercel.app" },
-  
-  models: [
-    { id: "grok-4-fast", label: "Grok 4 Fast" },
-    { id: "grok-3-mini", label: "Grok 3 Mini" },
-    { id: "grok-3", label: "Grok 3" }
-  ]
+  // Published sites live at https://NAME.baseDomain (needs wildcard DNS, see site.html).
+  publish: { baseDomain: "atlas-ai-builder.vercel.app/" }
 };
 </script>
