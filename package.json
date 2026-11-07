@@ -9,7 +9,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "vercel dev",
+    "dev": "node server.js",
     "start": "vercel dev",
     "deploy": "vercel --prod"
   },
