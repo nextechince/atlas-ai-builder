@@ -64,17 +64,17 @@
     return { url: `https://${sub}.${base}`, test: location.href.replace(/[^/]*$/, '') + 'site.html?s=' + sub };
   };
 
-  // Inline style.css / script.js into index.html so the page renders from one document.
-  A.bundle = f => {
-    let h = f['index.html'] || '';
-    for (const n in f) {
-      if (n === 'index.html') continue;
-      const q = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      if (/\.css$/.test(n)) h = h.replace(new RegExp('<link[^>]*href=["\']\\.?/?' + q + '["\'][^>]*>', 'i'), () => '<style>' + f[n] + '</style>');
-      if (/\.js$/.test(n)) h = h.replace(new RegExp('<script[^>]*src=["\']\\.?/?' + q + '["\'][^>]*>\\s*</script>', 'i'), () => '<script>' + f[n].replace(/<\/script/gi, '<\\/script') + '<\/script>');
-    }
+  // Bundle a multi-file project into ONE document: css inlined in place, local scripts moved (in order) to the end of <body>.
+  A.bundle = (f, preview) => {
+    let h = f['index.html'] || ''; const js = [], norm = p => p.replace(/^\.?\//, '').split(/[?#]/)[0];
+    h = h.replace(/<link\b[^>]*>/gi, t => { const m = t.match(/href=["']([^"']+)["']/i), n = m && norm(m[1]); return n && f[n] && /\.css$/i.test(n) ? '<style>' + f[n] + '</style>' : t; });
+    h = h.replace(/<script\b(?![^>]*type=["']module)[^>]*\bsrc=["']([^"']+)["'][^>]*>\s*<\/script>/gi, (t, s) => { const n = norm(s); if (f[n] && /\.js$/i.test(n)) { js.push(f[n]); return ''; } return t; });
+    const code = js.map(c => '<script>' + c.replace(/<\/script/gi, '<\\/script') + '<\/script>').join('\n');
+    if (code) h = /<\/body>/i.test(h) ? h.replace(/<\/body>(?![\s\S]*<\/body>)/i, () => code + '</body>') : h + code;
     // Preview frames block localStorage; this in-memory fallback stops generated sites from crashing there.
     const SHIM = '<script>try{localStorage.getItem("x")}catch(e){var mk=function(){var d={};return{getItem:function(k){return k in d?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}};["localStorage","sessionStorage"].forEach(function(n){Object.defineProperty(window,n,{value:mk(),configurable:true})})}<\/script>';
-    return /<head[^>]*>/i.test(h) ? h.replace(/<head[^>]*>/i, m => m + SHIM) : SHIM + h;
+    // In a srcdoc preview, "#links" would otherwise resolve against the builder's URL and load it inside the frame.
+    const head = (preview ? '<base href="about:srcdoc">' : '') + SHIM;
+    return /<head[^>]*>/i.test(h) ? h.replace(/<head[^>]*>/i, m => m + head) : head + h;
   };
 })();
