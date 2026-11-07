@@ -95,6 +95,29 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 @media (max-width:380px){h1{font-size:29px}.grid{grid-template-columns:1fr}}
 /* header fit on phones */
 @media (max-width:800px){.logo{white-space:nowrap;font-size:16px;gap:6px}.logo i{width:22px;height:22px}.top .btn{white-space:nowrap;padding:8px 11px}.top .row{flex-wrap:nowrap}}
+
+/* ===== previews, dashboard, real build steps, rich replies ===== */
+.thumb{position:relative;aspect-ratio:1100/688;overflow:hidden;background:#fff;border-bottom:1px solid var(--line)}
+.thumb iframe{position:absolute;left:0;top:0;width:1100px;height:688px;border:0;transform-origin:0 0;pointer-events:none}
+.thumb.big{border:1px solid var(--line);border-radius:14px;margin-bottom:12px}.thumb-empty{background:var(--l);border-radius:14px;padding:50px;text-align:center;color:var(--mut);margin-bottom:12px}
+.card .cd{margin:4px 0 0;color:var(--mut);font-size:13px}.live2{color:#1a9b5f}
+.dgreet{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}.dgreet h2{margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}.stat{border-radius:16px;padding:16px;transition:.2s}.stat:hover{transform:translateY(-3px)}.stat b{display:block;font:800 32px 'Bricolage Grotesque'}.stat span{color:var(--mut)}
+.cont{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:center;border:1px solid var(--line);border-radius:18px;background:#fff;padding:12px;cursor:pointer;transition:.2s}.cont:hover{box-shadow:0 12px 30px #2f5bff18}.cont .thumb{border-radius:12px;border:1px solid var(--line)}.cont h3{margin:4px 0}
+.search{border:1px solid var(--line);border-radius:99px;padding:8px 16px;min-width:200px;background:#fff;outline:0}.chip.on{background:var(--b);color:#fff;border-color:var(--b)}
+@keyframes fl{50%{transform:translateY(26px) scale(1.06)}}.blob{animation:fl 10s ease-in-out infinite}.blob:nth-child(2){animation-delay:-3s}.blob:nth-child(3){animation-delay:-6s}
+.steps{padding:0;overflow:hidden}.sh{display:flex;justify-content:space-between;padding:9px 14px;background:linear-gradient(90deg,var(--l),var(--p));font-weight:600;font-size:13px}.steps .st{align-items:center;padding:7px 14px;border-top:1px solid var(--line)}.sl{flex:1}.sl em{font-style:normal;color:var(--mut);font-size:12px;margin-left:4px}.st small{color:var(--mut);white-space:nowrap}.sp{margin-top:0}.ck{color:#1a9b5f;font-weight:700;width:14px;text-align:center}
+.go.stop{background:#d6336c}.typing{display:inline-flex;gap:4px}.typing i{width:7px;height:7px;border-radius:50%;background:var(--b);animation:bl 1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}@keyframes bl{50%{opacity:.25}}
+.m h2,.m h3,.m h4{margin:12px 0 6px;font-family:'Bricolage Grotesque'}.m h2{font-size:19px}.m h3{font-size:16px}.m h4{font-size:14px}
+.m ul,.m ol{margin:4px 0 8px;padding-left:20px}.m li{list-style:revert;margin:2px 0}.m blockquote{margin:8px 0;padding:8px 12px;border-left:4px solid var(--b);background:#eef2ff;border-radius:0 10px 10px 0}
+.m pre{background:#101a3a;color:#e8ecff;padding:10px 12px;border-radius:10px;overflow:auto;font-size:12px;margin:8px 0}.m pre code{background:none;padding:0}.m hr{border:0;border-top:1px solid var(--line);margin:10px 0}
+.m figure{margin:8px 0}.m figcaption{font-size:12px;color:var(--mut);margin-top:3px}.m a{text-decoration:underline}.m tr:nth-child(even) td{background:#f8f9ff}
+@media(max-width:800px){.cont{grid-template-columns:1fr}.search{min-width:0;width:100%}}
+
+/* phone: one panel at a time */
+.mob{display:none}
+@media(max-width:800px){.mob{display:inline-block}#ws #chat,#ws #pvw{height:calc(100vh - 57px)}#ws:not(.pvmode) #pvw{display:none}#ws.pvmode #chat{display:none}#pvw .bar .btn{padding:7px 9px;font-size:13px}#pn{display:none}}
+#msgs>*{flex-shrink:0}
 </style>
 </head><body>
 <header class="top"><div class="logo"><i></i>Atlas <span>Ai Builder</span></div>
@@ -110,7 +133,8 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 <div class="pbox"><textarea id="hp" placeholder="Describe what you want to build..."></textarea>
 <div class="row"><select class="mdl"></select><select class="lang"></select><button class="go" id="hgo">↑</button></div></div>
 <div class="chips" id="chips"></div><div class="chips" id="sty"></div></div>
-<div class="sec"><div class="tabs"><button class="on" data-t="tpl">Templates</button><button data-t="mine">My apps</button></div><div class="grid" id="grid"></div></div>
+<div class="sec" id="dash" hidden></div>
+<div class="sec"><div class="tabs"><button class="on" data-t="tpl">Templates</button><button data-t="mine">My apps</button></div><div id="tfilter" class="chips" style="justify-content:flex-start;margin:0 0 16px"></div><div class="grid" id="grid"></div></div>
 <div class="sec" id="styles"><h2>Pick a look</h2><p class="muted">Choose a style, then describe your idea. Atlas builds in that direction.</p><div class="grid" id="sgrid" style="margin-top:16px"></div></div>
 
 <div class="sec"><h2>How it works</h2><p class="muted">From idea to live link in four connected steps.</p>
@@ -147,9 +171,9 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 </div>
 
 <main id="ws" hidden>
-<aside id="chat"><div class="bar"><div class="seg"><button data-m="build" class="on">Build</button><button data-m="chat">Discuss</button></div><select class="mdl"></select><select class="lang"></select><button class="btn" id="undo" title="Undo last change">↶</button></div>
+<aside id="chat"><div class="bar"><div class="seg"><button data-m="build" class="on">Build</button><button data-m="chat">Discuss</button></div><select class="mdl"></select><select class="lang"></select><button class="btn" id="undo" title="Undo last change">↶</button><button class="btn mob" id="toPv">Preview ▸</button></div>
 <div id="msgs"></div><div id="inp"><textarea id="tx" placeholder="Describe a change or ask anything..."></textarea><button class="go" id="send">↑</button></div></aside>
-<section id="pvw"><div class="bar"><button class="btn" data-w="100%">Desktop</button><button class="btn" data-w="768px">Tablet</button><button class="btn" data-w="390px">Mobile</button><span id="pn" style="margin-left:auto;color:var(--mut)"></span><button class="btn pub" id="pub">Publish</button></div>
+<section id="pvw"><div class="bar"><button class="btn mob" id="toChat">◂ Chat</button><button class="btn" data-w="100%">Desktop</button><button class="btn" data-w="768px">Tablet</button><button class="btn" data-w="390px">Mobile</button><span id="pn" style="margin-left:auto;color:var(--mut)"></span><button class="btn pub" id="pub">Publish</button></div>
 <div class="fr"><iframe id="pv" sandbox="allow-scripts allow-forms allow-modals"></iframe></div></section></main>
 
 <div class="ov" id="viewm" hidden><div class="mod wide"><button class="x" id="vx">×</button><div id="vbody"></div></div></div>
@@ -168,5 +192,6 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="firebase.js"></script>
 <script src="ai.js"></script>
+<script src="templates.js"></script>
 <script src="app.js"></script>
 </body></html>
