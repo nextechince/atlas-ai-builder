@@ -23,7 +23,7 @@ function ui() {
 }
 $('#out').onclick = async () => { await Atlas.logout(); location.reload() };
 $('#homeBtn').onclick = () => show('home');
-function show(w) { $('#homeView').hidden = w !== 'home'; $('#ws').hidden = w === 'home'; $('#homeBtn').hidden = w === 'home' }
+function show(w) { $('#homeView').hidden = w !== 'home'; $('#ws').hidden = w === 'home'; $('#homeBtn').hidden = w === 'home'; if (w === 'home') renderGrid() }
 
 /* projects */
 const key = () => 'p_' + (user ? user.uid || user.email : 'guest');
@@ -32,15 +32,51 @@ function save() {
   const a = projs().filter(p => p.id !== proj.id); a.unshift(proj); LS(key(), a.slice(0, 30));
   try { Promise.resolve(Atlas.saveProject(proj)).catch(() => {}) } catch (e) {}
 }
+const pvBundle = f => Atlas.bundle(f, true); // preview-safe bundle (fixes #links inside srcdoc frames)
+let tf = 'All', tq = '';
+const CATS = ['All', 'Business', 'Store', 'Personal', 'Events'];
+const ro = new ResizeObserver(es => es.forEach(e => { const f = e.target.firstChild; if (f) f.style.transform = `scale(${e.target.clientWidth / 1100})` }));
+const seen = new WeakSet();
+const fitThumbs = () => $$('.thumb').forEach(t => { if (!seen.has(t)) { seen.add(t); ro.observe(t) } });
+/* Scaled live preview of a page (1100px canvas shrunk to the card width). */
+const thumb = (html, cls = '', scripts = false) => `<div class="thumb ${cls}"><iframe sandbox="${scripts ? 'allow-scripts' : ''}" tabindex="-1" loading="lazy" srcdoc="${esc(html)}"></iframe></div>`;
+const blank = '<body style="margin:0;background:linear-gradient(135deg,#eef1ff,#ffe9f0);font:600 40px system-ui;color:#9aa3c7;display:grid;place-items:center;height:100vh">New project</body>';
+
 function renderGrid() {
-  const g = $('#grid'), t = $('.tabs .on').dataset.t; g.innerHTML = '';
-  if (t === 'tpl') TPL.forEach(x => { const c = document.createElement('div'); c.className = 'card'; c.innerHTML = `<div class=th style="background:${x[4]}">${x[0]}</div><div class=ct><b>${x[1]}</b> <small>${x[2]}</small></div>`; c.onclick = () => openView({ t: 'tpl', x }); g.append(c) });
-  else {
+  const g = $('#grid'), t = $('.tabs .on').dataset.t; g.innerHTML = ''; $('#tfilter').hidden = t !== 'tpl';
+  if (t === 'tpl') {
+    TPL.filter(x => (tf === 'All' || x[2] === tf) && (x[1] + ' ' + x[3]).toLowerCase().includes(tq)).forEach(x => {
+      const c = document.createElement('div'); c.className = 'card';
+      c.innerHTML = thumb(TPL_PAGES[x[1]] || blank) + `<div class=ct><b>${x[1]}</b> <small>${x[2]}</small><p class=cd>${(TDET[x[1]] || {}).d || ''}</p></div>`;
+      c.onclick = () => openView({ t: 'tpl', x }); g.append(c);
+    });
+    if (!g.children.length) g.innerHTML = '<p class=empty>No templates match your search.</p>';
+  } else {
     const a = user ? projs() : [];
-    if (!a.length) g.innerHTML = '<p class=empty>' + (user ? 'No apps yet. Describe one above.' : 'Login to see your apps.') + '</p>';
-    a.forEach(p => { const c = document.createElement('div'); c.className = 'card'; c.innerHTML = `<div class=th style="background:var(--l)">🌐</div><div class=ct><b>${esc(p.name)}</b>${p.published ? ' <small>● live</small>' : ''}</div>`; c.onclick = () => openView({ t: 'app', p }); g.append(c) });
+    if (!a.length) g.innerHTML = '<p class=empty>' + (user ? 'No apps yet. Describe one above or start from a template.' : 'Login to see your apps.') + '</p>';
+    a.forEach(p => {
+      const c = document.createElement('div'); c.className = 'card'; const n = Object.keys(p.files).length;
+      c.innerHTML = thumb(p.files['index.html'] ? pvBundle(p.files) : blank, '', true) + `<div class=ct><b>${esc(p.name)}</b> ${p.published ? '<small class=live2>● Live</small>' : '<small>Draft</small>'}<p class=cd>${n} file${n === 1 ? '' : 's'}${p.created ? ' · ' + new Date(p.created).toLocaleDateString() : ''}</p></div>`;
+      c.onclick = () => openView({ t: 'app', p }); g.append(c);
+    });
   }
+  fitThumbs(); renderDash();
 }
+function renderDash() {
+  const d = $('#dash'); if (!user) { d.hidden = true; return } d.hidden = false;
+  const a = projs(), live = a.filter(p => p.published).length, files = a.reduce((n, p) => n + Object.keys(p.files).length, 0), last = a[0];
+  const hr = new Date().getHours(), gr = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
+  d.innerHTML = `<div class=dgreet><div><h2>${gr}, ${esc(user.name)}</h2><p class=muted>${a.length ? 'Pick up where you left off or start something new.' : 'Create your first app in under a minute.'}</p></div><button class="btn pri" id=dnew>+ New app</button></div>
+<div class=stats><div class=stat style="background:var(--l)"><b data-n=${a.length}>0</b><span>Projects</span></div><div class=stat style="background:var(--m)"><b data-n=${live}>0</b><span>Published</span></div><div class=stat style="background:var(--p)"><b data-n=${files}>0</b><span>Files built</span></div><div class=stat style="background:var(--pe)"><b data-n=${a.reduce((n, p) => n + p.chat.filter(m => m.r === 'u').length, 0)}>0</b><span>Prompts sent</span></div></div>
+${last ? `<div class=cont id=dcont>${thumb(last.files['index.html'] ? pvBundle(last.files) : blank, '', true)}<div><small class=muted>CONTINUE WHERE YOU LEFT OFF</small><h3>${esc(last.name)}</h3><p class=muted>${Object.keys(last.files).length} files · ${last.published ? 'Live' : 'Draft'}</p><button class="btn pri">Open project</button></div></div>` : ''}`;
+  $('#dnew').onclick = () => { window.scrollTo({ top: 0, behavior: 'smooth' }); $('#hp').focus() };
+  const dc = $('#dcont'); if (dc) dc.onclick = () => openProject(last);
+  $$('.stat b').forEach(b => { const n = +b.dataset.n, t0 = performance.now(); (function s(t) { const k = Math.min(1, (t - t0) / 700); b.textContent = Math.round(n * k); if (k < 1) requestAnimationFrame(s) })(t0) });
+  fitThumbs();
+}
+$('#tfilter').innerHTML = '<input class=search id=tsearch placeholder="Search templates">' + CATS.map(c => `<button class="chip${c === 'All' ? ' on' : ''}" data-c="${c}">${c}</button>`).join('');
+$('#tsearch').oninput = e => { tq = e.target.value.toLowerCase(); renderGrid() };
+$$('#tfilter .chip').forEach(b => b.onclick = () => { tf = b.dataset.c; $$('#tfilter .chip').forEach(x => x.classList.toggle('on', x === b)); renderGrid() });
 $$('.tabs button').forEach(b => b.onclick = () => { $$('.tabs button').forEach(x => x.classList.remove('on')); b.classList.add('on'); renderGrid() });
 ['Portfolio', 'Solar System', 'Restaurant Menu', 'Calculator', 'Minimal Blog'].forEach(n => { const c = document.createElement('button'); c.className = 'chip'; c.textContent = n; c.onclick = () => { $('#hp').value = 'Build a beautiful ' + n.toLowerCase() + ' website'; $('#hp').focus() }; $('#chips').append(c) });
 $('#hgo').onclick = () => { const v = $('#hp').value.trim(); if (v) startProject(v + (selStyle ? `. Art direction "${selStyle[0]}": ${selStyle[1]}. Palette: ${selStyle[2]}. Font feel: ${selStyle[3]}.` : '')) };
@@ -54,76 +90,133 @@ function openProject(p) {
   proj = p; show('ws'); $('#pn').textContent = p.name; $('#msgs').innerHTML = '';
   p.chat.forEach(m => bubble(m.r, m.r === 'u' ? esc(m.t) : md(m.t)));
   if (!p.chat.length) bubble('a', '<b>Hi! I\'m Atlas.</b> Tell me what to build, or switch to <b>Discuss</b> to plan first.');
-  preview();
+  preview(); $('#ws').classList.toggle('pvmode', !!Object.keys(p.files).length);
 }
 function setMode(m) { mode = m; $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.m === m)); $('#tx').placeholder = m === 'build' ? 'Describe a change or what to build...' : 'Ask for ideas, advice, comparisons...' }
 $$('.seg button').forEach(b => b.onclick = () => setMode(b.dataset.m));
+$('#toPv').onclick = () => $('#ws').classList.add('pvmode');
+$('#toChat').onclick = () => $('#ws').classList.remove('pvmode');
 $$('[data-w]').forEach(b => b.onclick = () => $('#pv').style.width = b.dataset.w);
 
 /* rich message rendering */
-const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-const inl = s => esc(s).replace(/!\[(.*?)\]\((https?:[^)\s]+)\)/g, '<img src="$2" alt="$1">').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\x60(.+?)\x60/g, '<code>$1</code>');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const inl = s => esc(s)
+  .replace(/!\[(.*?)\]\((https?:[^)\s]+)\)/g, '<figure><img src="$2" alt="$1" loading="lazy" onerror="this.parentNode.style.display=\'none\'"><figcaption>$1</figcaption></figure>')
+  .replace(/\[(.+?)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+  .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/(^|[^*])\*(?![\s*])(.+?)\*(?!\*)/g, '$1<i>$2</i>')
+  .replace(/\x60(.+?)\x60/g, '<code>$1</code>');
 function rich(t, d) {
   if (t === 'cards') return '<div class=cards>' + d.map(c => `<div><span class=e>${esc(c.emoji || '✨')}</span><b>${esc(c.title || '')}</b>${inl(c.text || '')}</div>`).join('') + '</div>';
   const it = d.items || d;
-  return `<div class=opts>${d.q ? '<b>' + esc(d.q) + '</b>' : ''}${it.map(i => `<button data-o="${esc(i).replace(/"/g, '&quot;')}">${esc(i)}</button>`).join('')}</div>`;
+  return `<div class=opts>${d.q ? '<b>' + esc(d.q) + '</b>' : ''}${it.map(i => `<button data-o="${esc(i)}">${esc(i)}</button>`).join('')}</div>`;
 }
+/* Markdown subset: headings, bold/italic/code, links, images, lists, quotes, tables, code blocks, hr + cards/options blocks. Safe while streaming. */
 function md(s) {
+  const fo = [...s.matchAll(new RegExp(T + '(cards|options)\\n', 'g'))].pop();
+  if (fo && s.indexOf(T, fo.index + fo[0].length) < 0) s = s.slice(0, fo.index); // hide a half-streamed block
   const B = []; s = s.replace(new RegExp(T + '(cards|options)\\n([\\s\\S]*?)' + T, 'g'), (m, t, j) => { let x = ''; try { x = rich(t, JSON.parse(j)) } catch (e) {} B.push(x); return '\n@@' + (B.length - 1) + '@@\n' });
-  const L = s.split('\n'); let o = '', i = 0;
+  const L = s.split('\n'); let o = '', i = 0, list = null; const close = () => { if (list) { o += '</' + list + '>'; list = null } };
   while (i < L.length) {
     const l = L[i];
-    if (/^\|/.test(l) && /^\|[\s:|-]+\|?$/.test(L[i + 1] || '')) { const r = []; while (i < L.length && /^\|/.test(L[i])) r.push(L[i++]); const c = x => x.replace(/^\||\|$/g, '').split('|').map(y => y.trim()); o += '<div class=tw><table><tr>' + c(r[0]).map(x => '<th>' + inl(x) + '</th>').join('') + '</tr>' + r.slice(2).map(x => '<tr>' + c(x).map(y => '<td>' + inl(y) + '</td>').join('') + '</tr>').join('') + '</table></div>'; continue }
-    const h = l.match(/^(#{1,3}) (.*)/);
-    if (h) o += `<h${h[1].length + 1}>${inl(h[2])}</h${h[1].length + 1}>`;
-    else if (/^[-*] /.test(l)) o += '<li>' + inl(l.slice(2)) + '</li>';
-    else if (/^@@\d+@@$/.test(l.trim())) o += B[+l.trim().slice(2, -2)];
-    else if (l.trim()) o += '<p>' + inl(l) + '</p>';
+    if (/^\x60\x60\x60/.test(l)) { close(); const c = []; i++; while (i < L.length && !/^\x60\x60\x60/.test(L[i])) c.push(L[i++]); i++; o += '<pre><code>' + esc(c.join('\n')) + '</code></pre>'; continue }
+    if (/^\|/.test(l) && /^\|[\s:|-]+\|?$/.test(L[i + 1] || '')) { close(); const r = []; while (i < L.length && /^\|/.test(L[i])) r.push(L[i++]); const c = x => x.replace(/^\||\|$/g, '').split('|').map(y => y.trim()); o += '<div class=tw><table><tr>' + c(r[0]).map(x => '<th>' + inl(x) + '</th>').join('') + '</tr>' + r.slice(2).map(x => '<tr>' + c(x).map(y => '<td>' + inl(y) + '</td>').join('') + '</tr>').join('') + '</table></div>'; continue }
+    const h = l.match(/^(#{1,3}) (.*)/), ul = l.match(/^\s*[-*] (.*)/), ol = l.match(/^\s*\d+[.)] (.*)/), bq = l.match(/^> ?(.*)/);
+    if (ul || ol) { const t = ul ? 'ul' : 'ol'; if (list !== t) { close(); o += '<' + t + '>'; list = t } o += '<li>' + inl((ul || ol)[1]) + '</li>' }
+    else {
+      close();
+      if (h) o += `<h${h[1].length + 1}>${inl(h[2])}</h${h[1].length + 1}>`;
+      else if (/^---+$/.test(l.trim())) o += '<hr>';
+      else if (bq) o += '<blockquote>' + inl(bq[1]) + '</blockquote>';
+      else if (/^@@\d+@@$/.test(l.trim())) o += B[+l.trim().slice(2, -2)];
+      else if (l.trim()) o += '<p>' + inl(l) + '</p>';
+    }
     i++;
   }
-  return o;
+  close(); return o;
 }
-function bubble(r, h) { const d = document.createElement('div'); d.className = 'm ' + r; d.innerHTML = h; $('#msgs').append(d); $('#msgs').scrollTop = 1e9; return d }
-$('#msgs').onclick = e => { const b = e.target.closest('[data-o]'); if (b) { setMode('chat'); send(b.dataset.o) } };
+function bubble(r, h) { const d = document.createElement('div'); d.className = 'm ' + r; d.dataset.m = mode; d.innerHTML = h; $('#msgs').append(d); $('#msgs').scrollTop = 1e9; return d }
+$('#msgs').onclick = e => { const b = e.target.closest('[data-o]'); if (b && !busy) { setMode(b.closest('.m').dataset.m || mode); send(b.dataset.o) } };
 
-/* chat + build */
-$('#send').onclick = () => { const v = $('#tx').value.trim(); if (v) { $('#tx').value = ''; send(v) } };
-$('#tx').onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#send').click() } };
-const callAI = msgs => location.protocol === 'file:' ? Promise.reject(Error('Open this site from a web address (Vercel or localhost), not as a local file, so Config.html can load.')) : ai($('.mdl').value, msgs, Atlas.C.xai && Atlas.C.xai.keys, Atlas.C.xai && Atlas.C.xai.endpoint);
+/* chat + build (real streaming) */
+let ctl = null;
+const SP = '<span class=sp></span>', CK = '<span class=ck>✓</span>';
+$('#send').onclick = () => { if (busy) { ctl && ctl.abort(); return } const v = $('#tx').value.trim(); if (v) { $('#tx').value = ''; send(v) } };
+$('#tx').onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!busy) $('#send').click() } };
+const setBusy = b => { busy = b; $('#send').textContent = b ? '■' : '↑'; $('#send').classList.toggle('stop', b); $('#send').title = b ? 'Stop' : 'Send' };
+const stream = (msgs, onDelta) => location.protocol === 'file:'
+  ? Promise.reject(Error('Open this site from a web address (Vercel or localhost), not as a local file, so Config.html can load.'))
+  : aiStream($('.mdl').value, msgs, Atlas.C.xai && Atlas.C.xai.keys, Atlas.C.xai && Atlas.C.xai.endpoint, onDelta, ctl.signal, (Atlas.C.xai && Atlas.C.xai.maxTokens) || 16000);
+const role = n => /^readme/i.test(n) ? 'docs' : /\.html$/i.test(n) ? 'app shell' : /\.css$/i.test(n) ? 'styles' : /pages?\//i.test(n) ? 'page' : /store|state/i.test(n) ? 'state' : /router/i.test(n) ? 'router' : /api/i.test(n) ? 'data layer' : /\.js$/i.test(n) ? 'logic' : 'file';
+const unfence = c => c.trim().replace(/^\x60\x60\x60\w*\n/, '').replace(/\n?\x60\x60\x60$/, '');
+const tail = s => s.replace(/\n?<{1,3}[A-Z:\w./-]*$/, '');
+/* Parse the model's streamed text into intro / files (done or in-progress) / outro. */
+function parseStream(t) {
+  const re = /<<<FILE:([\w./-]+)>>>\n?/g, st = []; let m;
+  while (m = re.exec(t)) st.push({ n: m[1], i: m.index, c: m.index + m[0].length });
+  const files = st.map((s, k) => { const rest = t.slice(s.c, k + 1 < st.length ? st[k + 1].i : undefined), e = rest.indexOf('<<<END>>>'); return { n: s.n, done: e >= 0 || k + 1 < st.length, c: e >= 0 ? rest.slice(0, e) : rest } });
+  const intro = st.length ? t.slice(0, st[0].i) : t;
+  const last = files[files.length - 1], le = t.lastIndexOf('<<<END>>>');
+  return { intro: tail(intro).trim(), files, outro: last && last.done && le >= 0 ? tail(t.slice(le + 9)).trim() : '' };
+}
 
 async function send(text) {
-  if (busy) return; busy = true; const lang = $('.lang').value;
+  if (busy) return; setBusy(true); ctl = new AbortController(); const lang = $('.lang').value;
   bubble('u', esc(text)); proj.chat.push({ r: 'u', t: text });
   const has = Object.keys(proj.files).length;
-  const ctx = has ? 'CURRENT FILES:\n' + Object.entries(proj.files).map(([n, c]) => `<<<FILE:${n}>>>\n${c}\n<<<END>>>`).join('\n') + '\n\n' : '';
-  const hist = proj.chat.slice(-7, -1).map(m => ({ role: m.r === 'u' ? 'user' : 'assistant', content: m.t.slice(0, 600) }));
+  const ctxFiles = has ? 'CURRENT FILES:\n' + Object.entries(proj.files).map(([n, c]) => `<<<FILE:${n}>>>\n${c}\n<<<END>>>`).join('\n') + '\n\n' : '';
+  const hist = proj.chat.slice(-7, -1).map(m => ({ role: m.r === 'u' ? 'user' : 'assistant', content: m.t.slice(0, 800) }));
   try {
     if (mode === 'chat') {
-      const w = bubble('a', '<i>Thinking...</i>');
-      const r = await callAI([{ role: 'system', content: SYS_CHAT(lang, has) }, ...hist, { role: 'user', content: text }]);
-      w.innerHTML = md(r); proj.chat.push({ r: 'a', t: r });
-    } else {
-      const names = ['Understanding your idea', 'Designing layout and palette', 'Writing index.html', 'Writing style.css', 'Writing script.js', 'Polishing details'];
-      const box = bubble('steps', names.map(n => `<div class=st><span class=sp style=visibility:hidden></span>${n}</div>`).join('')); box.className = 'steps'; let k = 0; const rows = box.children;
-      const tick = () => { if (k > 0) { rows[k - 1].className = 'st d'; rows[k - 1].firstChild.outerHTML = '<span>✓</span>' } if (k < names.length - 1) { rows[k].className = 'st r'; rows[k].firstChild.style.visibility = 'visible'; k++ } };
-      tick(); const iv = setInterval(tick, 4500);
-      let r; try { r = await callAI([{ role: 'system', content: SYS_BUILD(lang) }, ...hist, { role: 'user', content: ctx + 'REQUEST: ' + text }]) } finally { clearInterval(iv) }
-      const re = /<<<FILE:([\w./-]+)>>>\n?([\s\S]*?)<<<END>>>/g; let m; const got = []; const prev = JSON.stringify(proj.files);
-      while (m = re.exec(r)) got.push([m[1], m[2].trim().replace(/^\x60\x60\x60\w*\n/, '').replace(/\n?\x60\x60\x60$/, '')]);
-      if (!got.length) throw Error('Atlas did not return any files. Try again or rephrase.');
-      proj.history.push(prev); if (proj.history.length > 15) proj.history.shift();
-      got.forEach(([n, c]) => proj.files[n] = c);
-      box.innerHTML = got.map(([n, c]) => `<div class="st d"><span>✓</span>${esc(n)} <small>(${(c.length / 1024).toFixed(1)} KB)</small></div>`).join('');
-      const sum = r.split('<<<FILE:')[0].trim() || 'Done! Your site is ready in the preview.';
-      bubble('a', md(sum)); proj.chat.push({ r: 'a', t: sum }); preview();
-    }
+      const w = bubble('a', '<span class=typing><i></i><i></i><i></i></span>'); let raf = 0, txt = '';
+      const paint = () => { raf = 0; w.innerHTML = md(txt); $('#msgs').scrollTop = 1e9 };
+      try {
+        const r = await stream([{ role: 'system', content: SYS_CHAT(lang, has) }, ...hist, { role: 'user', content: text }], (d, full) => { txt = full; if (!raf) raf = requestAnimationFrame(paint) });
+        txt = r.text;
+      } finally { cancelAnimationFrame(raf); if (txt) { w.innerHTML = md(txt); proj.chat.push({ r: 'a', t: txt }) } else w.remove() }
+    } else await buildFlow(text, lang, ctxFiles, hist);
     save();
-  } catch (e) { bubble('a', '⚠️ ' + esc(e.message)) }
-  busy = false;
+  } catch (e) { if (e.name === 'AbortError') bubble('a', 'Stopped. Anything already finished was kept.'); else bubble('a', '⚠️ ' + esc(e.message)) }
+  setBusy(false); ctl = null;
+}
+
+async function buildFlow(text, lang, ctxFiles, hist) {
+  const t0 = Date.now(), secs = () => ((Date.now() - t0) / 1000).toFixed(0), model = $('.mdl').selectedOptions[0].textContent;
+  const intro = bubble('a', ''); intro.hidden = true;
+  const box = bubble('steps', ''); box.className = 'steps';
+  const outro = bubble('a', ''); outro.hidden = true;
+  let full = '', got = false, raf = 0, fin = false;
+  const row = (c, ic, l, n) => `<div class="st ${c}">${ic}<span class=sl>${l}</span><small>${n || ''}</small></div>`;
+  function paint() {
+    raf = 0; const p = parseStream(full);
+    if (p.intro) { intro.hidden = false; intro.innerHTML = md(p.intro) }
+    let h = row('d', CK, 'Connected to ' + esc(model), '');
+    if (!got) h += row('r', SP, 'Waiting for the model', secs() + 's');
+    else if (!p.files.length) h += row('r', SP, 'Planning the architecture', secs() + 's');
+    p.files.forEach(f => { const ln = f.c.split('\n').length, kb = (f.c.length / 1024).toFixed(1); h += row(f.done ? 'd' : 'r', f.done ? CK : SP, (f.done ? 'Created ' : 'Writing ') + '<b>' + esc(f.n) + '</b> <em>' + role(f.n) + '</em>', ln + ' lines · ' + kb + ' KB') });
+    if (fin) h += row('d', CK, 'Bundled live preview', '');
+    box.innerHTML = '<div class=sh><span>Building</span><span>' + secs() + 's</span></div>' + h;
+    if (p.outro) { outro.hidden = false; outro.innerHTML = md(p.outro) }
+    $('#msgs').scrollTop = 1e9;
+  }
+  const iv = setInterval(paint, 1000); paint();
+  let r, aborted = false;
+  try {
+    r = await stream([{ role: 'system', content: SYS_BUILD(lang) }, ...hist, { role: 'user', content: ctxFiles + 'REQUEST: ' + text }], (d, f) => { full = f; got = true; if (!raf) raf = requestAnimationFrame(paint) });
+    full = r.text;
+  } catch (e) { if (e.name !== 'AbortError') { clearInterval(iv); box.remove(); throw e } aborted = true }
+  finally { clearInterval(iv); cancelAnimationFrame(raf) }
+  const p = parseStream(full), ok = p.files.filter(f => f.done), cut = p.files.filter(f => !f.done).map(f => f.n);
+  if (!ok.length) { box.remove(); if (aborted) { const ab = Error('stopped'); ab.name = 'AbortError'; throw ab } throw Error(full.trim() ? 'Atlas did not return any files. Try again or rephrase.' : 'Nothing came back from the model.') }
+  const prev = JSON.stringify(proj.files); proj.history.push(prev); if (proj.history.length > 15) proj.history.shift();
+  ok.forEach(f => { const c = unfence(f.c); if (c === '__DELETE__') delete proj.files[f.n]; else proj.files[f.n] = c });
+  fin = true; paint(); preview(); $('#ws').classList.add('pvmode');
+  const summary = [p.intro, p.outro].filter(Boolean).join('\n\n'); proj.chat.push({ r: 'a', t: summary || 'Done.' });
+  if (cut.length || (r && r.finish === 'length'))
+    bubble('a', md((aborted ? 'Stopped.' : '⚠️ The reply was cut off') + (cut.length ? (aborted ? ' **' : ' while writing **') + cut.join(', ') + '**' + (aborted ? ' was left unfinished.' : '') : '') + ' Finished files were kept.\n' + '\x60\x60\x60' + 'options\n{"items":["Continue building the missing files"]}\n' + '\x60\x60\x60'));
 }
 $('#undo').onclick = () => { if (!proj || !proj.history.length) return bubble('a', 'Nothing to undo yet.'); proj.files = JSON.parse(proj.history.pop()); preview(); save(); bubble('a', 'Reverted the last change.') };
 function preview() {
-  $('#pv').srcdoc = proj.files['index.html'] ? Atlas.bundle(proj.files)
+  $('#pv').srcdoc = proj.files['index.html'] ? pvBundle(proj.files)
     : '<body style="font:16px system-ui;display:grid;place-items:center;height:100vh;margin:0;color:#6b7494;background:linear-gradient(135deg,#f3f5ff,#ffe9f0)">Your preview appears here</body>';
 }
 
@@ -182,20 +275,20 @@ function openView(v) {
   const b = $('#vbody'); $('#viewm').hidden = false;
   if (v.t === 'tpl') {
     const x = v.x, d = TDET[x[1]] || {};
-    b.innerHTML = `<div class=vhero style="background:${x[4]}">${x[0]}</div><h2>${x[1]}</h2><p class=muted>${d.d || x[3]}</p>
+    b.innerHTML = thumb(TPL_PAGES[x[1]] || blank, 'big') + `<h2>${x[1]}</h2><p class=muted>${d.d || x[3]}</p>
 <div class=tags>${(d.s || []).map(s => `<span>${s}</span>`).join('')}</div>
 <div class=meta><div><small>Category</small><b>${x[2]}</b></div><div><small>Suggested style</small><b>${d.st || 'Custom'}</b></div><div><small>Build time</small><b>About 1 minute</b></div></div>
 <div class=vact><button class="btn pri" id=vuse>Use this template</button></div>`;
     $('#vuse').onclick = () => { closeView(); startProject('Build ' + x[3]) };
-    return;
+    fitThumbs(); return;
   }
   const p = v.p, f = Object.keys(p.files), kb = (JSON.stringify(p.files).length / 1024).toFixed(1);
   b.innerHTML = `<h2>${esc(p.name)}</h2><p class=muted>${p.published ? '● Live' : 'Not published yet'}</p>
-${f.length ? '<iframe class=vpv sandbox="allow-scripts"></iframe>' : '<div class=vhero style="background:var(--l)">🌐</div>'}
+${f.length ? '<iframe class=vpv sandbox="allow-scripts"></iframe>' : '<div class=thumb-empty>No files yet</div>'}
 <div class=meta><div><small>Created</small><b>${p.created ? new Date(p.created).toLocaleDateString() : 'Earlier'}</b></div><div><small>Files</small><b>${f.length}</b></div><div><small>Size</small><b>${kb} KB</b></div><div><small>Messages</small><b>${p.chat.length}</b></div></div>
 ${f.length ? `<div class=tags>${f.map(n => `<span>${esc(n)}</span>`).join('')}</div>` : ''}
 <div class=vact><button class="btn pri" id=ved>Open and edit</button>${p.published ? `<a class=btn target=_blank href="https://${p.published}.${(Atlas.C.publish && Atlas.C.publish.baseDomain) || 'yourdomain.com'}">Visit live site</a>` : ''}<button class=btn id=vdup>Duplicate</button><button class="btn dan" id=vdel>Delete</button></div>`;
-  const fr = b.querySelector('.vpv'); if (fr) fr.srcdoc = Atlas.bundle(p.files);
+  const fr = b.querySelector('.vpv'); if (fr) fr.srcdoc = pvBundle(p.files);
   $('#ved').onclick = () => { closeView(); openProject(p) };
   $('#vdup').onclick = () => { const c = JSON.parse(JSON.stringify(p)); c.id = Date.now().toString(36); c.name += ' copy'; c.published = null; c.created = Date.now(); proj = c; save(); closeView(); renderGrid() };
   $('#vdel').onclick = () => {
