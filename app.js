@@ -5,12 +5,11 @@ const TPL = [['🚀', 'SaaS landing', 'Business', 'a modern SaaS landing page fo
 let user, mode = 'build', proj = null, busy = false;
 
 LANGS.forEach(l => $$('.lang').forEach(s => s.add(new Option(l))));
-$$('.mdl').forEach(s => s.onchange = () => $$('.mdl').forEach(x => x.value = s.value));
 $$('.lang').forEach(s => s.onchange = () => $$('.lang').forEach(x => x.value = s.value));
 
 (async () => {
   await Atlas.ready; await Atlas.authReady; user = Atlas.user;
-  (Atlas.C.models || [{ id: 'openrouter/auto-code', label: 'Claude' }]).forEach(m => $$('.mdl').forEach(s => s.add(new Option(m.label, m.id))));
+  Models.init();
   ui();
   if (user) { try { const a = await Atlas.listProjects(), l = projs(); a.forEach(p => { if (!l.find(x => x.id === p.id)) l.push(p) }); LS(key(), l); renderGrid() } catch (e) {} }
   const p = sessionStorage.getItem('pending');
@@ -143,9 +142,12 @@ const SP = '<span class=sp></span>', CK = '<span class=ck>✓</span>';
 $('#send').onclick = () => { if (busy) { ctl && ctl.abort(); return } const v = $('#tx').value.trim(); if (v) { $('#tx').value = ''; send(v) } };
 $('#tx').onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!busy) $('#send').click() } };
 const setBusy = b => { busy = b; $('#send').textContent = b ? '■' : '↑'; $('#send').classList.toggle('stop', b); $('#send').title = b ? 'Stop' : 'Send' };
-const stream = (msgs, onDelta) => location.protocol === 'file:'
-  ? Promise.reject(Error('Open this site from a web address (Vercel or localhost), not as a local file, so Config.html can load.'))
-  : aiStream($('.mdl').value, msgs, Atlas.C.xai && Atlas.C.xai.keys, Atlas.C.xai && Atlas.C.xai.endpoint, onDelta, ctl.signal, (Atlas.C.xai && Atlas.C.xai.maxTokens) || 16000);
+const stream = (msgs, onDelta) => {
+  const m = Models.current();
+  if (!m) return Promise.reject(Error('No AI provider is available. Check that your server is running (see README.md).'));
+  if (!m.provider.hasKey) return Promise.reject(Error('Add ' + m.provider.id.toUpperCase() + '_API_KEY to your .env (or Vercel environment variables), or pick another model.'));
+  return aiStream(m.provider.id, m.id, msgs, onDelta, ctl.signal, m.provider.maxTokens || 16000);
+};
 const role = n => /^readme/i.test(n) ? 'docs' : /\.html$/i.test(n) ? 'app shell' : /\.css$/i.test(n) ? 'styles' : /pages?\//i.test(n) ? 'page' : /store|state/i.test(n) ? 'state' : /router/i.test(n) ? 'router' : /api/i.test(n) ? 'data layer' : /\.js$/i.test(n) ? 'logic' : 'file';
 const unfence = c => c.trim().replace(/^\x60\x60\x60\w*\n/, '').replace(/\n?\x60\x60\x60$/, '');
 const tail = s => s.replace(/\n?<{1,3}[A-Z:\w./-]*$/, '');
@@ -180,7 +182,7 @@ async function send(text) {
 }
 
 async function buildFlow(text, lang, ctxFiles, hist) {
-  const t0 = Date.now(), secs = () => ((Date.now() - t0) / 1000).toFixed(0), model = $('.mdl').selectedOptions[0].textContent;
+  const t0 = Date.now(), secs = () => ((Date.now() - t0) / 1000).toFixed(0), model = (Models.current() || {}).label || 'the model';
   const intro = bubble('a', ''); intro.hidden = true;
   const box = bubble('steps', ''); box.className = 'steps';
   const outro = bubble('a', ''); outro.hidden = true;
@@ -224,7 +226,7 @@ function preview() {
 const slug = s => (s || '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).slice(0, 3).join('-').slice(0, 30) || 'my-site';
 $('#pub').onclick = () => {
   if (!proj.files['index.html']) return bubble('a', 'Build something first, then publish it.');
-  $('#pdom').textContent = '.' + ((Atlas.C.publish && Atlas.C.publish.baseDomain) || 'https://atlas-ai-builder.vercel.app');
+  $('#pdom').textContent = '.' + ((Atlas.C.publish && Atlas.C.publish.baseDomain) || 'yourdomain.com');
   $('#psub').value = proj.published || slug(proj.name); $('#perr').textContent = ''; $('#pres').innerHTML = ''; $('#pubm').hidden = false;
 };
 $('#px').onclick = () => $('#pubm').hidden = true;
