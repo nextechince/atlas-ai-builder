@@ -1,6 +1,4 @@
-/* Atlas AI engine: trained system prompts + xAI (Grok) caller with key rotation.
-   Keys come from process.env.API_KEY (comma-separated for rotation).
-   Runs server-side (Node / edge). Do not load this file in the browser. */
+/* Atlas AI engine: trained system prompts + xAI (Grok) caller with key rotation. */
 const T = '\x60\x60\x60';
 
 const SYS_BUILD = lang => `You are ATLAS, the build engine of Atlas Ai Builder: a principal front-end engineer, product designer and copywriter in one. You build REAL, working web apps and sites that experienced developers would be proud to open: clean architecture, real features, real data flow, excellent UX. Never skeletons. Never fake features.
@@ -64,59 +62,36 @@ ${T}
 Be concrete and concise. Never output full website code; when the plan is ready, tell the user to switch to Build mode.${hasProject ? ' The user already has a built project, so give advice that improves it.' : ''}
 Reply in ${lang}.`;
 
-/* Parse comma-separated keys from process.env.API_KEY, drop blanks and placeholders. */
-function envKeys() {
-  return (process.env.API_KEY || '')
-    .split(',')
-    .map(k => k.trim())
-    .filter(k => k && !/^YOUR/i.test(k) && k.length > 20);
-}
-
-async function ai(model, messages, endpoint) {
-  const keys = envKeys();
-  if (!keys.length) throw Error('API_KEY not configured');
-  let err;
-  for (const k of keys.sort(() => Math.random() - .5)) {
-    try {
-      const r = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + k },
-        body: JSON.stringify({ model, messages, temperature: .7, max_tokens: 16000 })
-      });
-      const j = await r.json();
-      if (r.ok) return j.choices[0].message.content;
-      err = (j.error && (j.error.message || j.error)) || r.status;
-    } catch (e) { err = e.message; }
+/* Streaming call through YOUR server (/api/chat). No provider keys exist in the browser.
+   onDelta(chunk, fullText) fires as tokens arrive. Returns {text, finish}. */
+async function aiStream(provider, model, messages, onDelta, signal, maxTokens) {
+  const tok = window.Atlas && Atlas.auth && Atlas.auth.currentUser ? await Atlas.auth.currentUser.getIdToken() : '';
+  const r = await fetch('/api/chat', {
+    method: 'POST', signal,
+    headers: { 'Content-Type': 'application/json', ...(tok ? { Authorization: 'Bearer ' + tok } : {}) },
+    body: JSON.stringify({ provider, model, messages, max_tokens: maxTokens })
+  });
+  if (!r.ok) {
+    let j = null; try { j = await r.json() } catch (e) {}
+    if (!j) throw Error('AI server not found at /api/chat. Deploy to Vercel, or run "node server.js" locally (see README.md).');
+    throw Error((j.error && (j.error.message || j.error)) || 'Request failed (' + r.status + ')');
   }
-  throw Error(err);
-}
-
-/* Streaming call: onDelta(chunk, fullText) fires as tokens arrive. Returns {text, finish}. */
-async function aiStream(model, messages, endpoint, onDelta, signal, maxTokens) {
-  const keys = envKeys();
-  if (!keys.length) throw Error('API_KEY not configured');
-  let err;
-  for (const k of keys.sort(() => Math.random() - .5)) {
-    try {
-      const r = await fetch(endpoint, {
-        method: 'POST', signal,
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + k },
-        body: JSON.stringify({ model, messages, temperature: .7, max_tokens: maxTokens || 16000, stream: true })
-      });
-      if (!r.ok) { let j = {}; try { j = await r.json() } catch (e) {} err = (j.error && (j.error.message || j.error)) || r.status; continue; }
-      const rd = r.body.getReader(), dec = new TextDecoder(); let buf = '', full = '', fin = '';
-      for (;;) {
-        const { done, value } = await rd.read(); if (done) break;
-        buf += dec.decode(value, { stream: true }); let i;
-        while ((i = buf.indexOf('\n')) >= 0) {
-          const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
-          if (!line.startsWith('data:')) continue;
-          const d = line.slice(5).trim(); if (d === '[DONE]') continue;
-          try { const c = JSON.parse(d).choices[0]; if (c.delta && c.delta.content) { full += c.delta.content; onDelta(c.delta.content, full) } if (c.finish_reason) fin = c.finish_reason } catch (e) {}
-        }
-      }
-      return { text: full, finish: fin };
-    } catch (e) { if (e.name === 'AbortError') throw e; err = e.message; }
+  const rd = r.body.getReader(), dec = new TextDecoder(); let buf = '', raw = '', full = '', fin = '';
+  const nothink = s => s.replace(/<think>[\s\S]*?(?:<\/think>\s*|$)/g, ''); // some free reasoning models stream <think> inline
+  for (;;) {
+    const { done, value } = await rd.read(); if (done) break;
+    buf += dec.decode(value, { stream: true }); let i;
+    while ((i = buf.indexOf('\n')) >= 0) {
+      const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+      if (!line.startsWith('data:')) continue;
+      const d = line.slice(5).trim(); if (d === '[DONE]') continue;
+      try {
+        const j = JSON.parse(d); if (j.error) throw Error(j.error.message || 'The model returned an error.');
+        const c = j.choices && j.choices[0];
+        if (c && c.delta && c.delta.content) { raw += c.delta.content; full = nothink(raw); onDelta(c.delta.content, full) }
+        if (c && c.finish_reason) fin = c.finish_reason;
+      } catch (e) { if (e.message && !/JSON|Unexpected/.test(e.message)) throw e }
+    }
   }
-  throw Error(err);
+  return { text: full, finish: fin };
 }
