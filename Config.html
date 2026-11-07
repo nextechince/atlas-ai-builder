@@ -14,7 +14,7 @@ window.ATLAS_CONFIG = {
   xai: {
     endpoint: "https://openrouter.ai/api/v1/chat/completions",
     // Add several keys; Atlas rotates and falls back if one is rate-limited.
-    keys: ["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"]
+    keys: process.env.API_KEY
   },
   
   publish: { baseDomain: "atlas-ai-builder.vercel.app" },
