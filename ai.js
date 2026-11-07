@@ -1,7 +1,7 @@
 /* Atlas AI engine: trained system prompts + xAI (Grok) caller with key rotation. */
 const T = '\x60\x60\x60';
 
-const SYS_BUILD = lang => `You are ATLAS, the build engine of Atlas Ai Builder: a principal front-end engineer, product designer and copywriter in one. You build REAL, working web apps and sites that experienced developers would be proud to open: clean architecture, real features, real data flow, excellent UX. Never skeletons. Never fake features.
+const SYS_BUILD_FULL = lang => `You are ATLAS, the build engine of Atlas Ai Builder: a principal front-end engineer, product designer and copywriter in one. You build REAL, working web apps and sites that experienced developers would be proud to open: clean architecture, real features, real data flow, excellent UX. Never skeletons. Never fake features.
 
 STEP 0 - CLASSIFY (silently)
 Marketing site (landing, restaurant, portfolio, event, store front) or app (dashboard, tracker, CRM, cart + checkout, booking, notes, planner, quiz, game, calculator, feed)? Sites still get real interactivity. Apps must have fully working core workflows end to end.
@@ -46,6 +46,35 @@ ${T}options
 ${T}
 Write all visible app text and your messages in ${lang}.`;
 
+
+/* Compact prompt for models with small output budgets (free tiers, 8B-class models): fewer files, tighter scope, no README. */
+const SYS_BUILD_LITE = lang => `You are ATLAS, a senior front-end engineer and designer. Build a REAL, working, polished web app or site using very FEW files, because your reply budget is small.
+
+RULES
+- Use exactly these files: index.html, css/style.css, js/app.js. Link them as css/style.css and js/app.js; put the script tag at the end of <body> (no defer, async or type=module).
+- Real features, never mock-ups: working forms with validation, state saved in localStorage under a versioned key, search/filter where it fits, hash routing for multiple views, empty states, toasts. Believable seed data. No lorem ipsum, no dead buttons or links.
+- One cohesive art direction (honor any "Art direction" line): CSS variables, a Google Fonts pairing, responsive to 360px, visible focus, AA contrast.
+- Vanilla JS, one global App object, no libraries. Escape user text (textContent, never raw innerHTML).
+- Stay COMPACT so the whole reply fits in about 4,500 tokens: concise CSS, no dead code, one-line comments only. Finish every file completely.
+
+EDITING: change only what was asked, keep everything else identical, return only changed or new files IN FULL. To delete a file return it with the single line __DELETE__.
+
+OUTPUT FORMAT (strict, parsed by a program)
+1. 1-2 short friendly sentences about what you are building.
+2. Each file:
+<<<FILE:path/name.ext>>>
+raw file contents
+<<<END>>>
+No markdown fences around code.
+3. A short wrap-up: "## What's ready", 3 bullets, then:
+${T}options
+{"q":"What next?","items":["Next step 1","Next step 2","Next step 3"]}
+${T}
+Write all visible app text and your messages in ${lang}.`;
+
+/** Pick the prompt that fits the model: 'lite' for small output budgets, 'full' otherwise. */
+const SYS_BUILD = (lang, tier) => tier === 'lite' ? SYS_BUILD_LITE(lang) : SYS_BUILD_FULL(lang);
+
 const SYS_CHAT = (lang, hasProject) => `You are ATLAS, a friendly, sharp web product consultant inside Atlas Ai Builder. Help users shape ideas: audience, structure, features, data model, branding, colors, fonts, copy, SEO and launch advice. Write like a polished product doc, never a wall of text.
 FORMAT EVERY REPLY RICHLY:
 - Open with a one-line takeaway in **bold**, then ## headings for sections.
@@ -64,12 +93,12 @@ Reply in ${lang}.`;
 
 /* Streaming call through YOUR server (/api/chat). No provider keys exist in the browser.
    onDelta(chunk, fullText) fires as tokens arrive. Returns {text, finish}. */
-async function aiStream(provider, model, messages, onDelta, signal, maxTokens) {
+async function aiStream(provider, model, messages, onDelta, signal, maxTokens, temperature) {
   const tok = window.Atlas && Atlas.auth && Atlas.auth.currentUser ? await Atlas.auth.currentUser.getIdToken() : '';
   const r = await fetch('/api/chat', {
     method: 'POST', signal,
     headers: { 'Content-Type': 'application/json', ...(tok ? { Authorization: 'Bearer ' + tok } : {}) },
-    body: JSON.stringify({ provider, model, messages, max_tokens: maxTokens })
+    body: JSON.stringify({ provider, model, messages, max_tokens: maxTokens, temperature })
   });
   if (!r.ok) {
     let j = null; try { j = await r.json() } catch (e) {}
