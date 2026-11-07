@@ -10,7 +10,7 @@ $$('.lang').forEach(s => s.onchange = () => $$('.lang').forEach(x => x.value = s
 
 (async () => {
   await Atlas.ready; await Atlas.authReady; user = Atlas.user;
-  (Atlas.C.models || [{ id: 'grok-4-fast', label: 'Grok' }]).forEach(m => $$('.mdl').forEach(s => s.add(new Option(m.label, m.id))));
+  (Atlas.C.models || [{ id: 'openrouter/auto-code', label: 'Claude' }]).forEach(m => $$('.mdl').forEach(s => s.add(new Option(m.label, m.id))));
   ui();
   if (user) { try { const a = await Atlas.listProjects(), l = projs(); a.forEach(p => { if (!l.find(x => x.id === p.id)) l.push(p) }); LS(key(), l); renderGrid() } catch (e) {} }
   const p = sessionStorage.getItem('pending');
