@@ -47,7 +47,9 @@ function renderGrid() {
     TPL.filter(x => (tf === 'All' || x[2] === tf) && (x[1] + ' ' + x[3]).toLowerCase().includes(tq)).forEach(x => {
       const c = document.createElement('div'); c.className = 'card';
       c.innerHTML = thumb(TPL_PAGES[x[1]] || blank) + `<div class=ct><b>${x[1]}</b> <small>${x[2]}</small><p class=cd>${(TDET[x[1]] || {}).d || ''}</p></div>`;
-      c.onclick = () => openView({ t: 'tpl', x }); g.append(c);
+      // CHANGED: navigate to builder.html instead of opening the inline workspace
+      c.onclick = () => { const prompt = 'Build ' + x[3]; if (!user) { sessionStorage.setItem('pending', prompt); location.href = 'login.html'; } else location.href = 'builder.html?prompt=' + encodeURIComponent(prompt); };
+      g.append(c);
     });
     if (!g.children.length) g.innerHTML = '<p class=empty>No templates match your search.</p>';
   } else {
@@ -56,7 +58,9 @@ function renderGrid() {
     a.forEach(p => {
       const c = document.createElement('div'); c.className = 'card'; const n = Object.keys(p.files).length;
       c.innerHTML = thumb(p.files['index.html'] ? pvBundle(p.files) : blank, '', true) + `<div class=ct><b>${esc(p.name)}</b> ${p.published ? '<small class=live2>● Live</small>' : '<small>Draft</small>'}<p class=cd>${n} file${n === 1 ? '' : 's'}${p.created ? ' · ' + new Date(p.created).toLocaleDateString() : ''}</p></div>`;
-      c.onclick = () => openView({ t: 'app', p }); g.append(c);
+      // CHANGED: navigate to builder.html instead of opening the modal
+      c.onclick = () => location.href = 'builder.html?p=' + encodeURIComponent(p.id);
+      g.append(c);
     });
   }
   fitThumbs(); renderDash();
@@ -69,7 +73,9 @@ function renderDash() {
 <div class=stats><div class=stat style="background:var(--l)"><b data-n=${a.length}>0</b><span>Projects</span></div><div class=stat style="background:var(--m)"><b data-n=${live}>0</b><span>Published</span></div><div class=stat style="background:var(--p)"><b data-n=${files}>0</b><span>Files built</span></div><div class=stat style="background:var(--pe)"><b data-n=${a.reduce((n, p) => n + p.chat.filter(m => m.r === 'u').length, 0)}>0</b><span>Prompts sent</span></div></div>
 ${last ? `<div class=cont id=dcont>${thumb(last.files['index.html'] ? pvBundle(last.files) : blank, '', true)}<div><small class=muted>CONTINUE WHERE YOU LEFT OFF</small><h3>${esc(last.name)}</h3><p class=muted>${Object.keys(last.files).length} files · ${last.published ? 'Live' : 'Draft'}</p><button class="btn pri">Open project</button></div></div>` : ''}`;
   $('#dnew').onclick = () => { window.scrollTo({ top: 0, behavior: 'smooth' }); $('#hp').focus() };
-  const dc = $('#dcont'); if (dc) dc.onclick = () => openProject(last);
+  const dc = $('#dcont');
+  // CHANGED: navigate to builder.html instead of opening inline
+  if (dc) dc.onclick = () => location.href = 'builder.html?p=' + encodeURIComponent(last.id);
   $$('.stat b').forEach(b => { const n = +b.dataset.n, t0 = performance.now(); (function s(t) { const k = Math.min(1, (t - t0) / 700); b.textContent = Math.round(n * k); if (k < 1) requestAnimationFrame(s) })(t0) });
   fitThumbs();
 }
@@ -78,7 +84,13 @@ $('#tsearch').oninput = e => { tq = e.target.value.toLowerCase(); renderGrid() }
 $$('#tfilter .chip').forEach(b => b.onclick = () => { tf = b.dataset.c; $$('#tfilter .chip').forEach(x => x.classList.toggle('on', x === b)); renderGrid() });
 $$('.tabs button').forEach(b => b.onclick = () => { $$('.tabs button').forEach(x => x.classList.remove('on')); b.classList.add('on'); renderGrid() });
 ['Portfolio', 'Solar System', 'Restaurant Menu', 'Calculator', 'Minimal Blog'].forEach(n => { const c = document.createElement('button'); c.className = 'chip'; c.textContent = n; c.onclick = () => { $('#hp').value = 'Build a beautiful ' + n.toLowerCase() + ' website'; $('#hp').focus() }; $('#chips').append(c) });
-$('#hgo').onclick = () => { const v = $('#hp').value.trim(); if (v) startProject(v + (selStyle ? `. Art direction "${selStyle[0]}": ${selStyle[1]}. Palette: ${selStyle[2]}. Font feel: ${selStyle[3]}.` : '')) };
+// CHANGED: hero ↑ button navigates to builder.html instead of opening inline workspace
+$('#hgo').onclick = () => {
+  const v = $('#hp').value.trim(); if (!v) return;
+  const prompt = v + (selStyle ? `. Art direction "${selStyle[0]}": ${selStyle[1]}. Palette: ${selStyle[2]}. Font feel: ${selStyle[3]}.` : '');
+  if (!user) { sessionStorage.setItem('pending', prompt); location.href = 'login.html'; }
+  else location.href = 'builder.html?prompt=' + encodeURIComponent(prompt);
+};
 
 function startProject(text) {
   if (!user) { sessionStorage.setItem('pending', text); location.href = 'login.html'; return }
@@ -300,7 +312,7 @@ $('#pgo').onclick = async () => {
 
 /* "Built by" popup */
 setTimeout(() => {
-  if (LS('noad')) return; const a = $('#ad'); a.hidden = false;
+  if (LS('noad')) return; const a = $('#ad'); if (!a) return; a.hidden = false;
   requestAnimationFrame(() => $('#adpg').style.width = '0');
   const close = () => { if ($('#noad').checked) LS('noad', 1); a.hidden = true };
   $('#adx').onclick = close; setTimeout(close, 10000);
