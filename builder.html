@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Atlas Ai Builder — Build</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--b:#2f5bff;--b2:#7c4dff;--ink:#101a3a;--mut:#6b7494;--line:#e4e8f5;--bg:#fbfcff;--p:#ffd3e0;--pe:#ffe4bd;--m:#c8f1dc;--l:#e1d6ff}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+h1,h2,h3,.logo{font-family:'Bricolage Grotesque',sans-serif}[hidden]{display:none!important}
+button,select,textarea,input{font:inherit;color:inherit}
+a{color:var(--b);text-decoration:none}
+.top{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5}
+.logo{font-weight:800;font-size:19px;display:flex;gap:8px;align-items:center}.logo i{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--b),var(--b2))}.logo span{color:var(--b)}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:500}.btn.pri{background:var(--b);border-color:var(--b);color:#fff}.btn.pub{background:linear-gradient(135deg,var(--b),var(--b2));color:#fff;border:0}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+#ws{display:grid;grid-template-columns:400px 1fr;height:calc(100vh - 57px)}
+#chat{display:flex;flex-direction:column;border-right:1px solid var(--line);background:#fff;min-height:0}
+.bar{display:flex;gap:6px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.seg{display:flex;background:#eef1fb;border-radius:10px;padding:3px}.seg button{border:0;background:none;padding:6px 12px;border-radius:8px;cursor:pointer}.seg .on{background:var(--b);color:#fff}
+select{border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:#fff;max-width:150px}
+#msgs{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px}#msgs>*{flex-shrink:0}
+.m{max-width:94%;padding:10px 13px;border-radius:14px;overflow-wrap:anywhere}.m.u{align-self:flex-end;background:var(--b);color:#fff}.m.a{background:#f3f5fd}
+.m p{margin:0 0 8px}.m li{margin-left:18px;list-style:disc}.m img{max-width:100%;border-radius:10px}.m code{background:#e8ecfb;padding:1px 5px;border-radius:5px}
+.m pre{background:#101a3a;color:#e8ecff;padding:10px 12px;border-radius:10px;overflow:auto;font-size:12px;margin:8px 0}.m pre code{background:none;padding:0}
+.m blockquote{margin:8px 0;padding:8px 12px;border-left:4px solid var(--b);background:#eef2ff;border-radius:0 10px 10px 0}
+.m hr{border:0;border-top:1px solid var(--line);margin:10px 0}
+.m table{border-collapse:collapse;font-size:13px;margin:6px 0}.m th,.m td{border:1px solid var(--line);padding:5px 9px;text-align:left}.m th{background:#e8ecfb}.m tr:nth-child(even) td{background:#f8f9ff}
+.m h2,.m h3,.m h4{margin:12px 0 6px;font-family:'Bricolage Grotesque'}.m h2{font-size:19px}.m h3{font-size:16px}.m h4{font-size:14px}
+.m ul,.m ol{margin:4px 0 8px;padding-left:20px}.m li{list-style:revert;margin:2px 0}
+.m figure{margin:8px 0}.m figcaption{font-size:12px;color:var(--mut);margin-top:3px}.m a{text-decoration:underline}
+.tw{overflow:auto}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.cards div{border-radius:12px;padding:10px;background:#fff;border:1px solid var(--line)}.cards b{display:block}.cards .e{font-size:22px}
+.opts{margin:6px 0}.opts button{display:block;width:100%;text-align:left;margin-top:6px;padding:9px 12px;border:1px solid #c9d4ff;background:#fff;border-radius:10px;cursor:pointer}.opts button:hover{background:#eef2ff}
+.steps{background:#fff;border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;align-self:stretch}
+.sh{display:flex;justify-content:space-between;padding:9px 14px;background:linear-gradient(90deg,var(--l),var(--p));font-weight:600;font-size:13px}
+.steps .st{display:flex;gap:8px;align-items:center;padding:7px 14px;border-top:1px solid var(--line);color:var(--mut)}.st.d{color:var(--ink)}.st.r{color:var(--b);font-weight:500}
+.sl{flex:1}.sl em{font-style:normal;color:var(--mut);font-size:12px;margin-left:4px}.st small{color:var(--mut);white-space:nowrap}
+.sp{width:14px;height:14px;border:2px solid #c9d4ff;border-top-color:var(--b);border-radius:50%;animation:s 1s linear infinite;margin-top:0}@keyframes s{to{rotate:360deg}}
+.ck{color:#1a9b5f;font-weight:700;width:14px;text-align:center}
+.typing{display:inline-flex;gap:4px}.typing i{width:7px;height:7px;border-radius:50%;background:var(--b);animation:bl 1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}@keyframes bl{50%{opacity:.25}}
+#inp{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}#inp textarea{flex:1;border:1px solid var(--line);border-radius:12px;padding:9px;resize:none;height:46px}
+.go{width:40px;height:40px;border-radius:50%;border:0;background:var(--b);color:#fff;cursor:pointer;font-size:18px}.go.stop{background:#d6336c}
+#pvw{display:flex;flex-direction:column;background:#eef1fb;min-width:0}#pvw .fr{flex:1;display:grid;place-items:center;padding:12px;min-height:0}
+#pv{height:100%;width:100%;border:0;background:#fff;border-radius:12px;box-shadow:0 8px 30px #0002;transition:width .25s}
+.mdlbtn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 10px;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;text-align:left}.mdlbtn:after{content:" ▾";color:var(--mut)}
+.ov{position:fixed;inset:0;background:#101a3a77;display:grid;place-items:center;z-index:20;padding:16px}
+.mod{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;position:relative}
+.mod input{width:100%;margin:6px 0;padding:11px;border:1px solid var(--line);border-radius:10px}
+.err{color:#d6336c;font-size:13px;min-height:18px}
+.x{position:absolute;top:10px;right:12px;border:0;background:none;font-size:22px;cursor:pointer;color:var(--mut)}
+.subrow{display:flex;align-items:center;gap:6px}.subrow input{margin:0;flex:1}.subrow span{color:var(--mut);white-space:nowrap}
+.live{background:#eaf9f1;border-radius:10px;padding:10px;margin-top:10px;word-break:break-all;font-size:14px}
+.mob{display:none}
+@media(max-width:800px){
+  body{font-size:14px}.top{padding:10px 14px}.logo{white-space:nowrap;font-size:16px;gap:6px}.logo i{width:22px;height:22px}
+  .top .btn{white-space:nowrap;padding:8px 11px}.top .row{flex-wrap:nowrap}
+  .mob{display:inline-block}
+  #ws{display:flex;flex-direction:column;height:auto}
+  #ws #chat,#ws #pvw{height:calc(100vh - 57px)}
+  #ws:not(.pvmode) #pvw{display:none}#ws.pvmode #chat{display:none}
+  #pvw{order:1}#chat{order:2;border-right:0;border-top:1px solid var(--line)}
+  #pvw .fr{padding:8px}#inp textarea{font-size:16px}.mdlbtn{max-width:48%}#pn{display:none}
+  .ov{padding:0;align-items:end}.mod{max-width:100%;border-radius:22px 22px 0 0;max-height:92vh;overflow:auto}
+}
+@media(min-width:801px){
+  .top{padding:14px 40px}#ws{grid-template-columns:420px 1fr;height:calc(100vh - 61px)}#pvw .fr{padding:20px}
+}
+</style>
+</head><body>
+
+<header class="top">
+  <div class="logo"><i></i>Atlas <span>Ai Builder</span></div>
+  <div class="row">
+    <span id="who"></span>
+    <a class="btn" href="index.html">Home</a>
+    <button class="btn" id="out" hidden>Logout</button>
+  </div>
+</header>
+
+<main id="ws">
+  <aside id="chat">
+    <div class="bar">
+      <div class="seg"><button data-m="build" class="on">Build</button><button data-m="chat">Discuss</button></div>
+      <button class="mdlbtn" type="button">Choose model</button>
+      <select class="lang"></select>
+      <button class="btn" id="undo" title="Undo last change">↶</button>
+      <button class="btn mob" id="toPv">Preview ▸</button>
+    </div>
+    <div id="msgs"></div>
+    <div id="inp"><textarea id="tx" placeholder="Describe a change or what to build..."></textarea><button class="go" id="send">↑</button></div>
+  </aside>
+  <section id="pvw">
+    <div class="bar">
+      <button class="btn mob" id="toChat">◂ Chat</button>
+      <button class="btn" data-w="100%">Desktop</button>
+      <button class="btn" data-w="768px">Tablet</button>
+      <button class="btn" data-w="390px">Mobile</button>
+      <span id="pn" style="margin-left:auto;color:var(--mut)"></span>
+      <button class="btn pub" id="pub">Publish</button>
+    </div>
+    <div class="fr"><iframe id="pv" sandbox="allow-scripts allow-forms allow-modals"></iframe></div>
+  </section>
+</main>
+
+<div class="ov" id="pubm" hidden>
+  <div class="mod">
+    <button class="x" id="px">×</button>
+    <h2 style="margin:0 0 6px">Publish your site</h2>
+    <p style="color:var(--mut);margin:0 0 10px">Pick a name for your link. Publish again any time to push updates.</p>
+    <div class="subrow"><input id="psub" placeholder="my-site"><span id="pdom"></span></div>
+    <div class="err" id="perr"></div>
+    <button class="btn pri" id="pgo" style="width:100%">Publish</button>
+    <div id="pres"></div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase.js"></script>
+<script src="ai.js"></script>
+<script src="models.js"></script>
+<script src="app.js"></script>
+<script>
+/* builder.html only: jump straight into the workspace and open the requested project/prompt */
+(async () => {
+  await Atlas.ready; await Atlas.authReady;
+  if (!Atlas.user) { location.href = 'login.html'; return }
+  show('ws');
+  const q = new URLSearchParams(location.search);
+  const prompt = q.get('prompt'), id = q.get('p');
+  if (prompt) startProject(prompt);
+  else if (id) {
+    const p = projs().find(x => x.id === id);
+    if (p) openProject(p);
+    else location.href = 'index.html';
+  }
+})();
+</script>
+</body></html>
