@@ -8,20 +8,17 @@
 *{box-sizing:border-box}body{margin:0;font:15px/1.5 Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
 h1,h2,h3,.logo{font-family:'Bricolage Grotesque',sans-serif}[hidden]{display:none!important}
 button,select,textarea,input{font:inherit;color:inherit}
-a{color:var(--b);text-decoration:none}
 .top{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5}
 .logo{font-weight:800;font-size:19px;display:flex;gap:8px;align-items:center}.logo i{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--b),var(--b2))}.logo span{color:var(--b)}
 .btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:500}.btn.pri{background:var(--b);border-color:var(--b);color:#fff}
-.row{display:flex;gap:8px;align-items:center;justify-content:space-between}
 #home{position:relative;overflow:hidden;padding:56px 18px 40px;text-align:center}
-.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.75;z-index:0;animation:fl 10s ease-in-out infinite}
-.blob:nth-child(2){animation-delay:-3s}.blob:nth-child(3){animation-delay:-6s}
-@keyframes fl{50%{transform:translateY(26px) scale(1.06)}}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.75;z-index:0}
 #home>*:not(.blob){position:relative;z-index:1}
 h1{font-size:clamp(34px,7vw,60px);margin:0 0 10px;line-height:1.05;font-weight:800}h1 em{font-style:normal;background:linear-gradient(90deg,var(--b),var(--b2));-webkit-background-clip:text;color:transparent}
 .sub{color:var(--mut);max-width:520px;margin:0 auto 26px}
 .pbox{max-width:640px;margin:auto;background:#fff;border:1.5px solid #c9d4ff;border-radius:20px;padding:12px;box-shadow:0 14px 40px #2f5bff1a;text-align:left}
 .pbox textarea{width:100%;border:0;outline:0;resize:none;min-height:84px}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between}
 select{border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:#fff;max-width:150px}
 .go{width:40px;height:40px;border-radius:50%;border:0;background:var(--b);color:#fff;cursor:pointer;font-size:18px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}.chip{border:1px solid var(--line);background:#ffffffcc;border-radius:99px;padding:7px 14px;cursor:pointer}
@@ -32,6 +29,39 @@ select{border:1px solid var(--line);border-radius:10px;padding:6px 8px;backgroun
 .card .th{height:120px;display:grid;place-items:center;font-size:40px}.card .ct{padding:12px 14px}.card small{color:var(--mut)}
 .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.feat div{padding:18px;border-radius:16px}
 footer{text-align:center;color:var(--mut);padding:30px}
+/* workspace */
+#ws{display:grid;grid-template-columns:400px 1fr;height:calc(100vh - 57px)}
+#chat{display:flex;flex-direction:column;border-right:1px solid var(--line);background:#fff;min-height:0}
+.bar{display:flex;gap:6px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.seg{display:flex;background:#eef1fb;border-radius:10px;padding:3px}.seg button{border:0;background:none;padding:6px 12px;border-radius:8px;cursor:pointer}.seg .on{background:var(--b);color:#fff}
+#msgs{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.m{max-width:94%;padding:10px 13px;border-radius:14px;overflow-wrap:anywhere}.m.u{align-self:flex-end;background:var(--b);color:#fff}.m.a{background:#f3f5fd}
+.m p{margin:0 0 8px}.m li{margin-left:18px;list-style:disc}.m img{max-width:100%;border-radius:10px}.m code{background:#e8ecfb;padding:1px 5px;border-radius:5px}
+.tw{overflow:auto}table{border-collapse:collapse;font-size:13px;margin:6px 0}th,td{border:1px solid var(--line);padding:5px 9px;text-align:left}th{background:#e8ecfb}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.cards div{border-radius:12px;padding:10px;background:#fff;border:1px solid var(--line)}.cards b{display:block}.cards .e{font-size:22px}
+.opts{margin:6px 0}.opts button{display:block;width:100%;text-align:left;margin-top:6px;padding:9px 12px;border:1px solid #c9d4ff;background:#fff;border-radius:10px;cursor:pointer}.opts button:hover{background:#eef2ff}
+.steps{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;align-self:stretch}.st{display:flex;gap:8px;padding:3px 0;color:var(--mut)}.st.d{color:var(--ink)}.st.r{color:var(--b);font-weight:500}
+.sp{width:14px;height:14px;border:2px solid #c9d4ff;border-top-color:var(--b);border-radius:50%;animation:s 1s linear infinite;margin-top:4px}@keyframes s{to{rotate:360deg}}
+#inp{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}#inp textarea{flex:1;border:1px solid var(--line);border-radius:12px;padding:9px;resize:none;height:46px}
+#pvw{display:flex;flex-direction:column;background:#eef1fb;min-width:0}#pvw .fr{flex:1;display:grid;place-items:center;padding:12px;min-height:0}
+#pv{height:100%;width:100%;border:0;background:#fff;border-radius:12px;box-shadow:0 8px 30px #0002;transition:width .25s}
+.empty{color:var(--mut);text-align:center}
+/* modals */
+.ov{position:fixed;inset:0;background:#101a3a77;display:grid;place-items:center;z-index:20;padding:16px}
+.mod{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;position:relative}.mod input{width:100%;margin:6px 0;padding:11px;border:1px solid var(--line);border-radius:10px}.err{color:#d6336c;font-size:13px;min-height:18px}
+.x{position:absolute;top:10px;right:12px;border:0;background:none;font-size:22px;cursor:pointer;color:var(--mut)}
+#ad{position:fixed;right:16px;bottom:16px;width:min(340px,calc(100% - 32px));z-index:30;background:#fff;border-radius:18px;padding:16px;box-shadow:0 18px 50px #2f5bff33;border:1px solid var(--line);overflow:hidden;background-image:linear-gradient(135deg,#fff 60%,var(--p))}
+#ad .pg{position:absolute;left:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--b),var(--b2));width:100%;transition:width 10s linear}
+@media(max-width:800px){#ws{grid-template-columns:1fr;grid-template-rows:55% 45%;height:auto}#chat{height:70vh}#pvw{height:70vh}}
+.auth{min-height:100vh;display:grid;place-items:center;padding:20px;position:relative;overflow:hidden;background:#fbfcff}
+.auth .mod{z-index:1;box-shadow:0 20px 60px #2f5bff22;border:1px solid var(--line)}
+.auth .logo{justify-content:center;margin-bottom:14px}
+.auth p.alt{text-align:center;margin:14px 0 0;color:var(--mut)}a{color:var(--b);text-decoration:none}
+.live{background:#eaf9f1;border-radius:10px;padding:10px;margin-top:10px;word-break:break-all;font-size:14px}
+.subrow{display:flex;align-items:center;gap:6px}.subrow input{margin:0;flex:1}.subrow span{color:var(--mut);white-space:nowrap}
+.btn.pub{background:linear-gradient(135deg,var(--b),var(--b2));color:#fff;border:0}
+
+
 .muted{color:var(--mut)}h2{font-size:30px;margin:0 0 6px}
 .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;position:relative;margin-top:26px}
 .flow:before{content:"";position:absolute;top:27px;left:12.5%;right:12.5%;border-top:2px dashed #b9c6ff}
@@ -46,32 +76,62 @@ footer{text-align:center;color:var(--mut);padding:30px}
 .mock .bo{display:grid;grid-template-columns:42% 1fr;min-height:230px}.mock .l{padding:12px;background:#f7f8ff;font-size:13px}.mock .r{padding:14px;background:linear-gradient(135deg,#fff,var(--l))}
 .mock .u{background:var(--b);color:#fff;border-radius:10px;padding:6px 9px;margin-bottom:8px;width:fit-content;margin-left:auto}.mock .s{padding:2px 0}.mock .ln{height:10px;border-radius:6px;background:#dfe5fa;margin:8px 0}
 .scard{border:2px solid var(--line);border-radius:16px;background:#fff;padding:12px;cursor:pointer;transition:.2s}.scard:hover,.scard.on{border-color:var(--b);box-shadow:0 10px 26px #2f5bff1a}
-.sw{display:flex;height:46px;border-radius:10px;overflow:hidden;margin-bottom:10px;border:1px solid var(--line)}.sw i{flex:1}
-.scard b{font-family:'Bricolage Grotesque'}.scard small{display:block;color:var(--mut)}
+.sw{display:flex;height:46px;border-radius:10px;overflow:hidden;margin-bottom:10px;border:1px solid var(--line)}.sw i{flex:1}.scard b{font-family:'Bricolage Grotesque'}.scard small{display:block;color:var(--mut)}
 details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 16px;margin-bottom:10px}summary{cursor:pointer;font-weight:600}details p{margin:8px 0 0;color:var(--mut)}
+.wide{max-width:720px;max-height:92vh;overflow:auto}.vhero{height:150px;border-radius:14px;display:grid;place-items:center;font-size:56px;margin-bottom:12px}
+.vpv{width:100%;height:340px;border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:12px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.tags span{background:#eef1fb;border-radius:99px;padding:3px 11px;font-size:13px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:12px 0}.meta div{background:#f7f8ff;border-radius:12px;padding:10px}.meta small{display:block;color:var(--mut)}
+.vact{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.btn.dan{color:#d6336c}
+.links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+@media(max-width:800px){.flow{grid-template-columns:1fr;gap:22px}.flow:before{top:20px;bottom:20px;left:27px;right:auto;border-top:0;border-left:2px dashed #b9c6ff}
+.step{text-align:left;padding-left:72px;min-height:56px}.step .n{position:absolute;left:0;top:0;margin:0}.split{grid-template-columns:1fr}}
+
+
+/* ===== DESKTOP MODE ===== */
+@media (min-width:801px){.top{padding:14px 40px}#home{padding:90px 40px 70px}h1{font-size:64px}.sub{font-size:18px;max-width:620px}.pbox{max-width:760px;padding:16px}.pbox textarea{min-height:110px;font-size:16px}.sec{padding:56px 40px;max-width:1200px}.grid{grid-template-columns:repeat(3,1fr);gap:22px}.feat{grid-template-columns:repeat(3,1fr);gap:18px}.card .th{height:150px}#ws{grid-template-columns:420px 1fr;height:calc(100vh - 61px)}#pvw .fr{padding:20px}}
+/* ===== PHONE MODE ===== */
+@media (max-width:800px){body{font-size:14px}.top{padding:10px 14px}#who{display:none}#home{padding:40px 14px 28px}h1{font-size:34px}.pbox .row{flex-wrap:wrap}select{max-width:46%}.sec{padding:24px 14px}h2{font-size:24px}.grid{grid-template-columns:1fr 1fr;gap:12px}.feat{grid-template-columns:1fr}.card .th{height:90px;font-size:32px}#ws{display:flex;flex-direction:column;height:auto}#pvw{order:1;height:55vh}#chat{order:2;height:70vh;border-right:0;border-top:1px solid var(--line)}#pvw .fr{padding:8px}#inp textarea{font-size:16px}.ov{padding:0;align-items:end}.mod{max-width:100%;border-radius:22px 22px 0 0;max-height:92vh;overflow:auto}.vpv{height:260px}#ad{left:12px;right:12px;bottom:12px;width:auto}}
+@media (max-width:380px){h1{font-size:29px}.grid{grid-template-columns:1fr}}
+/* header fit on phones */
+@media (max-width:800px){.logo{white-space:nowrap;font-size:16px;gap:6px}.logo i{width:22px;height:22px}.top .btn{white-space:nowrap;padding:8px 11px}.top .row{flex-wrap:nowrap}}
+
+/* ===== previews, dashboard, real build steps, rich replies ===== */
+.thumb{position:relative;aspect-ratio:1100/688;overflow:hidden;background:#fff;border-bottom:1px solid var(--line)}
+.thumb iframe{position:absolute;left:0;top:0;width:1100px;height:688px;border:0;transform-origin:0 0;pointer-events:none}
+.thumb.big{border:1px solid var(--line);border-radius:14px;margin-bottom:12px}.thumb-empty{background:var(--l);border-radius:14px;padding:50px;text-align:center;color:var(--mut);margin-bottom:12px}
+.card .cd{margin:4px 0 0;color:var(--mut);font-size:13px}.live2{color:#1a9b5f}
 .dgreet{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}.dgreet h2{margin:0}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}.stat{border-radius:16px;padding:16px;transition:.2s}.stat:hover{transform:translateY(-3px)}.stat b{display:block;font:800 32px 'Bricolage Grotesque'}.stat span{color:var(--mut)}
 .cont{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:center;border:1px solid var(--line);border-radius:18px;background:#fff;padding:12px;cursor:pointer;transition:.2s}.cont:hover{box-shadow:0 12px 30px #2f5bff18}.cont .thumb{border-radius:12px;border:1px solid var(--line)}.cont h3{margin:4px 0}
 .search{border:1px solid var(--line);border-radius:99px;padding:8px 16px;min-width:200px;background:#fff;outline:0}.chip.on{background:var(--b);color:#fff;border-color:var(--b)}
-.thumb{position:relative;aspect-ratio:1100/688;overflow:hidden;background:#fff;border-bottom:1px solid var(--line)}
-.thumb iframe{position:absolute;left:0;top:0;width:1100px;height:688px;border:0;transform-origin:0 0;pointer-events:none}
-.card .cd{margin:4px 0 0;color:var(--mut);font-size:13px}.live2{color:#1a9b5f}
-.links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
-@media (min-width:801px){.top{padding:14px 40px}#home{padding:90px 40px 70px}h1{font-size:64px}.sub{font-size:18px;max-width:620px}.pbox{max-width:760px;padding:16px}.pbox textarea{min-height:110px;font-size:16px}.sec{padding:56px 40px;max-width:1200px}.grid{grid-template-columns:repeat(3,1fr);gap:22px}.feat{grid-template-columns:repeat(3,1fr);gap:18px}.card .th{height:150px}}
-@media (max-width:800px){body{font-size:14px}.top{padding:10px 14px}#who{display:none}#home{padding:40px 14px 28px}h1{font-size:34px}.pbox .row{flex-wrap:wrap}select{max-width:46%}.sec{padding:24px 14px}h2{font-size:24px}.grid{grid-template-columns:1fr 1fr;gap:12px}.feat{grid-template-columns:1fr}.card .th{height:90px;font-size:32px}.cont{grid-template-columns:1fr}.search{min-width:0;width:100%}.logo{white-space:nowrap;font-size:16px;gap:6px}.logo i{width:22px;height:22px}.top .btn{white-space:nowrap;padding:8px 11px}.top .row{flex-wrap:nowrap}.flow{grid-template-columns:1fr;gap:22px}.flow:before{top:20px;bottom:20px;left:27px;right:auto;border-top:0;border-left:2px dashed #b9c6ff}.step{text-align:left;padding-left:72px;min-height:56px}.step .n{position:absolute;left:0;top:0;margin:0}.split{grid-template-columns:1fr}}
-@media (max-width:380px){h1{font-size:29px}.grid{grid-template-columns:1fr}}
+@keyframes fl{50%{transform:translateY(26px) scale(1.06)}}.blob{animation:fl 10s ease-in-out infinite}.blob:nth-child(2){animation-delay:-3s}.blob:nth-child(3){animation-delay:-6s}
+.steps{padding:0;overflow:hidden}.sh{display:flex;justify-content:space-between;padding:9px 14px;background:linear-gradient(90deg,var(--l),var(--p));font-weight:600;font-size:13px}.steps .st{align-items:center;padding:7px 14px;border-top:1px solid var(--line)}.sl{flex:1}.sl em{font-style:normal;color:var(--mut);font-size:12px;margin-left:4px}.st small{color:var(--mut);white-space:nowrap}.sp{margin-top:0}.ck{color:#1a9b5f;font-weight:700;width:14px;text-align:center}
+.go.stop{background:#d6336c}.typing{display:inline-flex;gap:4px}.typing i{width:7px;height:7px;border-radius:50%;background:var(--b);animation:bl 1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}@keyframes bl{50%{opacity:.25}}
+.m h2,.m h3,.m h4{margin:12px 0 6px;font-family:'Bricolage Grotesque'}.m h2{font-size:19px}.m h3{font-size:16px}.m h4{font-size:14px}
+.m ul,.m ol{margin:4px 0 8px;padding-left:20px}.m li{list-style:revert;margin:2px 0}.m blockquote{margin:8px 0;padding:8px 12px;border-left:4px solid var(--b);background:#eef2ff;border-radius:0 10px 10px 0}
+.m pre{background:#101a3a;color:#e8ecff;padding:10px 12px;border-radius:10px;overflow:auto;font-size:12px;margin:8px 0}.m pre code{background:none;padding:0}.m hr{border:0;border-top:1px solid var(--line);margin:10px 0}
+.m figure{margin:8px 0}.m figcaption{font-size:12px;color:var(--mut);margin-top:3px}.m a{text-decoration:underline}.m tr:nth-child(even) td{background:#f8f9ff}
+@media(max-width:800px){.cont{grid-template-columns:1fr}.search{min-width:0;width:100%}}
+
+/* phone: one panel at a time */
+.mob{display:none}
+@media(max-width:800px){.mob{display:inline-block}#ws #chat,#ws #pvw{height:calc(100vh - 57px)}#ws:not(.pvmode) #pvw{display:none}#ws.pvmode #chat{display:none}#pvw .bar .btn{padding:7px 9px;font-size:13px}#pn{display:none}}
+#msgs>*{flex-shrink:0}
+
+/* ===== custom model picker ===== */
+.mdlbtn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 10px;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;text-align:left}.mdlbtn:after{content:" ▾";color:var(--mut)}
+.mp{max-width:560px}.mp h3{margin:0 0 10px;font-size:20px}.mp .search{width:100%;margin:0}.mp input[type=checkbox]{width:auto;margin:0 6px 0 0}
+.mchips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.frl{display:block;font-size:13px;color:var(--mut);margin:2px 0 6px}
+.mlist{max-height:50vh;overflow:auto;margin:6px -6px 0;padding:0 6px}.mg{font:600 12px Inter;letter-spacing:.06em;color:var(--mut);margin:12px 0 4px;text-transform:uppercase}.mg a{text-transform:none;letter-spacing:0;margin-left:6px}
+.mi{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;margin-bottom:6px;cursor:pointer}.mi:hover{border-color:var(--b);background:#f5f7ff}.mi.on{border-color:var(--b);background:#eef2ff}.mi[disabled]{opacity:.45;cursor:not-allowed}
+.mi>div{flex:1;min-width:0}.mi b{display:block;font-weight:600}.mi small{display:block;color:var(--mut);word-break:break-all;font-size:12px}
+.tg{font-size:11px;border-radius:99px;padding:2px 8px;background:#dff7ea;color:#14804a;white-space:nowrap}.tg.pd{background:#fde7ef;color:#c0245a}.tg.nk{background:#eef1fb;color:var(--mut)}.mfoot{color:var(--mut);font-size:12px;margin:10px 0 0}
+@media(max-width:800px){.mdlbtn{max-width:48%}}
 </style>
 </head><body>
-
-<header class="top">
-  <div class="logo"><i></i>Atlas <span>Ai Builder</span></div>
-  <div class="row">
-    <span id="who"></span>
-    <a class="btn" href="login.html" id="lg">Login</a>
-    <a class="btn pri" href="signup.html" id="sg">Sign up</a>
-    <button class="btn" id="out" hidden>Logout</button>
-  </div>
-</header>
+<header class="top"><div class="logo"><i></i>Atlas <span>Ai Builder</span></div>
+<div class="row"><span id="who"></span><button class="btn" id="homeBtn" hidden>My apps</button><a class="btn" href="login.html" id="lg">Login</a><a class="btn pri" href="signup.html" id="sg">Sign up</a><button class="btn" id="out" hidden>Logout</button></div></header>
 
 <div id="homeView">
 <div id="home">
@@ -81,13 +141,10 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 <h1>Build websites <em>with Atlas</em></h1>
 <p class="sub">Describe your idea. Atlas designs and builds a complete, polished site you can preview, refine and publish on your own link.</p>
 <div class="pbox"><textarea id="hp" placeholder="Describe what you want to build..."></textarea>
-<div class="row"><button class="mdlbtn" type="button" style="border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 10px;cursor:pointer">Choose model</button><select class="lang"></select><button class="go" id="hgo">↑</button></div></div>
+<div class="row"><button class="mdlbtn" type="button">Choose model</button><select class="lang"></select><button class="go" id="hgo">↑</button></div></div>
 <div class="chips" id="chips"></div><div class="chips" id="sty"></div></div>
-
 <div class="sec" id="dash" hidden></div>
-
 <div class="sec"><div class="tabs"><button class="on" data-t="tpl">Templates</button><button data-t="mine">My apps</button></div><div id="tfilter" class="chips" style="justify-content:flex-start;margin:0 0 16px"></div><div class="grid" id="grid"></div></div>
-
 <div class="sec" id="styles"><h2>Pick a look</h2><p class="muted">Choose a style, then describe your idea. Atlas builds in that direction.</p><div class="grid" id="sgrid" style="margin-top:16px"></div></div>
 
 <div class="sec"><h2>How it works</h2><p class="muted">From idea to live link in four connected steps.</p>
@@ -103,7 +160,7 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 <div class="mock"><div class="bd"><i></i><i></i><i></i></div><div class="bo"><div class="l"><div class="u">A bakery site with online orders</div><div class="s"><b>✓</b> Designing layout and palette</div><div class="s"><b>✓</b> Writing index.html</div><div class="s"><b>✓</b> Writing style.css</div><div class="s" style="color:var(--b)">● Writing script.js</div></div>
 <div class="r"><div class="ln" style="width:40%;height:14px;background:#c9d4ff"></div><div class="ln" style="width:85%;height:22px;background:#ffd3e0"></div><div class="ln" style="width:70%"></div><div class="ln" style="width:30%;height:26px;background:var(--b);border-radius:99px"></div><div class="ln" style="width:100%;height:60px;background:#c8f1dc;border-radius:12px"></div></div></div></div></div></div>
 
-<div class="sec"><h2>Build or discuss</h2><p class="muted">Switch modes any time inside the same project.</p><div class="tw" style="margin-top:12px"><table style="border-collapse:collapse;font-size:14px"><tr><th style="border:1px solid var(--line);padding:6px 10px;background:#e8ecfb"></th><th style="border:1px solid var(--line);padding:6px 10px;background:#e8ecfb">Build</th><th style="border:1px solid var(--line);padding:6px 10px;background:#e8ecfb">Discuss</th></tr><tr><td style="border:1px solid var(--line);padding:6px 10px"><b>Best for</b></td><td style="border:1px solid var(--line);padding:6px 10px">Creating and editing your site</td><td style="border:1px solid var(--line);padding:6px 10px">Planning, ideas and advice</td></tr><tr><td style="border:1px solid var(--line);padding:6px 10px"><b>Atlas replies with</b></td><td style="border:1px solid var(--line);padding:6px 10px">Progress steps and new files</td><td style="border:1px solid var(--line);padding:6px 10px">Tables, cards and option buttons</td></tr><tr><td style="border:1px solid var(--line);padding:6px 10px"><b>Changes your site</b></td><td style="border:1px solid var(--line);padding:6px 10px">Yes, only what you ask</td><td style="border:1px solid var(--line);padding:6px 10px">Never</td></tr></table></div></div>
+<div class="sec"><h2>Build or discuss</h2><p class="muted">Switch modes any time inside the same project.</p><div class="tw" style="margin-top:12px"><table><tr><th></th><th>Build</th><th>Discuss</th></tr><tr><td><b>Best for</b></td><td>Creating and editing your site</td><td>Planning, ideas and advice</td></tr><tr><td><b>Atlas replies with</b></td><td>Progress steps and new files</td><td>Tables, cards and option buttons</td></tr><tr><td><b>Changes your site</b></td><td>Yes, only what you ask</td><td>Never</td></tr></table></div></div>
 
 <div class="sec"><h2>Everything you need</h2><div class="feat" style="margin-top:14px">
 <div style="background:var(--l)"><b>Complete builds</b><br>Real copy, real sections and working interactions. No skeletons.</div>
@@ -123,6 +180,23 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 <footer><div class="links"><a href="#styles">Styles</a><a href="login.html">Login</a><a href="signup.html">Sign up</a></div>© Atlas Ai Builder · Built by FG MAFIAN &amp; FG MAFIAN PERSONAL ASSISTANT</footer>
 </div>
 
+<main id="ws" hidden>
+<aside id="chat"><div class="bar"><div class="seg"><button data-m="build" class="on">Build</button><button data-m="chat">Discuss</button></div><button class="mdlbtn" type="button">Choose model</button><select class="lang"></select><button class="btn" id="undo" title="Undo last change">↶</button><button class="btn mob" id="toPv">Preview ▸</button></div>
+<div id="msgs"></div><div id="inp"><textarea id="tx" placeholder="Describe a change or ask anything..."></textarea><button class="go" id="send">↑</button></div></aside>
+<section id="pvw"><div class="bar"><button class="btn mob" id="toChat">◂ Chat</button><button class="btn" data-w="100%">Desktop</button><button class="btn" data-w="768px">Tablet</button><button class="btn" data-w="390px">Mobile</button><span id="pn" style="margin-left:auto;color:var(--mut)"></span><button class="btn pub" id="pub">Publish</button></div>
+<div class="fr"><iframe id="pv" sandbox="allow-scripts allow-forms allow-modals"></iframe></div></section></main>
+
+<div class="ov" id="viewm" hidden><div class="mod wide"><button class="x" id="vx">×</button><div id="vbody"></div></div></div>
+
+<div class="ov" id="pubm" hidden><div class="mod"><button class="x" id="px">×</button><h2 style="margin:0 0 6px">Publish your site</h2>
+<p style="color:var(--mut);margin:0 0 10px">Pick a name for your link. Publish again any time to push updates.</p>
+<div class="subrow"><input id="psub" placeholder="my-site"><span id="pdom"></span></div>
+<div class="err" id="perr"></div><button class="btn pri" id="pgo" style="width:100%">Publish</button><div id="pres"></div></div></div>
+
+<div id="ad" hidden><button class="x" id="adx" style="top:4px;right:8px">×</button>
+<b class="logo" style="font-size:17px">Built by</b><p style="margin:6px 0 10px"><b>FG MAFIAN</b> &amp; <b>FG MAFIAN PERSONAL ASSISTANT</b><br><span style="color:var(--mut)">Thanks for building with Atlas. We craft tools that make creating on the web feel effortless.</span></p>
+<label style="font-size:13px"><input type="checkbox" id="noad"> Do not show again</label><div class="pg" id="adpg"></div></div>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -130,5 +204,5 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 <script src="ai.js"></script>
 <script src="templates.js"></script>
 <script src="models.js"></script>
-<script src="landing.js"></script>
+<script src="app.js"></script>
 </body></html>
